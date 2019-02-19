@@ -20,7 +20,7 @@ public class splashActivity extends AppCompatActivity {
     }
 
     private void showLauncher() {
-        Intent intent = new Intent(splashActivity.this, collectionActivity.class);
+        Intent intent = new Intent(splashActivity.this, ligProvActivity.class);
         startActivity(intent);
         finish();
     }
