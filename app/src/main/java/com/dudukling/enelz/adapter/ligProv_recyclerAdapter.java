@@ -69,7 +69,9 @@ public class ligProv_recyclerAdapter extends RecyclerView.Adapter implements Fil
                     lpModel lp  = lpListFiltered.get(position);
 
                     Intent goToFormActivity = new Intent(context, form_ligProvActivity.class);
-                    goToFormActivity.putExtra("lp", lp);
+                    goToFormActivity
+                            .putExtra("lp", lp)
+                            .putExtra("type", "readOnly");
                     context.startActivity(goToFormActivity);
                 }
             });
@@ -78,21 +80,21 @@ public class ligProv_recyclerAdapter extends RecyclerView.Adapter implements Fil
         @Override
         public void onCreateContextMenu(ContextMenu menu, View v, final ContextMenu.ContextMenuInfo menuInfo) {
             MenuItem menuEdit = menu.add("Editar");
-//            menuEdit.setOnMenuItemClickListener(new MenuItem.OnMenuItemClickListener() {
-//                @Override
-//                public boolean onMenuItemClick(MenuItem item) {
-//                    int position = getAdapterPosition();
-//                    Sample sample  = lpListFiltered.get(position);
-//
-//                    Intent goToFormActivity = new Intent(context, formActivity.class);
-//                    goToFormActivity
-//                            .putExtra("sample", sample)
-//                            .putExtra("type", "edit");
-//                    context.startActivity(goToFormActivity);
-//
-//                    return false;
-//                }
-//            });
+            menuEdit.setOnMenuItemClickListener(new MenuItem.OnMenuItemClickListener() {
+                @Override
+                public boolean onMenuItemClick(MenuItem item) {
+                    int position = getAdapterPosition();
+                    lpModel lp  = lpListFiltered.get(position);
+
+                    Intent goToFormActivity = new Intent(context, form_ligProvActivity.class);
+                    goToFormActivity
+                            .putExtra("lp", lp)
+                            .putExtra("type", "edit");
+                    context.startActivity(goToFormActivity);
+
+                    return false;
+                }
+            });
 //
 //            MenuItem menuDelete = menu.add("Delete");
 //            menuDelete.setOnMenuItemClickListener(new MenuItem.OnMenuItemClickListener() {

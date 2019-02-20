@@ -25,6 +25,7 @@ import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.text.Normalizer;
 import java.util.List;
 
 
@@ -57,13 +58,30 @@ public class OpenCSVReader {
             while ((nextRecord = csvReader.readNext()) != null) {
                 lpModel lp = new lpModel();
 
-                lp.setOrdem(nextRecord[1]);
-                lp.setCliente(nextRecord[2]);
-                lp.setEndereco(nextRecord[3]);
+
+
+                lp.setOrdem(stripAccents(nextRecord[1]));
+                lp.setCliente(stripAccents(nextRecord[2]));
+                lp.setEndereco(stripAccents(nextRecord[3]));
+
+                lp.setNumero_cliente(stripAccents(nextRecord[0]));
+                lp.setBairro(stripAccents(nextRecord[4]));
+                lp.setDescricao_etapa(stripAccents(nextRecord[12]));
+                lp.setObservacoes(stripAccents(nextRecord[14]));
+                lp.setDescricao_retorno(stripAccents(nextRecord[15]));
+                lp.setObservacao_exe(stripAccents(nextRecord[28]));
+                lp.setTempo_max_servico(stripAccents(nextRecord[31]));
+                lp.setPerc_tempo_maximo(stripAccents(nextRecord[32]));
 
                 dao.insert(lp);
             }
             dao.close();
         }
+    }
+
+    private static String stripAccents(String s) {
+        s = Normalizer.normalize(s, Normalizer.Form.NFD);
+        s = s.replaceAll("[\\p{InCombiningDiacriticalMarks}]", "");
+        return s;
     }
 }

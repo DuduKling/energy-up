@@ -1,6 +1,7 @@
 package com.dudukling.enelz;
 
 import android.Manifest;
+import android.annotation.SuppressLint;
 import android.annotation.TargetApi;
 import android.content.ContentUris;
 import android.content.Context;
@@ -8,6 +9,8 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.database.Cursor;
+import android.database.sqlite.SQLiteDatabase;
+import android.location.Location;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
@@ -37,19 +40,25 @@ import com.dudukling.enelz.dao.lpDAO;
 import com.dudukling.enelz.model.lpModel;
 import com.dudukling.enelz.util.FileChooser;
 import com.dudukling.enelz.util.OpenCSVReader;
+import com.opencsv.CSVWriter;
 
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
+import java.io.FileWriter;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.URI;
 import java.net.URISyntaxException;
+import java.text.Normalizer;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.List;
 
 public class ligProvActivity extends AppCompatActivity {
     private static final int FILE_SELECT_CODE = 000;
     private static final int WRITE_PERMISSION_CODE = 111;
+    private static final int EXPORT_WRITE_PERMISSION_CODE = 222;
 
     private RecyclerView recyclerView;
     private ligProv_recyclerAdapter RecyclerAdapter;
@@ -142,6 +151,9 @@ public class ligProvActivity extends AppCompatActivity {
                         }
                     }
                     break;
+                case R.id.menu_export_file:
+                    checkPermissionBeforeExport();
+                    break;
             }
             return super.onOptionsItemSelected(item);
     }
@@ -183,6 +195,69 @@ public class ligProvActivity extends AppCompatActivity {
                 .setNegativeButton("Cancelar", dialogClickListener).show();
     }
 
+    @RequiresApi(api = Build.VERSION_CODES.M)
+    private void checkPermissionBeforeExport() {
+        if (this.checkSelfPermission(Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
+            ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE}, EXPORT_WRITE_PERMISSION_CODE);
+        } else {
+            exportDB();
+        }
+    }
+
+    private void exportDB() {
+        lpDAO dao = new lpDAO(this);
+
+        File exportDir = new File(Environment.getExternalStorageDirectory(), "");
+        if (!exportDir.exists()){
+            boolean dirCreated = exportDir.mkdirs();
+            Log.d("TAG1", "exportDB() called: "+dirCreated);
+        }
+
+        @SuppressLint("SimpleDateFormat") String timeStamp = new SimpleDateFormat("dd-MM-yyyy_HH-mm-ss").format(new Date());
+        File file = new File(exportDir, "EnelExport_"+timeStamp+".csv");
+
+        try{
+            boolean fileCreated = file.createNewFile();
+            Log.d("TAG2", "createNewFile() called: "+fileCreated);
+            CSVWriter csvWrite = new CSVWriter(new FileWriter(file));
+
+            SQLiteDatabase db = dao.getReadableDatabase();
+            Cursor curCSV = db.rawQuery("SELECT id, ordem, userObservacao, userCargaMedida FROM lpTable " +
+                    "WHERE userObservacao <> '' OR userCargaMedida != ''",null);
+
+            String[] str = {"ID", "ordem", "userObservacao", "userCargaMedida"};
+
+            csvWrite.writeNext(str);
+
+            while(curCSV.moveToNext()){
+                // Column you want get from DB:
+                String id = curCSV.getString(0);
+                String ordem = curCSV.getString(1);
+                String userObservacao = stripAccents(curCSV.getString(2));
+                String userCargaMedida = stripAccents(curCSV.getString(3));
+
+                String arrStr[] = {id, ordem, userObservacao, userCargaMedida};
+
+                csvWrite.writeNext(arrStr);
+            }
+            csvWrite.close();
+            curCSV.close();
+
+            Toast.makeText(this, "Exportado!", Toast.LENGTH_SHORT).show();
+
+        }catch(Exception sqlEx){
+            Log.e("MainActivity", sqlEx.getMessage(), sqlEx);
+        }
+
+        dao.close();
+    }
+
+    public static String stripAccents(String s) {
+        s = Normalizer.normalize(s, Normalizer.Form.NFD);
+        s = s.replaceAll("[\\p{InCombiningDiacriticalMarks}]", "");
+        return s;
+    }
+
     public static void deleteImagesFromPhoneMemory(lpModel lp) {
         List<String> imagesListToDelete = lp.getImagesList();
         for(int i = 0; i < imagesListToDelete.size(); i++){
@@ -211,8 +286,15 @@ public class ligProvActivity extends AppCompatActivity {
         if(requestCode == WRITE_PERMISSION_CODE) {
             if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_DENIED) {
                 Toast.makeText(this, "Não é possível utilizar esta função sem permissão!", Toast.LENGTH_SHORT).show();
-            } else{
+            } else {
                 callFileChooser();
+            }
+        }
+        if(requestCode == EXPORT_WRITE_PERMISSION_CODE) {
+            if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_DENIED) {
+                Toast.makeText(this, "Não é possível utilizar esta função sem permissão!", Toast.LENGTH_SHORT).show();
+            } else{
+                exportDB();
             }
         }
     }

@@ -1,9 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto">
+
     <item
-        android:id="@+id/menu_saveLP_button"
-        android:icon="@drawable/ic_check"
-        android:title="Save"
+        android:id="@+id/menu_edit_button"
+        android:icon="@drawable/ic_edit"
+        android:title="Editar"
         app:showAsAction="always" />
 </menu>

@@ -22,7 +22,17 @@ public class lpDAO extends SQLiteOpenHelper {
                 " id INTEGER PRIMARY KEY," +
                 " ordem TEXT NOT NULL," +
                 " cliente TEXT NOT NULL," +
-                " endereco TEXT NOT NULL" +
+                " endereco TEXT NOT NULL," +
+                " bairro TEXT NOT NULL," +
+                " numero_cliente TEXT NOT NULL," +
+                " descricao_etapa TEXT NOT NULL," +
+                " observacoes TEXT NOT NULL," +
+                " descricao_retorno TEXT NOT NULL," +
+                " observacao_exe TEXT NOT NULL," +
+                " tempo_max_servico TEXT NOT NULL," +
+                " perc_tempo_maximo TEXT NOT NULL," +
+                " userObservacao TEXT NOT NULL," +
+                " userCargaMedida TEXT NOT NULL" +
                 ");";
         db.execSQL(sql);
 
@@ -48,6 +58,10 @@ public class lpDAO extends SQLiteOpenHelper {
         SQLiteDatabase db = getWritableDatabase();
 
         ContentValues queryData = getContentValues(lp);
+
+        queryData.put("userObservacao", "");
+        queryData.put("userCargaMedida", "");
+
         db.insert("lpTable", null, queryData);
 
         // Add pictures:
@@ -70,25 +84,26 @@ public class lpDAO extends SQLiteOpenHelper {
         db.delete("lpImages","collectionID = ?", params);
     }
 
-    public void edit(lpModel lp) {
+    public void updateLPInfo(lpModel lp) {
         SQLiteDatabase db = getWritableDatabase();
         ContentValues queryData = getContentValues(lp);
         String[] params = {String.valueOf(lp.getId())};
         db.update("lpTable", queryData, "id=?", params);
 
-        int lpId = lp.getId();
-        deleteAllImagesFromDB(lpId);
 
-        // Add all pictures:
-        ContentValues queryData2 = new ContentValues();
-        List<String> images = lp.getImagesList();
+//        int lpId = lp.getId();
+//        deleteAllImagesFromDB(lpId);
 
-        for(int i=0; i <= (images.size() - 1); i++){
-            queryData2.clear();
-            queryData2.put("path", images.get(i));
-            queryData2.put("lpID", lpId);
-            db.insert("Images", null, queryData2);
-        }
+//        // Add all pictures:
+//        ContentValues queryData2 = new ContentValues();
+//        List<String> images = lp.getImagesList();
+//
+//        for(int i=0; i <= (images.size() - 1); i++){
+//            queryData2.clear();
+//            queryData2.put("path", images.get(i));
+//            queryData2.put("lpID", lpId);
+//            db.insert("Images", null, queryData2);
+//        }
     }
 
     public void deleteImage(int lpID, int imageID) {
@@ -123,6 +138,19 @@ public class lpDAO extends SQLiteOpenHelper {
             lp.setOrdem(c.getString(c.getColumnIndex("ordem")));
             lp.setCliente(c.getString(c.getColumnIndex("cliente")));
             lp.setEndereco(c.getString(c.getColumnIndex("endereco")));
+
+            lp.setNumero_cliente(c.getString(c.getColumnIndex("numero_cliente")));
+            lp.setBairro(c.getString(c.getColumnIndex("bairro")));
+            lp.setDescricao_etapa(c.getString(c.getColumnIndex("descricao_etapa")));
+            lp.setObservacoes(c.getString(c.getColumnIndex("observacoes")));
+            lp.setDescricao_retorno(c.getString(c.getColumnIndex("descricao_retorno")));
+            lp.setObservacao_exe(c.getString(c.getColumnIndex("observacao_exe")));
+            lp.setTempo_max_servico(c.getString(c.getColumnIndex("tempo_max_servico")));
+            lp.setPerc_tempo_maximo(c.getString(c.getColumnIndex("perc_tempo_maximo")));
+
+            lp.setUserObservacao(c.getString(c.getColumnIndex("userObservacao")));
+            lp.setUserCargaMedida(c.getString(c.getColumnIndex("userCargaMedida")));
+
 
             // Imagens:
             List<String> imagesList = getImagesDB(dbSampleID);
@@ -159,6 +187,18 @@ public class lpDAO extends SQLiteOpenHelper {
         queryData.put("ordem", lp.getOrdem());
         queryData.put("cliente", lp.getCliente());
         queryData.put("endereco", lp.getEndereco());
+
+        queryData.put("numero_cliente", lp.getNumero_cliente());
+        queryData.put("bairro", lp.getBairro());
+        queryData.put("descricao_etapa", lp.getDescricao_etapa());
+        queryData.put("observacoes", lp.getObservacoes());
+        queryData.put("descricao_retorno", lp.getDescricao_retorno());
+        queryData.put("observacao_exe", lp.getObservacao_exe());
+        queryData.put("tempo_max_servico", lp.getTempo_max_servico());
+        queryData.put("perc_tempo_maximo", lp.getPerc_tempo_maximo());
+
+        queryData.put("userObservacao", lp.getUserObservacao());
+        queryData.put("userCargaMedida", lp.getUserCargaMedida());
 
         return queryData;
     }

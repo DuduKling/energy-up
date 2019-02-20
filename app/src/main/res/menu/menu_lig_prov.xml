@@ -8,10 +8,6 @@
         app:showAsAction="always"/>
 
     <item
-        android:id="@+id/menu_import_file"
-        android:title="@string/menu_importar_arquivo"/>
-
-    <item
         android:id="@+id/menu_delete_all"
         android:title="@string/menu_limpar_aplicativo"/>
 
