@@ -29,12 +29,12 @@
     <TextView
         android:id="@+id/textViewCliente"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_height="18dp"
         android:layout_marginEnd="8dp"
         android:layout_marginRight="8dp"
         android:textSize="14sp"
         app:layout_constraintBottom_toBottomOf="@+id/textViewOrdem"
-        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintEnd_toStartOf="@+id/imageViewStatusOrdem"
         app:layout_constraintStart_toEndOf="@+id/textViewOrdem"
         app:layout_constraintTop_toTopOf="@+id/textViewOrdem"
         tools:text="Nome cliente" />
@@ -50,10 +50,19 @@
         android:textSize="14sp"
         android:textStyle="italic"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintEnd_toStartOf="@+id/imageViewStatusOrdem"
         app:layout_constraintStart_toStartOf="@+id/textViewOrdem"
         app:layout_constraintTop_toBottomOf="@+id/textViewOrdem"
         tools:text="Endereco" />
+
+    <ImageView
+        android:id="@+id/imageViewStatusOrdem"
+        android:layout_width="20dp"
+        android:layout_height="0dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        android:contentDescription="Status da Ordem" />
 
 
 </android.support.constraint.ConstraintLayout>

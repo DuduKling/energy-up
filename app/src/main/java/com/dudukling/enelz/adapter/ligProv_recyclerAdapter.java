@@ -2,6 +2,7 @@ package com.dudukling.enelz.adapter;
 
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Color;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
 import android.view.ContextMenu;
@@ -11,6 +12,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Filter;
 import android.widget.Filterable;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.dudukling.enelz.R;
@@ -48,18 +50,28 @@ public class ligProv_recyclerAdapter extends RecyclerView.Adapter implements Fil
         holder.viewOrdem.setText(lp.getOrdem());
         holder.viewCliente.setText(lp.getCliente());
         holder.viewEndereco.setText(lp.getEndereco());
+
+        if(!lp.getUserCargaMedida().equals("") && !lp.getUserObservacao().equals("") && !lp.getImagesList().isEmpty()){
+            holder.imageViewStatus.setBackgroundColor(Color.parseColor("#8BC34A"));
+        }else{
+            if(!lp.getUserCargaMedida().equals("") || !lp.getUserObservacao().equals("") || !lp.getImagesList().isEmpty()) {
+                holder.imageViewStatus.setBackgroundColor(Color.parseColor("#FFC107"));
+            }
+        }
     }
 
     class aViewHolder extends RecyclerView.ViewHolder implements View.OnCreateContextMenuListener {
         final TextView viewEndereco;
         final TextView viewCliente;
         final TextView viewOrdem;
+        final ImageView imageViewStatus;
 
         aViewHolder(View view) {
             super(view);
             viewOrdem = view.findViewById(R.id.textViewOrdem);
             viewCliente = view.findViewById(R.id.textViewCliente);
             viewEndereco = view.findViewById(R.id.textViewEndereco);
+            imageViewStatus = view.findViewById(R.id.imageViewStatusOrdem);
 
             view.setOnCreateContextMenuListener(this);
             view.setOnClickListener(new View.OnClickListener() {
