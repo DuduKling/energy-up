@@ -51,16 +51,16 @@ public class lpDAO extends SQLiteOpenHelper {
         db.insert("lpTable", null, queryData);
 
         // Add pictures:
-        ContentValues queryData2 = new ContentValues();
-        List<String> images = lp.getImagesList();
-        int lastId = lastID();
-
-        for(int i=0; i <= (images.size() - 1); i++){
-            queryData2.clear();
-            queryData2.put("path", images.get(i));
-            queryData2.put("lpID", lastId);
-            db.insert("lpImages", null, queryData2);
-        }
+//        ContentValues queryData2 = new ContentValues();
+//        List<String> images = lp.getImagesList();
+//        int lastId = lastID();
+//
+//        for(int i=0; i <= (images.size() - 1); i++){
+//            queryData2.clear();
+//            queryData2.put("path", images.get(i));
+//            queryData2.put("lpID", lastId);
+//            db.insert("lpImages", null, queryData2);
+//        }
     }
 
     public void delete(lpModel lp) {
@@ -106,7 +106,7 @@ public class lpDAO extends SQLiteOpenHelper {
 
 
     // GETS
-    public List<lpModel> getSamples() {
+    public List<lpModel> getLPList() {
         SQLiteDatabase db = getReadableDatabase();
 
         String sql = "SELECT * FROM lpTable ORDER BY id DESC";
@@ -140,7 +140,7 @@ public class lpDAO extends SQLiteOpenHelper {
         SQLiteDatabase db = getReadableDatabase();
 
         List<String> imagesList = new ArrayList<>();
-        String sql2 = "SELECT * FROM lpImages WHERE collectionID = ?";
+        String sql2 = "SELECT * FROM lpImages WHERE lpID = ?";
         Cursor c2 = db.rawQuery(sql2, new String[]{String.valueOf(dbSampleID)});
         while (c2.moveToNext()) {
             imagesList.add(c2.getString(c2.getColumnIndex("path")));
@@ -164,7 +164,7 @@ public class lpDAO extends SQLiteOpenHelper {
     }
 
     public int lastID(){
-        String sql = "SELECT MAX(id) AS LAST FROM lpImages";
+        String sql = "SELECT MAX(id) AS LAST FROM lpTable";
         SQLiteDatabase db = getReadableDatabase();
         Cursor c = db.rawQuery(sql, null);
         c.moveToFirst();

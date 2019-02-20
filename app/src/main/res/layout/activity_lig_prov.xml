@@ -7,7 +7,7 @@
     tools:context=".ligProvActivity">
 
     <android.support.v7.widget.RecyclerView
-        android:id="@+id/collection_list"
+        android:id="@+id/recyclerViewLP"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         app:layout_constraintBottom_toBottomOf="parent"
@@ -20,20 +20,38 @@
         android:id="@+id/textViewNoRecords"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="8dp"
-        android:layout_marginEnd="8dp"
-        android:layout_marginLeft="8dp"
-        android:layout_marginRight="8dp"
         android:layout_marginStart="8dp"
+        android:layout_marginLeft="8dp"
         android:layout_marginTop="8dp"
+        android:layout_marginEnd="8dp"
+        android:layout_marginRight="8dp"
+        android:layout_marginBottom="8dp"
         android:text="@string/item_sem_registros"
         android:textAllCaps="false"
         android:textSize="18sp"
+        android:textStyle="italic"
         android:visibility="gone"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_bias="0.050000012" />
+
+    <Button
+        android:id="@+id/buttonImportFile"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:layout_marginBottom="8dp"
+        android:background="@color/colorPrimary"
+        android:padding="15dp"
+        android:text="Importar arquivo"
+        android:textColor="@android:color/background_light"
+        android:textSize="14sp"
+        android:visibility="gone"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="@+id/textViewNoRecords"
+        app:layout_constraintStart_toStartOf="@+id/textViewNoRecords"
+        app:layout_constraintTop_toBottomOf="@+id/textViewNoRecords" />
 
 </android.support.constraint.ConstraintLayout>

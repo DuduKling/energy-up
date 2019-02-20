@@ -24,12 +24,12 @@ import java.util.List;
 public class ligProv_recyclerAdapter extends RecyclerView.Adapter implements Filterable {
     private Context context;
     private List<lpModel> lpList;
-    private List<lpModel> samplesFiltered;
+    private List<lpModel> lpListFiltered;
 
     public ligProv_recyclerAdapter(List<lpModel> lpList, Context context) {
         this.lpList = lpList;
         this.context = context;
-        this.samplesFiltered = lpList;
+        this.lpListFiltered = lpList;
     }
 
     @NonNull
@@ -43,7 +43,7 @@ public class ligProv_recyclerAdapter extends RecyclerView.Adapter implements Fil
     @Override
     public void onBindViewHolder(@NonNull RecyclerView.ViewHolder viewHolder, int position) {
         aViewHolder holder = (aViewHolder) viewHolder;
-        lpModel lp  = samplesFiltered.get(position);
+        lpModel lp  = lpListFiltered.get(position);
 
         holder.viewOrdem.setText(lp.getOrdem());
         holder.viewCliente.setText(lp.getCliente());
@@ -66,7 +66,7 @@ public class ligProv_recyclerAdapter extends RecyclerView.Adapter implements Fil
                 @Override
                 public void onClick(View v) {
                     int position = getAdapterPosition();
-                    lpModel lp  = samplesFiltered.get(position);
+                    lpModel lp  = lpListFiltered.get(position);
 
                     Intent goToFormActivity = new Intent(context, form_ligProvActivity.class);
                     goToFormActivity.putExtra("lp", lp);
@@ -82,7 +82,7 @@ public class ligProv_recyclerAdapter extends RecyclerView.Adapter implements Fil
 //                @Override
 //                public boolean onMenuItemClick(MenuItem item) {
 //                    int position = getAdapterPosition();
-//                    Sample sample  = samplesFiltered.get(position);
+//                    Sample sample  = lpListFiltered.get(position);
 //
 //                    Intent goToFormActivity = new Intent(context, formActivity.class);
 //                    goToFormActivity
@@ -99,12 +99,12 @@ public class ligProv_recyclerAdapter extends RecyclerView.Adapter implements Fil
 //                @Override
 //                public boolean onMenuItemClick(MenuItem item) {
 //                    int position = getAdapterPosition();
-//                    Sample sample  = samplesFiltered.get(position);
+//                    Sample sample  = lpListFiltered.get(position);
 //
 //                    sampleDAO dao = new sampleDAO(context);
 //                    formHelper.deleteImagesFromPhoneMemory(sample);
 //                    dao.delete(sample);
-//                    samplesFiltered = dao.getSamples();
+//                    lpListFiltered = dao.getSamples();
 //                    dao.close();
 //
 //                    notifyDataSetChanged();
@@ -118,7 +118,7 @@ public class ligProv_recyclerAdapter extends RecyclerView.Adapter implements Fil
 
     @Override
     public int getItemCount() {
-        return samplesFiltered.size();
+        return lpListFiltered.size();
     }
 
     @Override
@@ -151,7 +151,7 @@ public class ligProv_recyclerAdapter extends RecyclerView.Adapter implements Fil
 
             @Override
             protected void publishResults(CharSequence charSequence, FilterResults results) {
-                samplesFiltered = (List<lpModel>) results.values;
+                lpListFiltered = (List<lpModel>) results.values;
                 notifyDataSetChanged();
             }
         };
