@@ -118,6 +118,15 @@ public class lpDAO extends SQLiteOpenHelper {
         db.delete("lpImages", null,null);
     }
 
+    public void insertImage(lpModel lp, String path) {
+        SQLiteDatabase db = getWritableDatabase();
+
+        ContentValues queryData = new ContentValues();
+        queryData.put("path", path);
+        queryData.put("lpID", lp.getId());
+
+        db.insert("lpImages", null, queryData);
+    }
 
 
     // GETS

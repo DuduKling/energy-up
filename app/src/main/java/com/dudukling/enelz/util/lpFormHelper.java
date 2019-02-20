@@ -2,6 +2,7 @@ package com.dudukling.enelz.util;
 
 import android.graphics.Color;
 import android.support.design.widget.TextInputLayout;
+import android.util.Log;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.TextView;
@@ -11,6 +12,7 @@ import com.dudukling.enelz.dao.lpDAO;
 import com.dudukling.enelz.form_ligProvActivity;
 import com.dudukling.enelz.model.lpModel;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -119,6 +121,7 @@ public class lpFormHelper {
     }
 
 
+
     // HELPERS
     private void disableEditText(EditText editText) {
         editText.setFocusable(false);
@@ -128,7 +131,14 @@ public class lpFormHelper {
         editText.setTextColor(Color.parseColor("#616161"));
     }
 
-
+    public static void deleteImagesFromPhoneMemory(lpModel lp) {
+        List<String> imagesListToDelete = lp.getImagesList();
+        for(int i = 0; i < imagesListToDelete.size(); i++){
+            File file = new File(imagesListToDelete.get(i));
+            boolean deleted = file.delete();
+            Log.d("TAG4", "delete() called: "+deleted);
+        }
+    }
 
 
     // VALIDAÇÃO

@@ -1,13 +1,16 @@
 package com.dudukling.enelz;
 
+import android.app.Activity;
 import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.RequiresApi;
+import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AppCompatActivity;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
+import android.view.View;
 import android.widget.Toast;
 
 import com.dudukling.enelz.dao.lpDAO;
@@ -24,6 +27,7 @@ public class form_ligProvActivity extends AppCompatActivity {
     private String formType;
     private boolean saved = false;
     public List<String> imagesList = new ArrayList<>();
+    private FloatingActionButton albumButton;
 
     @RequiresApi(api = Build.VERSION_CODES.KITKAT)
     @Override
@@ -39,8 +43,18 @@ public class form_ligProvActivity extends AppCompatActivity {
         setTitle(lp.getOrdem());
         formHelper = new lpFormHelper(this, "new", lp);
 
-//        cameraControl = new cameraController(formActivity.this, helperForm.getSample(imagesList));
-//        cameraControl.setCameraActions();
+
+        albumButton = findViewById(R.id.buttonAlbum);
+        albumButton.setVisibility(View.GONE);
+        albumButton.setOnClickListener(new View.OnClickListener() {
+            @RequiresApi(api = Build.VERSION_CODES.M)
+            @Override
+            public void onClick(View v) {
+                Intent goToAlbum = new Intent(form_ligProvActivity.this, ligProvAlbumActivity.class);
+                goToAlbum.putExtra("lp", lp);
+                startActivity(goToAlbum);
+            }
+        });
 
         if (formType.equals("edit")) {setFormEdit(); return;}
         if (formType.equals("readOnly")) {setFormReadOnly();}
@@ -48,6 +62,7 @@ public class form_ligProvActivity extends AppCompatActivity {
 
     private void setFormEdit() {
         formHelper = new lpFormHelper(this, "edit", lp);
+        albumButton.setVisibility(View.GONE);
 
 //        cameraControl = new cameraController(formActivity.this, helperForm.getSample(imagesList));
 //        cameraControl.setCameraActions();
@@ -57,10 +72,10 @@ public class form_ligProvActivity extends AppCompatActivity {
 
     private void setFormReadOnly() {
         formHelper = new lpFormHelper(this, "readOnly", lp);
+        albumButton.setVisibility(View.VISIBLE);
 
 //        setAlbumAction();
     }
-
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
