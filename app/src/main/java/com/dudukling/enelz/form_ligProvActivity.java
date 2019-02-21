@@ -16,6 +16,7 @@ import android.widget.Toast;
 import com.dudukling.enelz.dao.lpDAO;
 import com.dudukling.enelz.model.lpModel;
 import com.dudukling.enelz.util.lpFormHelper;
+import com.dudukling.enelz.util.mapsController;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -28,6 +29,7 @@ public class form_ligProvActivity extends AppCompatActivity {
     private boolean saved = false;
     public List<String> imagesList = new ArrayList<>();
     private FloatingActionButton albumButton;
+    private mapsController mapsControl;
 
     @RequiresApi(api = Build.VERSION_CODES.KITKAT)
     @Override
@@ -55,6 +57,9 @@ public class form_ligProvActivity extends AppCompatActivity {
                 startActivity(goToAlbum);
             }
         });
+
+        mapsControl = new mapsController(this);
+        mapsControl.startMaps();
 
         if (formType.equals("edit")) {setFormEdit(); return;}
         if (formType.equals("readOnly")) {setFormReadOnly();}

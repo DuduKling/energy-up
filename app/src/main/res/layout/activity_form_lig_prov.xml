@@ -13,6 +13,28 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
 
+        <!-- MAPS -->
+        <RelativeLayout
+            android:id="@+id/map_layout"
+            android:layout_width="0dp"
+            android:layout_height="200dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent">
+
+            <FrameLayout
+                android:id="@+id/mapFrame"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent" />
+
+            <ImageView
+                android:id="@+id/transparent_image"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:background="@android:color/transparent"
+                android:contentDescription="Imagem trasparente" />
+        </RelativeLayout>
+
         <TextView
             android:id="@+id/TextViewFormOrdem"
             android:layout_width="0dp"
@@ -27,8 +49,9 @@
             android:textStyle="bold"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/map_layout"
             tools:text="123888123888123888" />
+
         <android.support.design.widget.FloatingActionButton
             android:id="@+id/buttonAlbum"
             android:layout_width="56dp"
@@ -43,10 +66,11 @@
             android:clickable="true"
             android:focusable="true"
             app:backgroundTint="@color/colorPrimary"
+            app:layout_constraintBottom_toBottomOf="@+id/map_layout"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="1.0"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/map_layout"
             app:layout_constraintVertical_bias="0.0"
             app:srcCompat="@drawable/ic_album" />
 
