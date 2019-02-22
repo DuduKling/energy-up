@@ -18,6 +18,7 @@ import android.os.Bundle;
 import android.os.Environment;
 import android.provider.DocumentsContract;
 import android.provider.MediaStore;
+import android.provider.SyncStateContract;
 import android.support.annotation.NonNull;
 import android.support.annotation.RequiresApi;
 import android.support.v4.app.ActivityCompat;
@@ -44,18 +45,24 @@ import com.dudukling.enelz.util.OpenCSVReader;
 import com.dudukling.enelz.util.mapsController;
 import com.opencsv.CSVWriter;
 
+import java.io.BufferedInputStream;
+import java.io.BufferedOutputStream;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.OutputStream;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.text.Normalizer;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
+import java.util.zip.ZipEntry;
+import java.util.zip.ZipOutputStream;
 
 public class ligProvActivity extends AppCompatActivity {
     private static final int FILE_SELECT_CODE = 000;
@@ -204,9 +211,92 @@ public class ligProvActivity extends AppCompatActivity {
         if (this.checkSelfPermission(Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
             ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE}, EXPORT_WRITE_PERMISSION_CODE);
         } else {
+//            exportImages();
             exportDB("");
         }
     }
+
+    private void exportImages() {
+        /* Example: zipFileAtPath("downloads/myfolder", "downloads/myFolder.zip"); */
+
+        String sourcePath = "/Download";
+        //Environment.getExternalStorageDirectory()
+        String toLocation = this.getFilesDir().getPath() + "/mysFolder.zip";
+        // java.io.FileNotFoundException: /myFolder.zip (Read-only file system)
+
+        final int BUFFER = 2048;
+
+        File sourceFile = new File(sourcePath);
+
+        Toast.makeText(this, "BB: " + sourcePath, Toast.LENGTH_SHORT).show();
+
+        try {
+            BufferedInputStream origin = null;
+            FileOutputStream dest = new FileOutputStream(toLocation);
+            ZipOutputStream out = new ZipOutputStream(new BufferedOutputStream(
+                    dest));
+            if (sourceFile.isDirectory()) {
+                zipSubFolder(out, sourceFile, sourceFile.getParent().length());
+            } else {
+                byte data[] = new byte[BUFFER];
+                FileInputStream fi = new FileInputStream(sourcePath);
+                origin = new BufferedInputStream(fi, BUFFER);
+                ZipEntry entry = new ZipEntry(getLastPathComponent(sourcePath));
+                entry.setTime(sourceFile.lastModified()); // to keep modification time after unzipping
+                out.putNextEntry(entry);
+                int count;
+                while ((count = origin.read(data, 0, BUFFER)) != -1) {
+                    out.write(data, 0, count);
+                }
+            }
+            out.close();
+
+            Toast.makeText(this, "AAAAAA!", Toast.LENGTH_LONG).show();
+
+        } catch (Exception e) {
+            e.printStackTrace();
+//          return false;
+        }
+//       return true;
+    }
+    /* Zips a subfolder */
+    private void zipSubFolder(ZipOutputStream out, File folder, int basePathLength) throws IOException {
+
+        final int BUFFER = 2048;
+
+        File[] fileList = folder.listFiles();
+        BufferedInputStream origin = null;
+        for (File file : fileList) {
+            if (file.isDirectory()) {
+                zipSubFolder(out, file, basePathLength);
+            } else {
+                byte data[] = new byte[BUFFER];
+                String unmodifiedFilePath = file.getPath();
+                String relativePath = unmodifiedFilePath
+                        .substring(basePathLength);
+                FileInputStream fi = new FileInputStream(unmodifiedFilePath);
+                origin = new BufferedInputStream(fi, BUFFER);
+                ZipEntry entry = new ZipEntry(relativePath);
+                entry.setTime(file.lastModified()); // to keep modification time after unzipping
+                out.putNextEntry(entry);
+                int count;
+                while ((count = origin.read(data, 0, BUFFER)) != -1) {
+                    out.write(data, 0, count);
+                }
+                origin.close();
+            }
+        }
+    }
+    /*Example: getLastPathComponent("downloads/example/fileToZip"); Result: "fileToZip" */
+    public String getLastPathComponent(String filePath) {
+        String[] segments = filePath.split("/");
+        if (segments.length == 0)
+            return "";
+        String lastPathComponent = segments[segments.length - 1];
+        return lastPathComponent;
+    }
+
+
 
     private void exportDB(String type) {
         lpDAO dao = new lpDAO(this);
@@ -266,7 +356,7 @@ public class ligProvActivity extends AppCompatActivity {
                 Log.e("MainActivity", sqlEx.getMessage(), sqlEx);
             }
         }else{
-            Toast.makeText(this, "Sem registros modificados.", Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, "Não há registros modificados para exportar.", Toast.LENGTH_SHORT).show();
         }
         dao.close();
     }

@@ -70,9 +70,9 @@ public class cameraController {
     }
 
     private File createImageFile() throws IOException {
-        @SuppressLint("SimpleDateFormat") String timeStamp = new SimpleDateFormat("dd-MM-yyy_HH-mm-ss").format(new Date());
+        @SuppressLint("SimpleDateFormat") String timeStamp = new SimpleDateFormat("ddMMyyy_HHmmss").format(new Date());
 
-        String imageFileName = lp.getOrdem() + "_#" + timeStamp;
+        String imageFileName = lp.getOrdem() + "_" + timeStamp;
 
         String path = formActivity.getExternalFilesDir(Environment.DIRECTORY_PICTURES) + "/" + lp.getOrdem();
         storageDir = new File(path);
