@@ -33,31 +33,33 @@ public class OpenCSVReader {
 
     @RequiresApi(api = Build.VERSION_CODES.O)
     public static void readCSVFile(Context context, String arquivoPath) throws IOException {
-
-        CSVParser parser = new CSVParserBuilder().withSeparator(';').build();
         Path myPath = Paths.get(arquivoPath);
+        File fileDir = new File(String.valueOf(myPath));
+        String arquivoExtensao = fileDir.getAbsolutePath().substring(fileDir.getAbsolutePath().lastIndexOf("."));
+
+        CSVParser parser;
+        switch (arquivoExtensao) {
+            case ".csv":
+                parser = new CSVParserBuilder().withSeparator(';').build();
+                break;
+            case ".txt":
+                parser = new CSVParserBuilder().withSeparator('\t').build();
+                break;
+            default:
+                return;
+        }
+
         try (
-//                Reader reader = Files.newBufferedReader(Paths.get(arquivoPath));
-//                CSVReader csvReader = new CSVReaderBuilder(reader).withSkipLines(1).build()
-
-//                Reader reader = Files.newBufferedReader(Paths.get(arquivoPath));
-//                CSVReader csvReader = new CSVReader(reader)
-
-                BufferedReader br = Files.newBufferedReader(myPath,StandardCharsets.UTF_8);
+                BufferedReader br = new BufferedReader(
+                        new InputStreamReader(
+                                new FileInputStream(fileDir), "UTF8"));
                 CSVReader csvReader = new CSVReaderBuilder(br).withSkipLines(1).withCSVParser(parser).build()
         ){
             String[] nextRecord;
             lpDAO dao = new lpDAO(context);
 
-//            lpModel lp1 = new lpModel();
-//            lp1.setOrdem("1231231231231");
-//            lp1.setCliente("Erick lindo bla bla bla");
-//            lp1.setEndereco("Rua da puta queu pariu que nao funciona nessa merda");
-//            dao.insert(lp1);
-
             while ((nextRecord = csvReader.readNext()) != null) {
                 lpModel lp = new lpModel();
-
 
 
                 lp.setOrdem(stripAccents(nextRecord[1]));

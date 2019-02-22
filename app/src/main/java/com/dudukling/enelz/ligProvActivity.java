@@ -309,20 +309,12 @@ public class ligProvActivity extends AppCompatActivity {
                     Uri selectedURI = data.getData();
                     String path = getPathFromUri(this, selectedURI);
 
-//                    Toast.makeText(this, "PATH: "+path, Toast.LENGTH_SHORT).show();
-
                     try {
                         OpenCSVReader.readCSVFile(this, path);
-                    }catch(IOException e){
+                    }catch(IOException e) {
                         e.printStackTrace();
                         Toast.makeText(this, "Não foi possível carregar este arquivo!", Toast.LENGTH_LONG).show();
                     }
-
-                    // Log.d(TAG, "File Path: " + path);
-
-                    // Get the file instance
-                    // File file = new File(path);
-                    // Initiate the upload
                 }
                 break;
         }
