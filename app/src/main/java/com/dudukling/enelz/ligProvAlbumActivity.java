@@ -52,7 +52,6 @@ public class ligProvAlbumActivity extends AppCompatActivity {
 
         Intent intent = getIntent();
         lp = (lpModel) intent.getSerializableExtra("lp");
-        imagesList = lp.getImagesList();
 
         setTitle("Album " + lp.getOrdem());
     }
@@ -62,6 +61,11 @@ public class ligProvAlbumActivity extends AppCompatActivity {
         recyclerView.setAdapter(new ligProvAlbum_recyclerAdapter(lp, this));
         RecyclerView.LayoutManager layout = new GridLayoutManager(this, 2);
         recyclerView.setLayoutManager(layout);
+
+        lpDAO dao = new lpDAO(this);
+        imagesList = dao.getImagesDB(lp.getId());
+        dao.close();
+
         super.onResume();
     }
 
@@ -90,10 +94,11 @@ public class ligProvAlbumActivity extends AppCompatActivity {
             if (requestCode == CAMERA_REQUEST_CODE) {
                 lpDAO dao = new lpDAO(this);
                 dao.insertImage(lp, cameraControl.getPhotoPath());
+                imagesList = dao.getImagesDB(lp.getId());
                 dao.close();
 
-                imagesList.add(cameraControl.getPhotoPath());
-                lp.setImagesList(imagesList);
+//                imagesList.add(cameraControl.getPhotoPath());
+//                lp.setImagesList(imagesList);
             }
         }else{
             if (requestCode == CAMERA_REQUEST_CODE) {

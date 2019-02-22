@@ -30,7 +30,9 @@ public class ligProvAlbum_recyclerAdapter extends RecyclerView.Adapter {
 
     public ligProvAlbum_recyclerAdapter(lpModel lp, Context context) {
         this.context = context;
-        imagesList = lp.getImagesList();
+        lpDAO dao = new lpDAO(context);
+        imagesList = dao.getImagesDB(lp.getId());
+        dao.close();
         this.lp = lp;
     }
 
