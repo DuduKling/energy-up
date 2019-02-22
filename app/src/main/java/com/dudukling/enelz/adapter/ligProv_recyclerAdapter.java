@@ -50,13 +50,12 @@ public class ligProv_recyclerAdapter extends RecyclerView.Adapter implements Fil
         holder.viewOrdem.setText(lp.getOrdem());
         holder.viewCliente.setText(lp.getCliente());
         holder.viewEndereco.setText(lp.getEndereco());
-
         if(!lp.getUserCargaMedida().equals("") && !lp.getUserObservacao().equals("") && !lp.getImagesList().isEmpty()){
             holder.imageViewStatus.setBackgroundColor(Color.parseColor("#8BC34A"));
-        }else{
-            if(!lp.getUserCargaMedida().equals("") || !lp.getUserObservacao().equals("") || !lp.getImagesList().isEmpty()) {
+        }else if(!lp.getUserCargaMedida().equals("") || !lp.getUserObservacao().equals("") || !lp.getImagesList().isEmpty()) {
                 holder.imageViewStatus.setBackgroundColor(Color.parseColor("#FFC107"));
-            }
+        }else {
+            holder.imageViewStatus.setBackgroundColor(Color.TRANSPARENT);
         }
     }
 
