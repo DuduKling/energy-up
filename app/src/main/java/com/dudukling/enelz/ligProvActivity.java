@@ -11,14 +11,13 @@ import android.content.pm.PackageManager;
 import android.database.Cursor;
 import android.database.DatabaseUtils;
 import android.database.sqlite.SQLiteDatabase;
-import android.location.Location;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Environment;
+import android.os.PersistableBundle;
 import android.provider.DocumentsContract;
 import android.provider.MediaStore;
-import android.provider.SyncStateContract;
 import android.support.annotation.NonNull;
 import android.support.annotation.RequiresApi;
 import android.support.v4.app.ActivityCompat;
@@ -33,30 +32,26 @@ import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
-import android.widget.TextView;
+import android.widget.Spinner;
 import android.widget.Toast;
 
 import com.dudukling.enelz.adapter.ligProv_recyclerAdapter;
 import com.dudukling.enelz.dao.lpDAO;
 import com.dudukling.enelz.model.lpModel;
-import com.dudukling.enelz.util.FileChooser;
 import com.dudukling.enelz.util.OpenCSVReader;
-import com.dudukling.enelz.util.mapsController;
 import com.opencsv.CSVWriter;
 
 import java.io.BufferedInputStream;
 import java.io.BufferedOutputStream;
 import java.io.File;
 import java.io.FileInputStream;
-import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.FileWriter;
 import java.io.IOException;
-import java.io.InputStream;
-import java.io.OutputStream;
-import java.net.URI;
-import java.net.URISyntaxException;
+import java.io.Serializable;
 import java.text.Normalizer;
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -75,6 +70,11 @@ public class ligProvActivity extends AppCompatActivity {
     private View textViewNoRecord;
     private View buttonImportFile;
 
+    private Spinner spinnerLocalidade;
+    private Spinner spinnerTipo;
+    private Spinner spinnerEtapa;
+
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -83,20 +83,82 @@ public class ligProvActivity extends AppCompatActivity {
         recyclerView = findViewById(R.id.recyclerViewLP);
 
         registerForContextMenu(recyclerView);
-
         recyclerView.addItemDecoration(new DividerItemDecoration(recyclerView.getContext(), DividerItemDecoration.VERTICAL));
 
-        Button importButton = findViewById(R.id.buttonImportFile);
-        importButton.setOnClickListener(new View.OnClickListener() {
-            @RequiresApi(api = Build.VERSION_CODES.M)
+
+        lpDAO dao = new lpDAO(this);
+        textViewNoRecord = this.findViewById(R.id.textViewNoRecords);
+        buttonImportFile = this.findViewById(R.id.buttonImportFile);
+
+        if (dao.lastID() > 0) {
+//            textViewNoRecord.setVisibility(View.GONE);
+            buttonImportFile.setVisibility(View.GONE);
+            lpList = dao.getLPList();
+
+            RecyclerAdapter = new ligProv_recyclerAdapter(lpList, this);
+            recyclerView.setAdapter(RecyclerAdapter);
+
+            RecyclerView.LayoutManager layout = new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false);
+            recyclerView.setLayoutManager(layout);
+            setFilters();
+        }
+        dao.close();
+
+    }
+
+    private void setFilters() {
+        spinnerLocalidade = findViewById(R.id.spinnerLPLocalidades);
+        ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(this,
+                R.array.localidades, android.R.layout.simple_spinner_item); // Create an ArrayAdapter using the string array and a default spinner layout
+        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item); // Specify the layout to use when the list of choices appears
+        spinnerLocalidade.setAdapter(adapter);    // Apply the adapter to the spinner
+        spinnerLocalidade.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
-            public void onClick(View v) {
-                if (ligProvActivity.this.checkSelfPermission(Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
-                    ActivityCompat.requestPermissions(ligProvActivity.this, new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE}, WRITE_PERMISSION_CODE);
-                } else {
-                    callFileChooser();
-                }
+            public void onItemSelected(AdapterView<?> parentView, View selectedItemView, int position, long id) {
+                RecyclerAdapter.updateStaticFilter(spinnerLocalidade, "localidade", position);
             }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parentView) {
+                // your code here
+            }
+
+        });
+
+
+        spinnerTipo = findViewById(R.id.spinnerLPTipoOrdem);
+        ArrayAdapter<CharSequence> adapter1 = ArrayAdapter.createFromResource(this, R.array.tipoOrdem, android.R.layout.simple_spinner_item);
+        adapter1.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        spinnerTipo.setAdapter(adapter1);
+        spinnerTipo.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parentView, View selectedItemView, int position, long id) {
+                RecyclerAdapter.updateStaticFilter(spinnerTipo, "tipo", position);
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parentView) {
+                // your code here
+            }
+
+        });
+
+
+        spinnerEtapa = findViewById(R.id.spinnerLPEtapa);
+        ArrayAdapter<CharSequence> adapter2 = ArrayAdapter.createFromResource(this, R.array.etapas, android.R.layout.simple_spinner_item);
+        adapter2.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        spinnerEtapa.setAdapter(adapter2);
+        spinnerEtapa.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parentView, View selectedItemView, int position, long id) {
+                RecyclerAdapter.updateStaticFilter(spinnerEtapa, "etapa", position);
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parentView) {
+                // your code here
+            }
+
         });
     }
 
@@ -111,19 +173,41 @@ public class ligProvActivity extends AppCompatActivity {
         if (dao.lastID() == 0) {
             textViewNoRecord.setVisibility(View.VISIBLE);
             buttonImportFile.setVisibility(View.VISIBLE);
-        }else{
-            textViewNoRecord.setVisibility(View.GONE);
-            buttonImportFile.setVisibility(View.GONE);
-            lpList = dao.getLPList();
 
-            RecyclerAdapter = new ligProv_recyclerAdapter(lpList, this);
-            recyclerView.setAdapter(RecyclerAdapter);
+            Button importButton = findViewById(R.id.buttonImportFile);
+            importButton.setOnClickListener(new View.OnClickListener() {
+                @RequiresApi(api = Build.VERSION_CODES.M)
+                @Override
+                public void onClick(View v) {
+                    if (ligProvActivity.this.checkSelfPermission(Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
+                        ActivityCompat.requestPermissions(ligProvActivity.this, new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE}, WRITE_PERMISSION_CODE);
+                    } else {
+                        callFileChooser();
+                    }
+                }
+            });
 
-            RecyclerView.LayoutManager layout = new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false);
-            recyclerView.setLayoutManager(layout);
         }
         dao.close();
     }
+
+
+    @Override
+    public void onSaveInstanceState(Bundle outState, PersistableBundle outPersistentState) {
+        super.onSaveInstanceState(outState, outPersistentState);
+
+        String[] filtros = RecyclerAdapter.getListaFiltros();
+        outState.putSerializable("filtros", filtros);
+    }
+
+    @Override
+    protected void onRestoreInstanceState(Bundle savedInstanceState) {
+        super.onRestoreInstanceState(savedInstanceState);
+
+        String[] filtros = (String[]) savedInstanceState.getSerializable("filtros");
+        RecyclerAdapter.setListaFiltros(filtros);
+    }
+
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -141,7 +225,8 @@ public class ligProvActivity extends AppCompatActivity {
 
             @Override
             public boolean onQueryTextChange(String newText) {
-                RecyclerAdapter.getFilter().filter(newText);
+//                RecyclerAdapter.getFilter().filter(newText);
+                RecyclerAdapter.updateSearchFilter(newText);
                 return false;
             }
         });
@@ -423,6 +508,19 @@ public class ligProvActivity extends AppCompatActivity {
                         e.printStackTrace();
                         Toast.makeText(this, "Não foi possível carregar este arquivo!", Toast.LENGTH_LONG).show();
                     }
+
+                    lpDAO dao = new lpDAO(this);
+                    lpList = dao.getLPList();
+
+                    RecyclerAdapter = new ligProv_recyclerAdapter(lpList, this);
+                    recyclerView.setAdapter(RecyclerAdapter);
+                    RecyclerView.LayoutManager layout = new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false);
+                    recyclerView.setLayoutManager(layout);
+
+                    buttonImportFile.setVisibility(View.GONE);
+//                    textViewNoRecord.setVisibility(View.GONE);
+                    setFilters();
+
                 }
                 break;
         }

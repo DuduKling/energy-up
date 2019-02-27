@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string-array name="localidades">
+        <item>Selecione</item>
+        <item>1100 - ANGRA DOS REIS</item>
+        <item>1200 - ARARUAMA</item>
+        <item>1300 - CABO FRIO</item>
+        <item>1400 - NITEROI</item>
+        <item>1410 - MARICÁ</item>
+        <item>2100 - SÃO GONÇALO</item>
+        <item>2200 - MAGÉ</item>
+        <item>3100 - PETRÓPOLIS</item>
+        <item>3200 - TERESÓPOLIS</item>
+        <item>3300 - RESENDE</item>
+        <item>4100 - CAMPOS</item>
+        <item>4200 - MACAÉ</item>
+        <item>4300 - ITAPERUNA</item>
+        <item>4400 - PÁDUA</item>
+        <item>4500 - CANTAGALO</item>
+    </string-array>
+</resources>

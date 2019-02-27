@@ -75,6 +75,10 @@ public class OpenCSVReader {
                 lp.setTempo_max_servico(stripAccents(nextRecord[31]));
                 lp.setPerc_tempo_maximo(stripAccents(nextRecord[32]));
 
+                lp.setTipoOrdem(stripAccents(nextRecord[6]));
+                lp.setEtapa(stripAccents(nextRecord[11]));
+                lp.setLocalidade(stripAccents(nextRecord[36]));
+
                 dao.insert(lp);
             }
             dao.close();

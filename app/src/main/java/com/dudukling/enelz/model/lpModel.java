@@ -26,9 +26,33 @@ public class lpModel implements Serializable {
     private String userObservacao;
     private String userCargaMedida;
 
+    private String tipoOrdem;
+    private String etapa;
+    private String localidade;
 
 
 
+
+    public String getTipoOrdem() {
+        return tipoOrdem;
+    }
+    public void setTipoOrdem(String tipoOrdem) {
+        this.tipoOrdem = tipoOrdem;
+    }
+
+    public String getEtapa() {
+        return etapa;
+    }
+    public void setEtapa(String etapa) {
+        this.etapa = etapa;
+    }
+
+    public String getLocalidade() {
+        return localidade;
+    }
+    public void setLocalidade(String localidade) {
+        this.localidade = localidade;
+    }
 
     public String getUserObservacao() {
         return userObservacao;

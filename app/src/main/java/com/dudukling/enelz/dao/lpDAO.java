@@ -32,7 +32,10 @@ public class lpDAO extends SQLiteOpenHelper {
                 " tempo_max_servico TEXT NOT NULL," +
                 " perc_tempo_maximo TEXT NOT NULL," +
                 " userObservacao TEXT NOT NULL," +
-                " userCargaMedida TEXT NOT NULL" +
+                " userCargaMedida TEXT NOT NULL," +
+                " tipo_ordem TEXT NOT NULL," +
+                " etapa TEXT NOT NULL," +
+                " localidade TEXT NOT NULL" +
                 ");";
         db.execSQL(sql);
 
@@ -160,6 +163,10 @@ public class lpDAO extends SQLiteOpenHelper {
             lp.setUserObservacao(c.getString(c.getColumnIndex("userObservacao")));
             lp.setUserCargaMedida(c.getString(c.getColumnIndex("userCargaMedida")));
 
+            lp.setTipoOrdem(c.getString(c.getColumnIndex("tipo_ordem")));
+            lp.setEtapa(c.getString(c.getColumnIndex("etapa")));
+            lp.setLocalidade(c.getString(c.getColumnIndex("localidade")));
+
 
             // Imagens:
             List<String> imagesList = getImagesDB(dbSampleID);
@@ -208,6 +215,10 @@ public class lpDAO extends SQLiteOpenHelper {
 
         queryData.put("userObservacao", lp.getUserObservacao());
         queryData.put("userCargaMedida", lp.getUserCargaMedida());
+
+        queryData.put("tipo_ordem", lp.getTipoOrdem());
+        queryData.put("etapa", lp.getEtapa());
+        queryData.put("localidade", lp.getLocalidade());
 
         return queryData;
     }

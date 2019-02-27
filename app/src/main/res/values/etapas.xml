@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string-array name="etapas">
+        <item>Selecione</item>
+        <item>CAC</item>
+        <item>ANA</item>
+        <item>INP</item>
+        <item>EXE</item>
+    </string-array>
+</resources>
+
