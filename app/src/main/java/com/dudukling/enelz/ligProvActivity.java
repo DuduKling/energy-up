@@ -105,6 +105,8 @@ public class ligProvActivity extends AppCompatActivity {
         }
         dao.close();
 
+        Toast.makeText(this, this.getExternalFilesDir(Environment.DIRECTORY_PICTURES).toString(), Toast.LENGTH_LONG).show();
+
     }
 
     private void setFilters() {
@@ -273,7 +275,7 @@ public class ligProvActivity extends AppCompatActivity {
                                 lpModel lp = lpList.get(i);
                                 List<String> lpImages = lp.getImagesList();
                                 if (!lpImages.isEmpty()) {
-                                    ligProvActivity.deleteImagesFromPhoneMemory(lp);
+                                    deleteImagesFromPhoneMemory(lp);
                                 }
                             }
                         }
@@ -527,13 +529,23 @@ public class ligProvActivity extends AppCompatActivity {
         return s;
     }
 
-    public static void deleteImagesFromPhoneMemory(lpModel lp) {
+    public void deleteImagesFromPhoneMemory(lpModel lp) {
         List<String> imagesListToDelete = lp.getImagesList();
         for(int i = 0; i < imagesListToDelete.size(); i++){
             File file = new File(imagesListToDelete.get(i));
             boolean deleted = file.delete();
             Log.d("TAG4", "delete() called: "+deleted);
         }
+
+        String path = this.getExternalFilesDir(Environment.DIRECTORY_PICTURES).toString();
+        File directory = new File(path);
+        File[] files = directory.listFiles();
+        for (File file : files) {
+            boolean deleted = file.delete();
+            Log.d("TAG4", "delete() called: "+deleted);
+        }
+
+
     }
 
     private void callFileChooser(){
