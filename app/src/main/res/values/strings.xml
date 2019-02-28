@@ -2,8 +2,8 @@
     <string name="app_name">EnelZ</string>
     <string name="menu_pesquisar">Pesquisar</string>
     <string name="menu_importar_arquivo">Importar arquivo</string>
-    <string name="menu_limpar_aplicativo">Limpar aplicativo</string>
-    <string name="menu_exportar_modificacoes">Exportar modificações</string>
+    <string name="menu_limpar_aplicativo">Deletar todos os registros</string>
+    <string name="menu_exportar_modificacoes">Exportar registros</string>
     <string name="alt_logo_enel">Logo Enel</string>
     <string name="item_sem_registros">Sem registros</string>
     <string name="title_activity_maps">Map</string>

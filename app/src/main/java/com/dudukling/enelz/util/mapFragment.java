@@ -1,12 +1,8 @@
 package com.dudukling.enelz.util;
 
 import android.os.Bundle;
-import android.support.design.widget.TextInputLayout;
-import android.widget.Toast;
 
-import com.dudukling.enelz.R;
-import com.dudukling.enelz.form_ligProvActivity;
-import com.dudukling.enelz.ligProvActivity;
+import com.dudukling.enelz.ligProvFormActivity;
 import com.google.android.gms.maps.CameraUpdate;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
@@ -17,7 +13,7 @@ import com.google.android.gms.maps.model.MarkerOptions;
 
 public class mapFragment extends SupportMapFragment implements OnMapReadyCallback {
 
-    private static form_ligProvActivity activity;
+    private static ligProvFormActivity activity;
     private static double[] latitude = {0};
     private static double[] longitude = {0};
 
@@ -26,7 +22,7 @@ public class mapFragment extends SupportMapFragment implements OnMapReadyCallbac
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        activity = (form_ligProvActivity) getActivity();
+        activity = (ligProvFormActivity) getActivity();
         getMapAsync(this);
     }
 

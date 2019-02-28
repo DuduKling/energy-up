@@ -1,6 +1,5 @@
 package com.dudukling.enelz;
 
-import android.app.Activity;
 import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
@@ -14,6 +13,7 @@ import android.view.View;
 import android.widget.Toast;
 
 import com.dudukling.enelz.dao.lpDAO;
+import com.dudukling.enelz.model.lpClandestino;
 import com.dudukling.enelz.model.lpModel;
 import com.dudukling.enelz.util.lpFormHelper;
 import com.dudukling.enelz.util.mapsController;
@@ -22,14 +22,17 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
-public class form_ligProvActivity extends AppCompatActivity {
-    private lpModel lp;
+public class ligProvFormActivity extends AppCompatActivity {
     private lpFormHelper formHelper;
     private String formType;
-    private boolean saved = false;
+
+    private lpModel lp;
     public List<String> imagesList = new ArrayList<>();
-    private FloatingActionButton albumButton;
+
     private mapsController mapsControl;
+
+    private FloatingActionButton buttonAlbum;
+    private FloatingActionButton buttonClandestino;
 
     @RequiresApi(api = Build.VERSION_CODES.KITKAT)
     @Override
@@ -46,15 +49,30 @@ public class form_ligProvActivity extends AppCompatActivity {
         formHelper = new lpFormHelper(this, "new", lp);
 
 
-        albumButton = findViewById(R.id.buttonAlbum);
-        albumButton.setVisibility(View.GONE);
-        albumButton.setOnClickListener(new View.OnClickListener() {
+        buttonAlbum = findViewById(R.id.buttonAlbum);
+        buttonAlbum.setVisibility(View.GONE);
+        buttonAlbum.setOnClickListener(new View.OnClickListener() {
             @RequiresApi(api = Build.VERSION_CODES.M)
             @Override
             public void onClick(View v) {
-                Intent goToAlbum = new Intent(form_ligProvActivity.this, ligProvAlbumActivity.class);
+                Intent goToAlbum = new Intent(ligProvFormActivity.this, ligProvAlbumActivity.class);
                 goToAlbum.putExtra("lp", lp);
                 startActivity(goToAlbum);
+            }
+        });
+
+        buttonClandestino = findViewById(R.id.buttonClandestino);
+        buttonClandestino.setVisibility(View.GONE);
+        buttonClandestino.setOnClickListener(new View.OnClickListener() {
+            @RequiresApi(api = Build.VERSION_CODES.M)
+            @Override
+            public void onClick(View v) {
+                Intent goToClandestino = new Intent(ligProvFormActivity.this, clandestinoFormActivity.class);
+                goToClandestino
+                        .putExtra("clandest", new lpClandestino())
+                        .putExtra("lpID", lp.getId())
+                        .putExtra("type", "new");
+                startActivity(goToClandestino);
             }
         });
 
@@ -67,24 +85,19 @@ public class form_ligProvActivity extends AppCompatActivity {
 
     private void setFormEdit() {
         formHelper = new lpFormHelper(this, "edit", lp);
-        albumButton.setVisibility(View.GONE);
-
-//        cameraControl = new cameraController(formActivity.this, helperForm.getSample(imagesList));
-//        cameraControl.setCameraActions();
-
-//        setAlbumAction();
+        buttonAlbum.setVisibility(View.GONE);
+        buttonClandestino.setVisibility(View.GONE);
     }
 
     private void setFormReadOnly() {
         formHelper = new lpFormHelper(this, "readOnly", lp);
-        albumButton.setVisibility(View.VISIBLE);
-
-//        setAlbumAction();
+        buttonAlbum.setVisibility(View.VISIBLE);
+        buttonClandestino.setVisibility(View.VISIBLE);
     }
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        lpDAO dao = new lpDAO(form_ligProvActivity.this);
+        lpDAO dao = new lpDAO(ligProvFormActivity.this);
 
         switch (item.getItemId()){
             case android.R.id.home:
@@ -92,22 +105,22 @@ public class form_ligProvActivity extends AppCompatActivity {
                 break;
 
             case R.id.menu_saveLP_button:
-                saved = true;
                 if(formHelper.validateForm()){
                     lpModel lpSave = formHelper.getLPFromForm(lp, imagesList);
 
                     dao.updateLPInfo(lpSave);
 
-                    finish();
+                    this.finish();
                 }else{
-                    Toast.makeText(form_ligProvActivity.this, "Favor preencher todos os campos obrigatórios!", Toast.LENGTH_LONG).show();
+                    Toast.makeText(ligProvFormActivity.this, "Favor preencher todos os campos obrigatórios!", Toast.LENGTH_LONG).show();
                 }
                 break;
 
             case R.id.menu_edit_button:
                 Intent intent = getIntent();
                 intent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
-                intent.putExtra("lp", lp)
+                intent
+                        .putExtra("lp", lp)
                         .putExtra("type", "edit");
                 finish();
                 overridePendingTransition(0, 0);

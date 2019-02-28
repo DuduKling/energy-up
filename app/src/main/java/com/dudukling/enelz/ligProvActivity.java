@@ -95,7 +95,8 @@ public class ligProvActivity extends AppCompatActivity {
             buttonImportFile.setVisibility(View.GONE);
             lpList = dao.getLPList();
 
-            RecyclerAdapter = new ligProv_recyclerAdapter(lpList, this);
+//            RecyclerAdapter = new ligProv_recyclerAdapter(lpList, this);
+            RecyclerAdapter = new ligProv_recyclerAdapter(this);
             recyclerView.setAdapter(RecyclerAdapter);
 
             RecyclerView.LayoutManager layout = new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false);
@@ -186,8 +187,10 @@ public class ligProvActivity extends AppCompatActivity {
                     }
                 }
             });
-
+        }else{
+            RecyclerAdapter.refreshList();
         }
+
         dao.close();
     }
 
@@ -248,6 +251,10 @@ public class ligProvActivity extends AppCompatActivity {
                 case R.id.menu_export_file:
                     checkPermissionBeforeExport();
                     break;
+                case R.id.menu_clandestinos:
+                    Intent goToClandestinoList = new Intent(ligProvActivity.this, clandestinoActivity.class);
+                    startActivity(goToClandestinoList);
+                    break;
             }
             return super.onOptionsItemSelected(item);
     }
@@ -275,7 +282,9 @@ public class ligProvActivity extends AppCompatActivity {
                         dao.close();
 
                         lpList.clear();
-                        RecyclerAdapter.notifyDataSetChanged();
+                        RecyclerAdapter = new ligProv_recyclerAdapter(ligProvActivity.this);
+                        recyclerView.setAdapter(RecyclerAdapter);
+
                         textViewNoRecord.setVisibility(View.VISIBLE);
                         buttonImportFile.setVisibility(View.VISIBLE);
                         break;
@@ -287,7 +296,7 @@ public class ligProvActivity extends AppCompatActivity {
         };
 
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
-        builder.setMessage("Tem certeza que deseja deletar tudo?").setPositiveButton("Confirmar", dialogClickListener)
+        builder.setMessage("Tem certeza que deseja deletar tudo (Ligações provisórias e Clandestinos)?").setPositiveButton("Confirmar", dialogClickListener)
                 .setNegativeButton("Cancelar", dialogClickListener).show();
     }
 
@@ -387,63 +396,128 @@ public class ligProvActivity extends AppCompatActivity {
         lpDAO dao = new lpDAO(this);
 
         SQLiteDatabase db = dao.getReadableDatabase();
-        long qtdCSV = DatabaseUtils.queryNumEntries(db, "lpTable",
-                "userObservacao<>'' AND userCargaMedida!=''");
+        long qtdCSV = DatabaseUtils.queryNumEntries(db, "lpTable","userObservacao<>'' AND userCargaMedida!=''");
         if(qtdCSV != 0) {
-
-            File exportDir = new File(Environment.getExternalStorageDirectory(), "");
-            if (!exportDir.exists()) {
-                boolean dirCreated = exportDir.mkdirs();
-                Log.d("TAG1", "exportDB() called: " + dirCreated);
-            }
-
-            @SuppressLint("SimpleDateFormat") String timeStamp = new SimpleDateFormat("ddMMyyyy_HHmmss").format(new Date());
-            File file;
-            if(type.equals("backup")){
-                file = new File(exportDir, "EnelBackup_" + timeStamp + ".csv");
-            }else{
-                file = new File(exportDir, "EnelExport_" + timeStamp + ".csv");
-            }
-
-
-            try {
-                boolean fileCreated = file.createNewFile();
-                Log.d("TAG2", "createNewFile() called: " + fileCreated);
-                CSVWriter csvWrite = new CSVWriter(new FileWriter(file));
-
-
-                Cursor curCSV = db.rawQuery("SELECT id, ordem, userObservacao, userCargaMedida FROM lpTable " +
-                        "WHERE userObservacao <> '' OR userCargaMedida != ''", null);
-
-                String[] str = {"ID", "ordem", "userObservacao", "userCargaMedida"};
-
-                csvWrite.writeNext(str);
-
-                while (curCSV.moveToNext()) {
-                    // Column you want get from DB:
-                    String id = curCSV.getString(0);
-                    String ordem = curCSV.getString(1);
-                    String userObservacao = stripAccents(curCSV.getString(2));
-                    String userCargaMedida = stripAccents(curCSV.getString(3));
-
-                    String arrStr[] = {id, ordem, userObservacao, userCargaMedida};
-
-                    csvWrite.writeNext(arrStr);
-                }
-                csvWrite.close();
-                curCSV.close();
-
-                if(!type.equals("backup")) {
-                    Toast.makeText(this, "Exportado!", Toast.LENGTH_SHORT).show();
-                }
-
-            } catch (Exception sqlEx) {
-                Log.e("MainActivity", sqlEx.getMessage(), sqlEx);
-            }
-        }else{
-            Toast.makeText(this, "Não há registros modificados para exportar.", Toast.LENGTH_SHORT).show();
+            exportLPs(type, db);
+        }else if(!type.equals("backup")){
+            Toast.makeText(this, "Não há LPs cadastradas para exportar.", Toast.LENGTH_SHORT).show();
         }
+
+        long qtdCSVClandest = DatabaseUtils.queryNumEntries(db, "lpClandestino");
+        if(qtdCSVClandest != 0) {
+            exportClandests(type, db);
+        }else if(!type.equals("backup")){
+            Toast.makeText(this, "Não há clandestinos para exportar.", Toast.LENGTH_SHORT).show();
+        }
+
         dao.close();
+    }
+
+    private void exportClandests(String type, SQLiteDatabase db) {
+        File exportDir = new File(Environment.getExternalStorageDirectory(), "");
+        if (!exportDir.exists()) {
+            boolean dirCreated = exportDir.mkdirs();
+            Log.d("TAG1", "exportDB() called: " + dirCreated);
+        }
+
+        @SuppressLint("SimpleDateFormat") String timeStamp = new SimpleDateFormat("ddMMyyyy_HHmmss").format(new Date());
+        File file;
+        if(type.equals("backup")){
+            file = new File(exportDir, "EnelBackupClandestinos_" + timeStamp + ".csv");
+        }else{
+            file = new File(exportDir, "EnelExportClandestinos_" + timeStamp + ".csv");
+        }
+
+
+        try {
+            boolean fileCreated = file.createNewFile();
+            Log.d("TAG2", "createNewFile() called: " + fileCreated);
+            CSVWriter csvWrite = new CSVWriter(new FileWriter(file));
+
+            Cursor curCSV = db.rawQuery("SELECT lpClandestino.id, ordem, lpClandestino.endereco, transformador, tensao, corrente, protecao, fatorPotencia, carga, descricao FROM lpClandestino " +
+                    "INNER JOIN lpTable ON lpClandestino.lpID=lpTable.id", null);
+
+            String[] str = {"ID", "ordem", "endereco", "transformador", "tensao", "corrente", "protecao", "fator de potencia", "carga", "descricao"};
+
+            csvWrite.writeNext(str);
+            while (curCSV.moveToNext()) {
+                String id = curCSV.getString(0);
+                String ordem = curCSV.getString(1);
+                String endereco = stripAccents(curCSV.getString(2));
+                String transformador = stripAccents(curCSV.getString(3));
+                String tensao = stripAccents(curCSV.getString(4));
+                String corrente = stripAccents(curCSV.getString(5));
+                String protecao = stripAccents(curCSV.getString(6));
+                String fatorPotencia = stripAccents(curCSV.getString(7));
+                String carga = stripAccents(curCSV.getString(8));
+                String descricao = stripAccents(curCSV.getString(9));
+
+                String arrStr[] = {id, ordem, endereco, transformador, tensao, corrente, protecao, fatorPotencia, carga, descricao};
+
+                csvWrite.writeNext(arrStr);
+            }
+            csvWrite.close();
+            curCSV.close();
+
+            if(!type.equals("backup")) {
+                Toast.makeText(this, "Clandestinos Exportados!", Toast.LENGTH_SHORT).show();
+            }
+
+        } catch (Exception sqlEx) {
+            Log.e("MainActivity", sqlEx.getMessage(), sqlEx);
+        }
+    }
+
+    private void exportLPs(String type, SQLiteDatabase db) {
+        File exportDir = new File(Environment.getExternalStorageDirectory(), "");
+        if (!exportDir.exists()) {
+            boolean dirCreated = exportDir.mkdirs();
+            Log.d("TAG1", "exportDB() called: " + dirCreated);
+        }
+
+        @SuppressLint("SimpleDateFormat") String timeStamp = new SimpleDateFormat("ddMMyyyy_HHmmss").format(new Date());
+        File file;
+        if(type.equals("backup")){
+            file = new File(exportDir, "EnelBackupLP_" + timeStamp + ".csv");
+        }else{
+            file = new File(exportDir, "EnelExportLP_" + timeStamp + ".csv");
+        }
+
+
+        try {
+            boolean fileCreated = file.createNewFile();
+            Log.d("TAG2", "createNewFile() called: " + fileCreated);
+            CSVWriter csvWrite = new CSVWriter(new FileWriter(file));
+
+
+            Cursor curCSV = db.rawQuery("SELECT id, ordem, userObservacao, userCargaMedida FROM lpTable " +
+                    "WHERE userObservacao <> '' OR userCargaMedida != ''", null);
+
+            String[] str = {"ID", "ordem", "userObservacao", "userCargaMedida"};
+
+            csvWrite.writeNext(str);
+
+            while (curCSV.moveToNext()) {
+                // Column you want get from DB:
+                String id = curCSV.getString(0);
+                String ordem = curCSV.getString(1);
+                String userObservacao = stripAccents(curCSV.getString(2));
+                String userCargaMedida = stripAccents(curCSV.getString(3));
+
+                String arrStr[] = {id, ordem, userObservacao, userCargaMedida};
+
+                csvWrite.writeNext(arrStr);
+            }
+            csvWrite.close();
+            curCSV.close();
+
+            if(!type.equals("backup")) {
+                Toast.makeText(this, "LPs Exportadas!", Toast.LENGTH_SHORT).show();
+            }
+
+        } catch (Exception sqlEx) {
+            Log.e("MainActivity", sqlEx.getMessage(), sqlEx);
+        }
     }
 
     public static String stripAccents(String s) {
@@ -512,7 +586,8 @@ public class ligProvActivity extends AppCompatActivity {
                     lpDAO dao = new lpDAO(this);
                     lpList = dao.getLPList();
 
-                    RecyclerAdapter = new ligProv_recyclerAdapter(lpList, this);
+//                    RecyclerAdapter = new ligProv_recyclerAdapter(lpList, this);
+                    RecyclerAdapter = new ligProv_recyclerAdapter(this);
                     recyclerView.setAdapter(RecyclerAdapter);
                     RecyclerView.LayoutManager layout = new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false);
                     recyclerView.setLayoutManager(layout);

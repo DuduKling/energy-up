@@ -8,18 +8,16 @@ import android.widget.EditText;
 import android.widget.TextView;
 
 import com.dudukling.enelz.R;
-import com.dudukling.enelz.dao.lpDAO;
-import com.dudukling.enelz.form_ligProvActivity;
+import com.dudukling.enelz.ligProvFormActivity;
 import com.dudukling.enelz.model.lpModel;
 
 import java.io.File;
-import java.util.ArrayList;
 import java.util.List;
 
 public class lpFormHelper {
     private static final String REQUIRED_FIELD_ERROR_MSG = "Campo obrigatório!";
 
-    private static form_ligProvActivity activity;
+    private static ligProvFormActivity activity;
     private final lpModel lp;
 
     private TextView TextViewOrdem;
@@ -41,7 +39,7 @@ public class lpFormHelper {
     private EditText fieldCargaMedida;
 
 
-    public lpFormHelper(final form_ligProvActivity activity1, String formType, lpModel lp1) {
+    public lpFormHelper(final ligProvFormActivity activity1, String formType, lpModel lp1) {
         activity = activity1;
         lp = lp1;
 

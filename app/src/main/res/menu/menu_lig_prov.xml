@@ -8,6 +8,10 @@
         app:showAsAction="always"/>
 
     <item
+        android:id="@+id/menu_clandestinos"
+        android:title="Clandestinos"/>
+
+    <item
         android:id="@+id/menu_delete_all"
         android:title="@string/menu_limpar_aplicativo"/>
 
@@ -15,8 +19,4 @@
         android:id="@+id/menu_export_file"
         android:title="@string/menu_exportar_modificacoes"/>
 
-    <!--<item-->
-        <!--android:id="@+id/menu_export_file"-->
-        <!--android:icon="@drawable/ic_upload"-->
-        <!--android:title="@string/menu_exportar_modificacoes"/>-->
 </menu>

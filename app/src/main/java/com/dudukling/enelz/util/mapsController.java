@@ -3,27 +3,24 @@ package com.dudukling.enelz.util;
 import android.annotation.SuppressLint;
 import android.location.Address;
 import android.location.Geocoder;
-import android.support.design.widget.TextInputLayout;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.view.MotionEvent;
 import android.view.View;
-import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.ScrollView;
 
 import com.dudukling.enelz.R;
-import com.dudukling.enelz.form_ligProvActivity;
-import com.dudukling.enelz.ligProvActivity;
+import com.dudukling.enelz.ligProvFormActivity;
 
 import java.io.IOException;
 import java.util.List;
 import java.util.Locale;
 
 public class mapsController {
-    private static form_ligProvActivity activity;
+    private static ligProvFormActivity activity;
 
-    public mapsController(form_ligProvActivity activity) {
+    public mapsController(ligProvFormActivity activity) {
         mapsController.activity = activity;
     }
 

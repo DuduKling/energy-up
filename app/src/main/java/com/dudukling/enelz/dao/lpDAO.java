@@ -6,6 +6,7 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 
+import com.dudukling.enelz.model.lpClandestino;
 import com.dudukling.enelz.model.lpModel;
 
 import java.util.ArrayList;
@@ -46,6 +47,21 @@ public class lpDAO extends SQLiteOpenHelper {
                 "FOREIGN KEY (lpID) REFERENCES lpTable(id)" +
                 ");";
         db.execSQL(sql2);
+
+        String sql3 = "CREATE TABLE lpClandestino ( " +
+                "id INTEGER PRIMARY KEY, " +
+                "endereco TEXT NOT NULL, " +
+                "transformador TEXT NOT NULL," +
+                "tensao TEXT NOT NULL," +
+                "corrente TEXT NOT NULL," +
+                "protecao TEXT NOT NULL," +
+                "fatorPotencia TEXT NOT NULL," +
+                "carga TEXT NOT NULL," +
+                "descricao TEXT NOT NULL," +
+                "lpID INTEGER NOT NULL, " +
+                "FOREIGN KEY (lpID) REFERENCES lpTable(id)" +
+                ");";
+        db.execSQL(sql3);
     }
 
     @Override
@@ -119,6 +135,7 @@ public class lpDAO extends SQLiteOpenHelper {
         SQLiteDatabase db = getWritableDatabase();
         db.delete("lpTable", null,null);
         db.delete("lpImages", null,null);
+        db.delete("lpClandestino", null,null);
     }
 
     public void insertImage(lpModel lp, String path) {
@@ -144,8 +161,8 @@ public class lpDAO extends SQLiteOpenHelper {
         while (c.moveToNext()) {
             lpModel lp = new lpModel();
 
-            int dbSampleID = c.getInt(c.getColumnIndex("id"));
-            lp.setId(dbSampleID);
+            int dbLPID = c.getInt(c.getColumnIndex("id"));
+            lp.setId(dbLPID);
 
             lp.setOrdem(c.getString(c.getColumnIndex("ordem")));
             lp.setCliente(c.getString(c.getColumnIndex("cliente")));
@@ -169,7 +186,7 @@ public class lpDAO extends SQLiteOpenHelper {
 
 
             // Imagens:
-            List<String> imagesList = getImagesDB(dbSampleID);
+            List<String> imagesList = getImagesDB(dbLPID);
             lp.setImagesList(imagesList);
 
             lpList.add(lp);
@@ -193,6 +210,8 @@ public class lpDAO extends SQLiteOpenHelper {
 
         return imagesList;
     }
+
+
 
 
 
@@ -251,4 +270,96 @@ public class lpDAO extends SQLiteOpenHelper {
         return imageID;
     }
 
+
+    // CLANDESTINO
+    public void insertClandestino(lpClandestino clandest, int idLP) {
+        SQLiteDatabase db = getWritableDatabase();
+
+        ContentValues queryData = new ContentValues();
+
+        queryData.put("endereco", clandest.getEndereco());
+        queryData.put("transformador", clandest.getTransformador());
+        queryData.put("tensao", clandest.getTensao());
+        queryData.put("corrente", clandest.getCorrente());
+        queryData.put("protecao", clandest.getProtecao());
+        queryData.put("fatorPotencia", clandest.getFatorPotencia());
+        queryData.put("carga", clandest.getCarga());
+        queryData.put("descricao", clandest.getDescricao());
+
+        queryData.put("lpID", idLP);
+
+        db.insert("lpClandestino", null, queryData);
+    }
+
+    public List<lpClandestino> getClandestinoList() {
+        SQLiteDatabase db = getReadableDatabase();
+
+        String sql = "SELECT lpClandestino.id as idClandest, lpClandestino.endereco as enderecoClandest, lpClandestino.transformador as transformadorClandest, lpClandestino.tensao as tensaoClandest, " +
+                "lpClandestino.corrente as correnteClandest, lpClandestino.protecao as protecaoClandest, " +
+                "lpClandestino.fatorPotencia as fpClandest, lpClandestino.carga as cargaClandest, lpClandestino.descricao as descricaoClandest, lpTable.ordem  as ordemLP FROM lpClandestino " +
+                "INNER JOIN lpTable ON lpClandestino.lpID=lpTable.id ORDER BY idClandest DESC";
+
+        Cursor c = db.rawQuery(sql, null);
+        List<lpClandestino> lpClandestList = new ArrayList<>();
+
+        while (c.moveToNext()) {
+            lpClandestino clandest = new lpClandestino();
+
+            int dbLPID = c.getInt(c.getColumnIndex("idClandest"));
+            clandest.setId(dbLPID);
+
+            clandest.setEndereco(c.getString(c.getColumnIndex("enderecoClandest")));
+            clandest.setTransformador(c.getString(c.getColumnIndex("transformadorClandest")));
+            clandest.setTensao(c.getString(c.getColumnIndex("tensaoClandest")));
+            clandest.setCorrente(c.getString(c.getColumnIndex("correnteClandest")));
+            clandest.setProtecao(c.getString(c.getColumnIndex("protecaoClandest")));
+            clandest.setFatorPotencia(c.getString(c.getColumnIndex("fpClandest")));
+            clandest.setCarga(c.getString(c.getColumnIndex("cargaClandest")));
+            clandest.setDescricao(c.getString(c.getColumnIndex("descricaoClandest")));
+
+            clandest.setOrdem(c.getString(c.getColumnIndex("ordemLP")));
+
+
+            lpClandestList.add(clandest);
+        }
+
+        c.close();
+
+        return lpClandestList;
+    }
+
+    public void deleteClandestino(lpClandestino clandest) {
+            SQLiteDatabase db = getWritableDatabase();
+            String[] params = {String.valueOf(clandest.getId())};
+            db.delete("lpClandestino","id = ?", params);
+    }
+
+    public void updateClandestino(lpClandestino clandest) {
+        SQLiteDatabase db = getWritableDatabase();
+
+        ContentValues queryData = new ContentValues();
+
+        queryData.put("endereco", clandest.getEndereco());
+        queryData.put("transformador", clandest.getTransformador());
+        queryData.put("tensao", clandest.getTensao());
+        queryData.put("corrente", clandest.getCorrente());
+        queryData.put("protecao", clandest.getProtecao());
+        queryData.put("fatorPotencia", clandest.getFatorPotencia());
+        queryData.put("carga", clandest.getCarga());
+        queryData.put("descricao", clandest.getDescricao());
+
+        String[] params = {String.valueOf(clandest.getId())};
+        db.update("lpClandestino", queryData, "id=?", params);
+    }
+
+    public int getClandestinoLastID() {
+        String sql = "SELECT MAX(id) AS LAST FROM lpClandestino";
+        SQLiteDatabase db = getReadableDatabase();
+        Cursor c = db.rawQuery(sql, null);
+        c.moveToFirst();
+        int ID = c.getInt(0);
+        c.close();
+
+        return ID;
+    }
 }

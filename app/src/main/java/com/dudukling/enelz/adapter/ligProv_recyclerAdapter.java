@@ -13,11 +13,10 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.Spinner;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.dudukling.enelz.R;
-import com.dudukling.enelz.form_ligProvActivity;
-import com.dudukling.enelz.ligProvActivity;
+import com.dudukling.enelz.dao.lpDAO;
+import com.dudukling.enelz.ligProvFormActivity;
 import com.dudukling.enelz.model.lpModel;
 
 import java.util.ArrayList;
@@ -31,8 +30,11 @@ public class ligProv_recyclerAdapter extends RecyclerView.Adapter {
 
     private String[] listaFiltros = new String[4];
 
-    public ligProv_recyclerAdapter(List<lpModel> lpList, Context context) {
-        this.lpList = lpList;
+    public ligProv_recyclerAdapter(Context context) {
+        lpDAO dao = new lpDAO(context);
+        this.lpList = dao.getLPList();
+        dao.close();
+
         this.context = context;
 //        this.lpListFiltered = lpList;
         makeFilter();
@@ -69,6 +71,7 @@ public class ligProv_recyclerAdapter extends RecyclerView.Adapter {
             holder.imageViewStatus.setBackgroundColor(Color.TRANSPARENT);
         }
     }
+
     class aViewHolder extends RecyclerView.ViewHolder implements View.OnCreateContextMenuListener {
 
         final TextView viewEndereco;
@@ -90,7 +93,7 @@ public class ligProv_recyclerAdapter extends RecyclerView.Adapter {
                     int position = getAdapterPosition();
                     lpModel lp  = lpListFiltered.get(position);
 
-                    Intent goToFormActivity = new Intent(context, form_ligProvActivity.class);
+                    Intent goToFormActivity = new Intent(context, ligProvFormActivity.class);
                     goToFormActivity
                             .putExtra("lp", lp)
                             .putExtra("type", "readOnly");
@@ -108,7 +111,7 @@ public class ligProv_recyclerAdapter extends RecyclerView.Adapter {
                     int position = getAdapterPosition();
                     lpModel lp  = lpListFiltered.get(position);
 
-                    Intent goToFormActivity = new Intent(context, form_ligProvActivity.class);
+                    Intent goToFormActivity = new Intent(context, ligProvFormActivity.class);
                     goToFormActivity
                             .putExtra("lp", lp)
                             .putExtra("type", "edit");
@@ -117,25 +120,6 @@ public class ligProv_recyclerAdapter extends RecyclerView.Adapter {
                     return false;
                 }
             });
-//
-//            MenuItem menuDelete = menu.add("Delete");
-//            menuDelete.setOnMenuItemClickListener(new MenuItem.OnMenuItemClickListener() {
-//                @Override
-//                public boolean onMenuItemClick(MenuItem item) {
-//                    int position = getAdapterPosition();
-//                    Sample sample  = lpListFiltered.get(position);
-//
-//                    sampleDAO dao = new sampleDAO(context);
-//                    formHelper.deleteImagesFromPhoneMemory(sample);
-//                    dao.delete(sample);
-//                    lpListFiltered = dao.getSamples();
-//                    dao.close();
-//
-//                    notifyDataSetChanged();
-//
-//                    return false;
-//                }
-//            });
         }
 
     }
@@ -416,5 +400,12 @@ public class ligProv_recyclerAdapter extends RecyclerView.Adapter {
 
     }
 
+    public void refreshList() {
+        lpDAO dao = new lpDAO(context);
+        lpList = dao.getLPList();
+        dao.close();
+        notifyDataSetChanged();
+        makeFilter();
+    }
 
 }
