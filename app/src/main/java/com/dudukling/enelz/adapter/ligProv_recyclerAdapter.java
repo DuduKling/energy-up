@@ -178,14 +178,14 @@ public class ligProv_recyclerAdapter extends RecyclerView.Adapter {
                 if(position==0){
                     listaFiltros[2] = null;
                 }else{
-                    listaFiltros[2] = spinner.getSelectedItem().toString().substring(spinner.getSelectedItem().toString().indexOf("ria ") + 4).toLowerCase();
+                    listaFiltros[2] = spinner.getSelectedItem().toString().substring(spinner.getSelectedItem().toString().indexOf("RIA ") + 4).toLowerCase();
                 }
                 break;
             case "etapa":
                 if(position==0){
                     listaFiltros[3] = null;
                 }else{
-                    listaFiltros[3] = spinner.getSelectedItem().toString().toLowerCase();
+                    listaFiltros[3] = spinner.getSelectedItem().toString().substring(0,3).toLowerCase();
                 }
 
                 break;

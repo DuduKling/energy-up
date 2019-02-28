@@ -2,10 +2,10 @@
 <resources>
     <string-array name="etapas">
         <item>Selecione</item>
-        <item>CAC</item>
-        <item>ANA</item>
-        <item>INP</item>
-        <item>EXE</item>
+        <item>CAC - CONHECIMENTO E AÇÃO</item>
+        <item>ANA - ANALISE DE CARGA</item>
+        <item>INP - INSPEÇÃO DE CARGA</item>
+        <item>EXE - EXECUÇÃO DA LIGAÇÃO</item>
     </string-array>
 </resources>
 

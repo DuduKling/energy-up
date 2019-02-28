@@ -2,7 +2,7 @@
 <resources>
     <string-array name="tipoOrdem">
         <item>Selecione</item>
-        <item>LTG - Ligação Temporária Governo</item>
-        <item>LTM - Ligação Temporária Massiva</item>
+        <item>LTG - LIGAÇÃO TEMPORÁRIA GOVERNO</item>
+        <item>LTM - LIGAÇÃO TEMPORÁRIA MASSIVA</item>
     </string-array>
 </resources>
