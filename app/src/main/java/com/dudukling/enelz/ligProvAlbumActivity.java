@@ -18,7 +18,9 @@ import android.support.v7.widget.RecyclerView;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
+import android.view.View;
 import android.widget.ImageView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.dudukling.enelz.adapter.ligProvAlbum_recyclerAdapter;
@@ -65,6 +67,13 @@ public class ligProvAlbumActivity extends AppCompatActivity {
         lpDAO dao = new lpDAO(this);
         imagesList = dao.getImagesDB(lp.getId());
         dao.close();
+
+        TextView textViewNoFotos = this.findViewById(R.id.textViewNoFotos);
+        if(imagesList.size()>0){
+            textViewNoFotos.setVisibility(View.GONE);
+        }else{
+            textViewNoFotos.setVisibility(View.VISIBLE);
+        }
 
         super.onResume();
     }
