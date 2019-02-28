@@ -3,7 +3,8 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:id="@+id/album_item"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content">
+    android:layout_height="wrap_content"
+    android:background="?attr/selectableItemBackground">
 
     <ImageView
         android:id="@+id/imageViewAlbumBg"
@@ -15,6 +16,7 @@
         app:layout_constraintEnd_toEndOf="@+id/imageViewLPAlbum"
         app:layout_constraintStart_toStartOf="@+id/imageViewLPAlbum"
         app:layout_constraintTop_toTopOf="@+id/imageViewLPAlbum" />
+
     <ImageView
         android:id="@+id/imageViewLPAlbum"
         android:layout_width="0dp"

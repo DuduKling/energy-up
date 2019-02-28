@@ -19,6 +19,8 @@ import com.dudukling.enelz.dao.lpDAO;
 import com.dudukling.enelz.model.lpClandestino;
 import com.dudukling.enelz.model.lpModel;
 
+import org.w3c.dom.Text;
+
 import java.util.List;
 import java.util.Objects;
 
@@ -50,6 +52,13 @@ public class clandestinoActivity extends AppCompatActivity {
         recyclerView.setAdapter(RecyclerAdapter);
         RecyclerView.LayoutManager layout = new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false);
         recyclerView.setLayoutManager(layout);
+
+        TextView textViewNoClandestinos = this.findViewById(R.id.textViewNoClandestinos);
+        if(lpClandest.size()>0){
+            textViewNoClandestinos.setVisibility(View.GONE);
+        }else{
+            textViewNoClandestinos.setVisibility(View.VISIBLE);
+        }
 
         dao.close();
     }

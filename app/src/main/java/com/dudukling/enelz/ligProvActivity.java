@@ -188,6 +188,7 @@ public class ligProvActivity extends AppCompatActivity {
                 }
             });
         }else{
+            textViewNoRecord.setVisibility(View.GONE);
             RecyclerAdapter.refreshList();
         }
 
