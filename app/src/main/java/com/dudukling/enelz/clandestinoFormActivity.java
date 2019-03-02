@@ -58,7 +58,7 @@ public class clandestinoFormActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_clandestino_form);
+        setContentView(R.layout.frag_clandestino_form);
         Objects.requireNonNull(getSupportActionBar()).setDisplayHomeAsUpEnabled(true);
 
         setTitle("Ponto clandestino");

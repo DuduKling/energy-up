@@ -12,15 +12,14 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.dudukling.enelz.R;
-import com.dudukling.enelz.clandestinoActivity;
 import com.dudukling.enelz.clandestinoFormActivity;
 import com.dudukling.enelz.dao.lpDAO;
 import com.dudukling.enelz.model.lpClandestino;
-import com.dudukling.enelz.model.lpModel;
 
 import java.util.List;
 
 public class clandestino_recyclerAdapter extends RecyclerView.Adapter {
+//    private final clandestinoFrag.OnItemSelectedListener listener;
     private Context context;
 
     private List<lpClandestino> lpClandest;
@@ -28,6 +27,7 @@ public class clandestino_recyclerAdapter extends RecyclerView.Adapter {
     public clandestino_recyclerAdapter(List<lpClandestino> lpClandest, Context context) {
         this.lpClandest = lpClandest;
         this.context = context;
+//        this.listener = listener;
     }
 
     @NonNull
@@ -73,6 +73,8 @@ public class clandestino_recyclerAdapter extends RecyclerView.Adapter {
                             .putExtra("lpID", 0)
                             .putExtra("type", "readOnly");
                     context.startActivity(goToFormActivity);
+
+//                    listener.onItemSelected(clandest, 0, "readOnly");
                 }
             });
         }
@@ -92,6 +94,8 @@ public class clandestino_recyclerAdapter extends RecyclerView.Adapter {
                             .putExtra("lpID", 0)
                             .putExtra("type", "edit");
                     context.startActivity(goToFormActivity);
+
+//                    listener.onItemSelected(clandest, 0, "readOnly");
 
                     return false;
                 }
