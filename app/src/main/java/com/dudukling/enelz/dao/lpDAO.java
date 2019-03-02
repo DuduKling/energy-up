@@ -36,7 +36,11 @@ public class lpDAO extends SQLiteOpenHelper {
                 " userCargaMedida TEXT NOT NULL," +
                 " tipo_ordem TEXT NOT NULL," +
                 " etapa TEXT NOT NULL," +
-                " localidade TEXT NOT NULL" +
+                " localidade TEXT NOT NULL," +
+                " latitude TEXT NOT NULL," +
+                " longitude TEXT NOT NULL," +
+                " autoLat TEXT NOT NULL," +
+                " autoLong TEXT NOT NULL" +
                 ");";
         db.execSQL(sql);
 
@@ -58,7 +62,9 @@ public class lpDAO extends SQLiteOpenHelper {
                 "fatorPotencia TEXT NOT NULL," +
                 "carga TEXT NOT NULL," +
                 "descricao TEXT NOT NULL," +
-                "lpID INTEGER NOT NULL, " +
+                "autoLat TEXT NOT NULL," +
+                "autoLong TEXT NOT NULL," +
+                "lpID INTEGER NOT NULL," +
                 "FOREIGN KEY (lpID) REFERENCES lpTable(id)" +
                 ");";
         db.execSQL(sql3);
@@ -80,27 +86,11 @@ public class lpDAO extends SQLiteOpenHelper {
 
         queryData.put("userObservacao", "");
         queryData.put("userCargaMedida", "");
+        queryData.put("autoLat", "");
+        queryData.put("autoLong", "");
+
 
         db.insert("lpTable", null, queryData);
-
-        // Add pictures:
-//        ContentValues queryData2 = new ContentValues();
-//        List<String> images = lp.getImagesList();
-//        int lastId = lastID();
-//
-//        for(int i=0; i <= (images.size() - 1); i++){
-//            queryData2.clear();
-//            queryData2.put("path", images.get(i));
-//            queryData2.put("lpID", lastId);
-//            db.insert("lpImages", null, queryData2);
-//        }
-    }
-
-    public void delete(lpModel lp) {
-        SQLiteDatabase db = getWritableDatabase();
-        String[] params = {String.valueOf(lp.getId())};
-        db.delete("lpTable","id = ?", params);
-        db.delete("lpImages","collectionID = ?", params);
     }
 
     public void updateLPInfo(lpModel lp) {
@@ -108,21 +98,6 @@ public class lpDAO extends SQLiteOpenHelper {
         ContentValues queryData = getContentValues(lp);
         String[] params = {String.valueOf(lp.getId())};
         db.update("lpTable", queryData, "id=?", params);
-
-
-//        int lpId = lp.getId();
-//        deleteAllImagesFromDB(lpId);
-
-//        // Add all pictures:
-//        ContentValues queryData2 = new ContentValues();
-//        List<String> images = lp.getImagesList();
-//
-//        for(int i=0; i <= (images.size() - 1); i++){
-//            queryData2.clear();
-//            queryData2.put("path", images.get(i));
-//            queryData2.put("lpID", lpId);
-//            db.insert("Images", null, queryData2);
-//        }
     }
 
     public void deleteImage(int lpID, int imageID) {
@@ -184,6 +159,11 @@ public class lpDAO extends SQLiteOpenHelper {
             lp.setEtapa(c.getString(c.getColumnIndex("etapa")));
             lp.setLocalidade(c.getString(c.getColumnIndex("localidade")));
 
+            lp.setLatitude(c.getString(c.getColumnIndex("latitude")));
+            lp.setLongitude(c.getString(c.getColumnIndex("longitude")));
+            lp.setAutoLat(c.getString(c.getColumnIndex("autoLat")));
+            lp.setAutoLong(c.getString(c.getColumnIndex("autoLong")));
+
 
             // Imagens:
             List<String> imagesList = getImagesDB(dbLPID);
@@ -211,8 +191,30 @@ public class lpDAO extends SQLiteOpenHelper {
         return imagesList;
     }
 
+    public List<lpModel> getGPSList(int id) {
+        SQLiteDatabase db = getReadableDatabase();
 
+        String sql = "SELECT * FROM lpTable WHERE id != ? ORDER BY id DESC";
+        Cursor c = db.rawQuery(sql, new String[]{String.valueOf(id)});
 
+        List<lpModel> lpList = new ArrayList<>();
+
+        while (c.moveToNext()) {
+            lpModel lp = new lpModel();
+
+            lp.setOrdem(c.getString(c.getColumnIndex("ordem")));
+            lp.setEtapa(c.getString(c.getColumnIndex("etapa")));
+
+            lp.setLatitude(c.getString(c.getColumnIndex("latitude")));
+            lp.setLongitude(c.getString(c.getColumnIndex("longitude")));
+
+            lpList.add(lp);
+        }
+
+        c.close();
+
+        return lpList;
+    }
 
 
     // HELPERS
@@ -239,10 +241,15 @@ public class lpDAO extends SQLiteOpenHelper {
         queryData.put("etapa", lp.getEtapa());
         queryData.put("localidade", lp.getLocalidade());
 
+        queryData.put("latitude", lp.getLatitude());
+        queryData.put("longitude", lp.getLongitude());
+        queryData.put("autoLat", lp.getAutoLat());
+        queryData.put("autoLong", lp.getAutoLong());
+
         return queryData;
     }
 
-    public int lastID(){
+    public int lastLPID(){
         String sql = "SELECT MAX(id) AS LAST FROM lpTable";
         SQLiteDatabase db = getReadableDatabase();
         Cursor c = db.rawQuery(sql, null);
@@ -251,12 +258,6 @@ public class lpDAO extends SQLiteOpenHelper {
         c.close();
 
         return ID;
-    }
-
-    private void deleteAllImagesFromDB(int id) {
-        SQLiteDatabase db = getWritableDatabase();
-        String[] params = {String.valueOf(id)};
-        db.delete("lpImages","lpID = ?", params);
     }
 
     public int getImageIdDB(String imagePath) {
@@ -285,6 +286,8 @@ public class lpDAO extends SQLiteOpenHelper {
         queryData.put("fatorPotencia", clandest.getFatorPotencia());
         queryData.put("carga", clandest.getCarga());
         queryData.put("descricao", clandest.getDescricao());
+        queryData.put("autoLat", clandest.getAutoLat());
+        queryData.put("autoLong", clandest.getAutoLong());
 
         queryData.put("lpID", idLP);
 
@@ -294,9 +297,20 @@ public class lpDAO extends SQLiteOpenHelper {
     public List<lpClandestino> getClandestinoList() {
         SQLiteDatabase db = getReadableDatabase();
 
-        String sql = "SELECT lpClandestino.id as idClandest, lpClandestino.endereco as enderecoClandest, lpClandestino.transformador as transformadorClandest, lpClandestino.tensao as tensaoClandest, " +
-                "lpClandestino.corrente as correnteClandest, lpClandestino.protecao as protecaoClandest, " +
-                "lpClandestino.fatorPotencia as fpClandest, lpClandestino.carga as cargaClandest, lpClandestino.descricao as descricaoClandest, lpTable.ordem  as ordemLP FROM lpClandestino " +
+        String sql = "SELECT " +
+                "lpClandestino.id as idClandest, " +
+                "lpClandestino.endereco as enderecoClandest, " +
+                "lpClandestino.transformador as transformadorClandest, " +
+                "lpClandestino.tensao as tensaoClandest, " +
+                "lpClandestino.corrente as correnteClandest, " +
+                "lpClandestino.protecao as protecaoClandest, " +
+                "lpClandestino.fatorPotencia as fpClandest, " +
+                "lpClandestino.carga as cargaClandest, " +
+                "lpClandestino.descricao as descricaoClandest, " +
+                "lpTable.ordem as ordemLP, " +
+                "lpClandestino.autoLat as latitude, " +
+                "lpClandestino.autoLong as longitude " +
+                "FROM lpClandestino " +
                 "INNER JOIN lpTable ON lpClandestino.lpID=lpTable.id ORDER BY idClandest DESC";
 
         Cursor c = db.rawQuery(sql, null);
@@ -318,6 +332,9 @@ public class lpDAO extends SQLiteOpenHelper {
             clandest.setDescricao(c.getString(c.getColumnIndex("descricaoClandest")));
 
             clandest.setOrdem(c.getString(c.getColumnIndex("ordemLP")));
+
+            clandest.setAutoLat(c.getString(c.getColumnIndex("latitude")));
+            clandest.setAutoLong(c.getString(c.getColumnIndex("longitude")));
 
 
             lpClandestList.add(clandest);
@@ -348,6 +365,9 @@ public class lpDAO extends SQLiteOpenHelper {
         queryData.put("carga", clandest.getCarga());
         queryData.put("descricao", clandest.getDescricao());
 
+        queryData.put("autoLat", clandest.getAutoLat());
+        queryData.put("autoLong", clandest.getAutoLong());
+
         String[] params = {String.valueOf(clandest.getId())};
         db.update("lpClandestino", queryData, "id=?", params);
     }
@@ -362,4 +382,5 @@ public class lpDAO extends SQLiteOpenHelper {
 
         return ID;
     }
+
 }

@@ -23,7 +23,7 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
         tools:ignore="AllowBackup,GoogleAppIndexingWarning">
-        <activity android:name=".clandestinoActivity"></activity>
+        <activity android:name=".clandestinoActivity" />
         <activity android:name=".clandestinoFormActivity" />
         <!--
              The API key for Google Maps-based APIs is defined as a string resource.

@@ -17,6 +17,8 @@ public class lpClandestino  implements Serializable {
 
     private String Ordem;
 
+    private String autoLat;
+    private String autoLong;
 
 
     public int getId() {
@@ -91,4 +93,18 @@ public class lpClandestino  implements Serializable {
         Ordem = ordem;
     }
 
+
+    public String getAutoLat() {
+        return autoLat;
+    }
+    public void setAutoLat(String autoLat) {
+        this.autoLat = autoLat;
+    }
+
+    public String getAutoLong() {
+        return autoLong;
+    }
+    public void setAutoLong(String autoLong) {
+        this.autoLong = autoLong;
+    }
 }

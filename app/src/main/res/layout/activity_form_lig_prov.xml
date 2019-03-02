@@ -17,7 +17,7 @@
         <RelativeLayout
             android:id="@+id/map_layout"
             android:layout_width="0dp"
-            android:layout_height="200dp"
+            android:layout_height="500dp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent">
@@ -35,22 +35,28 @@
                 android:contentDescription="Imagem trasparente" />
         </RelativeLayout>
 
-        <TextView
-            android:id="@+id/TextViewFormOrdem"
-            android:layout_width="0dp"
+        <include
+            android:id="@+id/mapLegenda"
+            layout="@layout/activity_form_lig_prov_legenda"
+
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginStart="8dp"
-            android:layout_marginLeft="8dp"
-            android:layout_marginTop="8dp"
-            android:layout_marginEnd="8dp"
-            android:layout_marginRight="8dp"
-            android:gravity="center"
-            android:textSize="24sp"
-            android:textStyle="bold"
+            android:layout_marginBottom="8dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="1.0"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintVertical_bias="0.0" />
+
+        <include
+            android:id="@+id/mapBottomHeader"
+            layout="@layout/activity_form_lig_prov_header"
+
+            android:layout_width="0dp"
+            android:layout_height="60dp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/map_layout"
-            tools:text="123888123888123888" />
+            app:layout_constraintTop_toBottomOf="@+id/map_layout" />
 
         <android.support.design.widget.FloatingActionButton
             android:id="@+id/buttonAlbum"
@@ -59,21 +65,16 @@
             android:layout_margin="8dp"
             android:layout_marginStart="8dp"
             android:layout_marginLeft="8dp"
-            android:layout_marginTop="8dp"
             android:layout_marginEnd="16dp"
             android:layout_marginRight="16dp"
-            android:layout_marginBottom="8dp"
             android:clickable="true"
             android:focusable="true"
             app:backgroundTint="@color/colorPrimary"
-            app:layout_constraintBottom_toBottomOf="@+id/map_layout"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="1.0"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/map_layout"
-            app:layout_constraintVertical_bias="0.0"
+            app:layout_constraintTop_toTopOf="@+id/TextViewLP1"
             app:srcCompat="@drawable/ic_album" />
-
 
         <android.support.design.widget.FloatingActionButton
             android:id="@+id/buttonClandestino"
@@ -100,6 +101,8 @@
             android:id="@+id/TextViewLP1"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
+            android:layout_marginLeft="8dp"
             android:layout_marginTop="16dp"
             android:layout_marginEnd="8dp"
             android:layout_marginRight="8dp"
@@ -108,8 +111,8 @@
             android:textStyle="bold"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.458"
-            app:layout_constraintStart_toStartOf="@+id/TextViewFormOrdem"
-            app:layout_constraintTop_toBottomOf="@+id/TextViewFormOrdem" />
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/mapBottomHeader" />
 
         <TextView
             android:id="@+id/TextViewFormCliente"
@@ -118,8 +121,10 @@
             android:layout_marginStart="16dp"
             android:layout_marginLeft="16dp"
             android:layout_marginTop="8dp"
+            android:layout_marginEnd="8dp"
+            android:layout_marginRight="8dp"
             android:textSize="20sp"
-            app:layout_constraintEnd_toEndOf="@+id/TextViewLP1"
+            app:layout_constraintEnd_toStartOf="@+id/buttonAlbum"
             app:layout_constraintHorizontal_bias="0.458"
             app:layout_constraintStart_toStartOf="@+id/TextViewLP1"
             app:layout_constraintTop_toBottomOf="@+id/TextViewLP1"
@@ -146,8 +151,10 @@
             android:layout_marginStart="16dp"
             android:layout_marginLeft="16dp"
             android:layout_marginTop="8dp"
+            android:layout_marginEnd="8dp"
+            android:layout_marginRight="8dp"
             android:textSize="20sp"
-            app:layout_constraintEnd_toEndOf="@+id/TextViewLP2"
+            app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="@+id/TextViewLP2"
             app:layout_constraintTop_toBottomOf="@+id/TextViewLP2"
             tools:text="TextViewFormEndereco" />
@@ -401,7 +408,6 @@
                 android:hint="Carga Medida"
                 android:inputType="number" />
         </android.support.design.widget.TextInputLayout>
-
 
 
     </android.support.constraint.ConstraintLayout>

@@ -30,6 +30,12 @@ public class lpModel implements Serializable {
     private String etapa;
     private String localidade;
 
+    private String latitude;
+    private String longitude;
+
+    private String autoLat;
+    private String autoLong;
+
 
 
 
@@ -158,4 +164,33 @@ public class lpModel implements Serializable {
     public void setImagesList(List<String> imagesList) {
         this.imagesList = imagesList;
     }
+
+    public String getLatitude() {
+        return latitude;
+    }
+    public void setLatitude(String latitude) {
+        this.latitude = latitude;
+    }
+
+    public String getLongitude() {
+        return longitude;
+    }
+    public void setLongitude(String longitude) {
+        this.longitude = longitude;
+    }
+
+    public String getAutoLat() {
+        return autoLat;
+    }
+    public void setAutoLat(String autoLat) {
+        this.autoLat = autoLat;
+    }
+
+    public String getAutoLong() {
+        return autoLong;
+    }
+    public void setAutoLong(String autoLong) {
+        this.autoLong = autoLong;
+    }
+
 }

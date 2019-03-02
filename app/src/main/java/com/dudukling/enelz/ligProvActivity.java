@@ -51,7 +51,6 @@ import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.FileWriter;
 import java.io.IOException;
-import java.io.Serializable;
 import java.text.Normalizer;
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -90,7 +89,7 @@ public class ligProvActivity extends AppCompatActivity {
         textViewNoRecord = this.findViewById(R.id.textViewNoRecords);
         buttonImportFile = this.findViewById(R.id.buttonImportFile);
 
-        if (dao.lastID() > 0) {
+        if (dao.lastLPID() > 0) {
 //            textViewNoRecord.setVisibility(View.GONE);
             buttonImportFile.setVisibility(View.GONE);
             lpList = dao.getLPList();
@@ -104,9 +103,6 @@ public class ligProvActivity extends AppCompatActivity {
             setFilters();
         }
         dao.close();
-
-        Toast.makeText(this, this.getExternalFilesDir(Environment.DIRECTORY_PICTURES).toString(), Toast.LENGTH_LONG).show();
-
     }
 
     private void setFilters() {
@@ -173,7 +169,7 @@ public class ligProvActivity extends AppCompatActivity {
         textViewNoRecord = this.findViewById(R.id.textViewNoRecords);
         buttonImportFile = this.findViewById(R.id.buttonImportFile);
 
-        if (dao.lastID() == 0) {
+        if (dao.lastLPID() == 0) {
             textViewNoRecord.setVisibility(View.VISIBLE);
             buttonImportFile.setVisibility(View.VISIBLE);
 
@@ -437,10 +433,10 @@ public class ligProvActivity extends AppCompatActivity {
             Log.d("TAG2", "createNewFile() called: " + fileCreated);
             CSVWriter csvWrite = new CSVWriter(new FileWriter(file));
 
-            Cursor curCSV = db.rawQuery("SELECT lpClandestino.id, ordem, lpClandestino.endereco, transformador, tensao, corrente, protecao, fatorPotencia, carga, descricao FROM lpClandestino " +
+            Cursor curCSV = db.rawQuery("SELECT lpClandestino.id, ordem, lpClandestino.endereco, transformador, tensao, corrente, protecao, fatorPotencia, carga, descricao, lpClandestino.autoLat, lpClandestino.autoLong FROM lpClandestino " +
                     "INNER JOIN lpTable ON lpClandestino.lpID=lpTable.id", null);
 
-            String[] str = {"ID", "ordem", "endereco", "transformador", "tensao", "corrente", "protecao", "fator de potencia", "carga", "descricao"};
+            String[] str = {"ID", "ordem", "endereco", "transformador", "tensao", "corrente", "protecao", "fator de potencia", "carga", "descricao", "latitude", "longitude"};
 
             csvWrite.writeNext(str);
             while (curCSV.moveToNext()) {
@@ -454,8 +450,10 @@ public class ligProvActivity extends AppCompatActivity {
                 String fatorPotencia = stripAccents(curCSV.getString(7));
                 String carga = stripAccents(curCSV.getString(8));
                 String descricao = stripAccents(curCSV.getString(9));
+                String latitude = stripAccents(curCSV.getString(10));
+                String longitude = stripAccents(curCSV.getString(11));
 
-                String arrStr[] = {id, ordem, endereco, transformador, tensao, corrente, protecao, fatorPotencia, carga, descricao};
+                String arrStr[] = {id, ordem, endereco, transformador, tensao, corrente, protecao, fatorPotencia, carga, descricao, latitude, longitude};
 
                 csvWrite.writeNext(arrStr);
             }
@@ -493,10 +491,10 @@ public class ligProvActivity extends AppCompatActivity {
             CSVWriter csvWrite = new CSVWriter(new FileWriter(file));
 
 
-            Cursor curCSV = db.rawQuery("SELECT id, ordem, userObservacao, userCargaMedida FROM lpTable " +
+            Cursor curCSV = db.rawQuery("SELECT id, ordem, userObservacao, userCargaMedida, autoLat, autoLong FROM lpTable " +
                     "WHERE userObservacao <> '' OR userCargaMedida != ''", null);
 
-            String[] str = {"ID", "ordem", "userObservacao", "userCargaMedida"};
+            String[] str = {"ID", "ordem", "Observacao", "CargaMedida", "latitudeGPS", "longitudeGPS"};
 
             csvWrite.writeNext(str);
 
@@ -506,8 +504,10 @@ public class ligProvActivity extends AppCompatActivity {
                 String ordem = curCSV.getString(1);
                 String userObservacao = stripAccents(curCSV.getString(2));
                 String userCargaMedida = stripAccents(curCSV.getString(3));
+                String autoLat = stripAccents(curCSV.getString(4));
+                String autoLong = stripAccents(curCSV.getString(5));
 
-                String arrStr[] = {id, ordem, userObservacao, userCargaMedida};
+                String arrStr[] = {id, ordem, userObservacao, userCargaMedida, autoLat, autoLong};
 
                 csvWrite.writeNext(arrStr);
             }

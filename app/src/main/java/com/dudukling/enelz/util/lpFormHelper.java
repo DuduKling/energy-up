@@ -98,22 +98,10 @@ public class lpFormHelper {
         setValidateEmpty(textInputCargaMedida);
     }
 
-    public lpModel getLPFromForm(lpModel lp, List<String> imagesList) {
+    public lpModel getLPFromForm(lpModel lp) {
 
         lp.setUserCargaMedida(fieldCargaMedida.getText().toString());
         lp.setUserObservacao(fieldObs.getText().toString());
-
-//        lpDAO dao = new lpDAO(activity);
-//        List<String> imagesListDB = dao.getImagesDB(lp.getId());
-//        dao.close();
-//
-//        List<String> newestImageList = new ArrayList<>();
-//        newestImageList.addAll(imagesListDB);
-//        newestImageList.addAll(imagesList);
-//
-//        lp.setImagesList(newestImageList);
-
-        //Toast.makeText(activity,""+formActivity.imagesList,Toast.LENGTH_LONG).show();
 
         return lp;
     }
@@ -161,11 +149,18 @@ public class lpFormHelper {
         });
     }
 
-    public boolean validateForm() {
-        if(fieldIsEmpty(textInputObs)){return false;}
-        if(fieldIsEmpty(textInputCargaMedida)){return false;}
+    public String validateForm(lpModel lp) {
+        if(fieldIsEmpty(textInputObs)){return "false";}
+        if(fieldIsEmpty(textInputCargaMedida)){return "false";}
 
-        return true;
+        if(
+            lp.getAutoLat().isEmpty() ||
+            lp.getAutoLong().isEmpty()
+        ){
+            return "gps";
+        }
+
+        return "true";
     }
 
     private boolean fieldIsEmpty(TextInputLayout textInputCampo) {

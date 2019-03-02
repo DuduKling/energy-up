@@ -79,6 +79,10 @@ public class OpenCSVReader {
                 lp.setEtapa(stripAccents(nextRecord[11]));
                 lp.setLocalidade(stripAccents(nextRecord[36]));
 
+                lp.setLatitude(stripAccents(nextRecord[37]));
+                lp.setLongitude(stripAccents(nextRecord[38]));
+
+
                 dao.insert(lp);
             }
             dao.close();
