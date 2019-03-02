@@ -194,7 +194,7 @@ public class lpDAO extends SQLiteOpenHelper {
     public List<lpModel> getGPSList(int id) {
         SQLiteDatabase db = getReadableDatabase();
 
-        String sql = "SELECT * FROM lpTable WHERE id != ? ORDER BY id DESC";
+        String sql = "SELECT * FROM lpTable WHERE id != ? AND (userObservacao=='' OR userCargaMedida=='')  ORDER BY id DESC";
         Cursor c = db.rawQuery(sql, new String[]{String.valueOf(id)});
 
         List<lpModel> lpList = new ArrayList<>();
