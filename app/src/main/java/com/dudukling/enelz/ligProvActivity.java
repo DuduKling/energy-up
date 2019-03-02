@@ -115,6 +115,7 @@ public class ligProvActivity extends AppCompatActivity {
             @Override
             public void onItemSelected(AdapterView<?> parentView, View selectedItemView, int position, long id) {
                 RecyclerAdapter.updateStaticFilter(spinnerLocalidade, "localidade", position);
+                checkQtdListed();
             }
 
             @Override
@@ -133,6 +134,7 @@ public class ligProvActivity extends AppCompatActivity {
             @Override
             public void onItemSelected(AdapterView<?> parentView, View selectedItemView, int position, long id) {
                 RecyclerAdapter.updateStaticFilter(spinnerTipo, "tipo", position);
+                checkQtdListed();
             }
 
             @Override
@@ -151,6 +153,7 @@ public class ligProvActivity extends AppCompatActivity {
             @Override
             public void onItemSelected(AdapterView<?> parentView, View selectedItemView, int position, long id) {
                 RecyclerAdapter.updateStaticFilter(spinnerEtapa, "etapa", position);
+                checkQtdListed();
             }
 
             @Override
@@ -161,13 +164,19 @@ public class ligProvActivity extends AppCompatActivity {
         });
     }
 
+    private void checkQtdListed() {
+        if(RecyclerAdapter.getItemCount()==0){
+            textViewNoRecord.setVisibility(View.VISIBLE);
+        }else{
+            textViewNoRecord.setVisibility(View.GONE);
+        }
+    }
+
     @Override
     protected void onResume() {
         super.onResume();
 
         lpDAO dao = new lpDAO(this);
-        textViewNoRecord = this.findViewById(R.id.textViewNoRecords);
-        buttonImportFile = this.findViewById(R.id.buttonImportFile);
 
         if (dao.lastLPID() == 0) {
             textViewNoRecord.setVisibility(View.VISIBLE);
@@ -229,6 +238,7 @@ public class ligProvActivity extends AppCompatActivity {
             public boolean onQueryTextChange(String newText) {
 //                RecyclerAdapter.getFilter().filter(newText);
                 RecyclerAdapter.updateSearchFilter(newText);
+                checkQtdListed();
                 return false;
             }
         });

@@ -27,19 +27,6 @@
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_bias="0.197" />
 
-    <android.support.v7.widget.RecyclerView
-        android:id="@+id/recyclerViewLP"
-        android:layout_width="match_parent"
-        android:layout_height="0dp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="1.0"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/imageView"
-        tools:listitem="@layout/item_lig_prov" >
-
-    </android.support.v7.widget.RecyclerView>
-
     <Button
         android:id="@+id/buttonImportFile"
         android:layout_width="wrap_content"
@@ -56,6 +43,19 @@
         app:layout_constraintEnd_toEndOf="@+id/textViewNoRecords"
         app:layout_constraintStart_toStartOf="@+id/textViewNoRecords"
         app:layout_constraintTop_toBottomOf="@+id/textViewNoRecords" />
+
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/recyclerViewLP"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="1.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/imageView"
+        tools:listitem="@layout/item_lig_prov" >
+
+    </android.support.v7.widget.RecyclerView>
 
     <ImageView
         android:id="@+id/imageView"
