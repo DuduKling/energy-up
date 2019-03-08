@@ -59,15 +59,12 @@ import java.util.zip.ZipEntry;
 import java.util.zip.ZipOutputStream;
 
 public class ligProvActivity extends AppCompatActivity {
-    private static final int FILE_SELECT_CODE = 000;
-    private static final int WRITE_PERMISSION_CODE = 111;
     private static final int EXPORT_WRITE_PERMISSION_CODE = 222;
 
     private RecyclerView recyclerView;
     private ligProv_recyclerAdapter RecyclerAdapter;
     private List<lpModel> lpList;
     private View textViewNoRecord;
-    private View buttonImportFile;
 
     private Spinner spinnerLocalidade;
     private Spinner spinnerTipo;
@@ -87,11 +84,9 @@ public class ligProvActivity extends AppCompatActivity {
 
         lpDAO dao = new lpDAO(this);
         textViewNoRecord = this.findViewById(R.id.textViewNoRecords);
-        buttonImportFile = this.findViewById(R.id.buttonImportFile);
 
         if (dao.lastLPID() > 0) {
 //            textViewNoRecord.setVisibility(View.GONE);
-            buttonImportFile.setVisibility(View.GONE);
             lpList = dao.getLPList();
 
 //            RecyclerAdapter = new ligProv_recyclerAdapter(lpList, this);
@@ -165,9 +160,9 @@ public class ligProvActivity extends AppCompatActivity {
     }
 
     private void checkQtdListed() {
-        if(RecyclerAdapter.getItemCount()==0){
+        if (RecyclerAdapter.getItemCount() == 0) {
             textViewNoRecord.setVisibility(View.VISIBLE);
-        }else{
+        } else {
             textViewNoRecord.setVisibility(View.GONE);
         }
     }
@@ -180,21 +175,7 @@ public class ligProvActivity extends AppCompatActivity {
 
         if (dao.lastLPID() == 0) {
             textViewNoRecord.setVisibility(View.VISIBLE);
-            buttonImportFile.setVisibility(View.VISIBLE);
-
-            Button importButton = findViewById(R.id.buttonImportFile);
-            importButton.setOnClickListener(new View.OnClickListener() {
-                @RequiresApi(api = Build.VERSION_CODES.M)
-                @Override
-                public void onClick(View v) {
-                    if (ligProvActivity.this.checkSelfPermission(Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
-                        ActivityCompat.requestPermissions(ligProvActivity.this, new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE}, WRITE_PERMISSION_CODE);
-                    } else {
-                        callFileChooser();
-                    }
-                }
-            });
-        }else{
+        } else {
             textViewNoRecord.setVisibility(View.GONE);
             RecyclerAdapter.refreshList();
         }
@@ -249,23 +230,23 @@ public class ligProvActivity extends AppCompatActivity {
     @RequiresApi(api = Build.VERSION_CODES.M)
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-            switch (item.getItemId()){
-                case R.id.menu_delete_all:
-                    if(lpList!=null) {
-                        if(!lpList.isEmpty()) {
-                            deleteAll();
-                        }
+        switch (item.getItemId()) {
+            case R.id.menu_delete_all:
+                if (lpList != null) {
+                    if (!lpList.isEmpty()) {
+                        deleteAll();
                     }
-                    break;
-                case R.id.menu_export_file:
-                    checkPermissionBeforeExport();
-                    break;
-                case R.id.menu_clandestinos:
-                    Intent goToClandestinoList = new Intent(ligProvActivity.this, clandestinoActivity.class);
-                    startActivity(goToClandestinoList);
-                    break;
-            }
-            return super.onOptionsItemSelected(item);
+                }
+                break;
+            case R.id.menu_export_file:
+                checkPermissionBeforeExport();
+                break;
+            case R.id.menu_clandestinos:
+                Intent goToClandestinoList = new Intent(ligProvActivity.this, clandestinoActivity.class);
+                startActivity(goToClandestinoList);
+                break;
+        }
+        return super.onOptionsItemSelected(item);
     }
 
     private void deleteAll() {
@@ -276,7 +257,7 @@ public class ligProvActivity extends AppCompatActivity {
                     case DialogInterface.BUTTON_POSITIVE:
                         exportDB("backup");
 
-                        if(!lpList.isEmpty()) {
+                        if (!lpList.isEmpty()) {
                             for (int i = 0; i < lpList.size(); i++) {
                                 lpModel lp = lpList.get(i);
                                 List<String> lpImages = lp.getImagesList();
@@ -295,7 +276,6 @@ public class ligProvActivity extends AppCompatActivity {
                         recyclerView.setAdapter(RecyclerAdapter);
 
                         textViewNoRecord.setVisibility(View.VISIBLE);
-                        buttonImportFile.setVisibility(View.VISIBLE);
                         break;
                     case DialogInterface.BUTTON_NEGATIVE:
                         //No button clicked
@@ -362,6 +342,7 @@ public class ligProvActivity extends AppCompatActivity {
         }
 //       return true;
     }
+
     /* Zips a subfolder */
     private void zipSubFolder(ZipOutputStream out, File folder, int basePathLength) throws IOException {
 
@@ -390,6 +371,7 @@ public class ligProvActivity extends AppCompatActivity {
             }
         }
     }
+
     /*Example: getLastPathComponent("downloads/example/fileToZip"); Result: "fileToZip" */
     public String getLastPathComponent(String filePath) {
         String[] segments = filePath.split("/");
@@ -400,22 +382,21 @@ public class ligProvActivity extends AppCompatActivity {
     }
 
 
-
     private void exportDB(String type) {
         lpDAO dao = new lpDAO(this);
 
         SQLiteDatabase db = dao.getReadableDatabase();
-        long qtdCSV = DatabaseUtils.queryNumEntries(db, "lpTable","userObservacao<>'' AND userCargaMedida!=''");
-        if(qtdCSV != 0) {
+        long qtdCSV = DatabaseUtils.queryNumEntries(db, "lpTable", "userObservacao<>'' AND userCargaMedida!=''");
+        if (qtdCSV != 0) {
             exportLPs(type, db);
-        }else if(!type.equals("backup")){
+        } else if (!type.equals("backup")) {
             Toast.makeText(this, "Não há LPs cadastradas para exportar.", Toast.LENGTH_SHORT).show();
         }
 
         long qtdCSVClandest = DatabaseUtils.queryNumEntries(db, "lpClandestino");
-        if(qtdCSVClandest != 0) {
+        if (qtdCSVClandest != 0) {
             exportClandests(type, db);
-        }else if(!type.equals("backup")){
+        } else if (!type.equals("backup")) {
             Toast.makeText(this, "Não há clandestinos para exportar.", Toast.LENGTH_SHORT).show();
         }
 
@@ -431,9 +412,9 @@ public class ligProvActivity extends AppCompatActivity {
 
         @SuppressLint("SimpleDateFormat") String timeStamp = new SimpleDateFormat("ddMMyyyy_HHmmss").format(new Date());
         File file;
-        if(type.equals("backup")){
+        if (type.equals("backup")) {
             file = new File(exportDir, "EnelBackupClandestinos_" + timeStamp + ".csv");
-        }else{
+        } else {
             file = new File(exportDir, "EnelExportClandestinos_" + timeStamp + ".csv");
         }
 
@@ -470,7 +451,7 @@ public class ligProvActivity extends AppCompatActivity {
             csvWrite.close();
             curCSV.close();
 
-            if(!type.equals("backup")) {
+            if (!type.equals("backup")) {
                 Toast.makeText(this, "Clandestinos Exportados!", Toast.LENGTH_SHORT).show();
             }
 
@@ -488,9 +469,9 @@ public class ligProvActivity extends AppCompatActivity {
 
         @SuppressLint("SimpleDateFormat") String timeStamp = new SimpleDateFormat("ddMMyyyy_HHmmss").format(new Date());
         File file;
-        if(type.equals("backup")){
+        if (type.equals("backup")) {
             file = new File(exportDir, "EnelBackupLP_" + timeStamp + ".csv");
-        }else{
+        } else {
             file = new File(exportDir, "EnelExportLP_" + timeStamp + ".csv");
         }
 
@@ -524,7 +505,7 @@ public class ligProvActivity extends AppCompatActivity {
             csvWrite.close();
             curCSV.close();
 
-            if(!type.equals("backup")) {
+            if (!type.equals("backup")) {
                 Toast.makeText(this, "LPs Exportadas!", Toast.LENGTH_SHORT).show();
             }
 
@@ -541,10 +522,10 @@ public class ligProvActivity extends AppCompatActivity {
 
     public void deleteImagesFromPhoneMemory(lpModel lp) {
         List<String> imagesListToDelete = lp.getImagesList();
-        for(int i = 0; i < imagesListToDelete.size(); i++){
+        for (int i = 0; i < imagesListToDelete.size(); i++) {
             File file = new File(imagesListToDelete.get(i));
             boolean deleted = file.delete();
-            Log.d("TAG4", "delete() called: "+deleted);
+            Log.d("TAG4", "delete() called: " + deleted);
         }
 
         String path = this.getExternalFilesDir(Environment.DIRECTORY_PICTURES).toString();
@@ -552,195 +533,22 @@ public class ligProvActivity extends AppCompatActivity {
         File[] files = directory.listFiles();
         for (File file : files) {
             boolean deleted = file.delete();
-            Log.d("TAG4", "delete() called: "+deleted);
+            Log.d("TAG4", "delete() called: " + deleted);
         }
 
 
-    }
-
-    private void callFileChooser(){
-        Intent intent = new Intent(Intent.ACTION_GET_CONTENT);
-        intent.setType("text/*");
-        intent.addCategory(Intent.CATEGORY_OPENABLE);
-
-        try {
-            startActivityForResult(
-                    Intent.createChooser(intent, "Selecione um arquivo para carregar"),
-                    FILE_SELECT_CODE);
-        } catch (android.content.ActivityNotFoundException ex) {
-            Toast.makeText(this, "Favor instalar um Gerenciador de Arquivos!", Toast.LENGTH_SHORT).show();
-        }
     }
 
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
-        if(requestCode == WRITE_PERMISSION_CODE) {
+        if (requestCode == EXPORT_WRITE_PERMISSION_CODE) {
             if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_DENIED) {
                 Toast.makeText(this, "Não é possível utilizar esta função sem permissão!", Toast.LENGTH_SHORT).show();
             } else {
-                callFileChooser();
-            }
-        }
-        if(requestCode == EXPORT_WRITE_PERMISSION_CODE) {
-            if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_DENIED) {
-                Toast.makeText(this, "Não é possível utilizar esta função sem permissão!", Toast.LENGTH_SHORT).show();
-            } else{
                 exportDB("");
             }
         }
     }
 
-    @TargetApi(Build.VERSION_CODES.O)
-    @Override
-    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        switch (requestCode) {
-            case FILE_SELECT_CODE:
-                if (resultCode == RESULT_OK) {
-                    Uri selectedURI = data.getData();
-                    String path = getPathFromUri(this, selectedURI);
-
-                    try {
-                        OpenCSVReader.readCSVFile(this, path);
-                    }catch(IOException e) {
-                        e.printStackTrace();
-                        Toast.makeText(this, "Não foi possível carregar este arquivo!", Toast.LENGTH_LONG).show();
-                    }
-
-                    lpDAO dao = new lpDAO(this);
-                    lpList = dao.getLPList();
-
-//                    RecyclerAdapter = new ligProv_recyclerAdapter(lpList, this);
-                    RecyclerAdapter = new ligProv_recyclerAdapter(this);
-                    recyclerView.setAdapter(RecyclerAdapter);
-                    RecyclerView.LayoutManager layout = new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false);
-                    recyclerView.setLayoutManager(layout);
-
-                    buttonImportFile.setVisibility(View.GONE);
-//                    textViewNoRecord.setVisibility(View.GONE);
-                    setFilters();
-
-                }
-                break;
-        }
-        super.onActivityResult(requestCode, resultCode, data);
-    }
-
-    @RequiresApi(api = Build.VERSION_CODES.KITKAT)
-    public static String getPathFromUri(final Context context, final Uri uri) {
-
-        final boolean isKitKat = Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT;
-
-        // DocumentProvider
-        if (isKitKat && DocumentsContract.isDocumentUri(context, uri)) {
-            // ExternalStorageProvider
-            if (isExternalStorageDocument(uri)) {
-                final String docId = DocumentsContract.getDocumentId(uri);
-                final String[] split = docId.split(":");
-                final String type = split[0];
-
-                if ("primary".equalsIgnoreCase(type)) {
-                    return Environment.getExternalStorageDirectory() + "/" + split[1];
-                }
-
-                // TODO handle non-primary volumes
-            }
-            // DownloadsProvider
-            else if (isDownloadsDocument(uri)) {
-
-                final String id = DocumentsContract.getDocumentId(uri);
-                final Uri contentUri = ContentUris.withAppendedId(
-                        Uri.parse("content://downloads/public_downloads"), Long.valueOf(id));
-
-                return getDataColumn(context, contentUri, null, null);
-            }
-            // MediaProvider
-            else if (isMediaDocument(uri)) {
-                final String docId = DocumentsContract.getDocumentId(uri);
-                final String[] split = docId.split(":");
-                final String type = split[0];
-
-                Uri contentUri = null;
-                if ("image".equals(type)) {
-                    contentUri = MediaStore.Images.Media.EXTERNAL_CONTENT_URI;
-                } else if ("video".equals(type)) {
-                    contentUri = MediaStore.Video.Media.EXTERNAL_CONTENT_URI;
-                } else if ("audio".equals(type)) {
-                    contentUri = MediaStore.Audio.Media.EXTERNAL_CONTENT_URI;
-                }
-
-                final String selection = "_id=?";
-                final String[] selectionArgs = new String[] {
-                        split[1]
-                };
-
-                return getDataColumn(context, contentUri, selection, selectionArgs);
-            }
-        }
-        // MediaStore (and general)
-        else if ("content".equalsIgnoreCase(uri.getScheme())) {
-
-            // Return the remote address
-            if (isGooglePhotosUri(uri))
-                return uri.getLastPathSegment();
-
-            return getDataColumn(context, uri, null, null);
-        }
-        // File
-        else if ("file".equalsIgnoreCase(uri.getScheme())) {
-            return uri.getPath();
-        }
-
-        return null;
-    }
-    public static String getDataColumn(Context context, Uri uri, String selection,
-                                       String[] selectionArgs) {
-
-        Cursor cursor = null;
-        final String column = "_data";
-        final String[] projection = {
-                column
-        };
-
-        try {
-            cursor = context.getContentResolver().query(uri, projection, selection, selectionArgs,
-                    null);
-            if (cursor != null && cursor.moveToFirst()) {
-                final int index = cursor.getColumnIndexOrThrow(column);
-                return cursor.getString(index);
-            }
-        } finally {
-            if (cursor != null)
-                cursor.close();
-        }
-        return null;
-    }
-    /**
-     * @param uri The Uri to check.
-     * @return Whether the Uri authority is ExternalStorageProvider.
-     */
-    public static boolean isExternalStorageDocument(Uri uri) {
-        return "com.android.externalstorage.documents".equals(uri.getAuthority());
-    }
-    /**
-     * @param uri The Uri to check.
-     * @return Whether the Uri authority is DownloadsProvider.
-     */
-    public static boolean isDownloadsDocument(Uri uri) {
-        return "com.android.providers.downloads.documents".equals(uri.getAuthority());
-    }
-    /**
-     * @param uri The Uri to check.
-     * @return Whether the Uri authority is MediaProvider.
-     */
-    public static boolean isMediaDocument(Uri uri) {
-        return "com.android.providers.media.documents".equals(uri.getAuthority());
-    }
-    /**
-     * @param uri The Uri to check.
-     * @return Whether the Uri authority is Google Photos.
-     */
-    public static boolean isGooglePhotosUri(Uri uri) {
-        return "com.google.android.apps.photos.content".equals(uri.getAuthority());
-    }
 
 }

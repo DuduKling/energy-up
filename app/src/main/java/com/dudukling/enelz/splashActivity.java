@@ -1,7 +1,6 @@
 package com.dudukling.enelz;
 
 import android.content.Intent;
-import android.graphics.Color;
 import android.net.Uri;
 import android.os.Handler;
 import android.support.v7.app.AppCompatActivity;
@@ -44,7 +43,7 @@ public class splashActivity extends AppCompatActivity {
     }
 
     private void showLauncher() {
-        Intent intent = new Intent(splashActivity.this, ligProvActivity.class);
+        Intent intent = new Intent(splashActivity.this, menuActivity.class);
         startActivity(intent);
         finish();
     }

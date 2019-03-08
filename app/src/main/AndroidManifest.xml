@@ -41,6 +41,8 @@
         <activity android:name=".ligProvFormActivity" />
         <activity android:name=".ligProvAlbumActivity" />
         <activity android:name=".ligProvImageActivity" />
+        <activity android:name=".menuActivity" />
+        <activity android:name=".importActivity" />
         <activity
             android:name=".splashActivity"
             android:theme="@style/AppCompat.fullScreen">
