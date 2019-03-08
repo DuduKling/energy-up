@@ -17,6 +17,8 @@ import android.support.v4.app.ActivityCompat;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -30,6 +32,9 @@ import com.dudukling.enelz.dao.lpDAO;
 import com.dudukling.enelz.model.lpClandestino;
 
 import java.util.Objects;
+
+import static java.lang.Float.parseFloat;
+import static java.lang.Integer.parseInt;
 
 public class clandestinoFormActivity extends AppCompatActivity {
     private static final String REQUIRED_FIELD_ERROR_MSG = "Campo obrigatório!";
@@ -49,6 +54,7 @@ public class clandestinoFormActivity extends AppCompatActivity {
     private TextInputLayout textInputLayoutClandestDescricao;
     private TextView textViewClandestNumero;
     private TextView textViewClandestLatLong;
+    private TextView textViewPotCalculada;
 
     private LocationManager locationManager;
     private LocationListener locationListener;
@@ -76,13 +82,17 @@ public class clandestinoFormActivity extends AppCompatActivity {
         }else if(tipoForm.equals("edit")){
             fillForm();
             setValidation();
+            setCalculus();
         }else if(tipoForm.equals("new")){
             setValidation();
+
             lpDAO dao = new lpDAO(this);
             int nextID = dao.getClandestinoLastID() + 1;
             dao.close();
+
             textViewClandestNumero.setText("Clandestino #"+nextID);
             getGPSLocation();
+            setCalculus();
         }
     }
 
@@ -192,6 +202,91 @@ public class clandestinoFormActivity extends AppCompatActivity {
         textViewClandestLatLong.setText("Lat: "+lpClandest.getAutoLat()+" | Long: "+lpClandest.getAutoLong());
 
         textViewClandestNumero.setText("Clandestino #"+lpClandest.getId());
+
+        calculaPotEncontrada();
+    }
+
+    private void calculaPotEncontrada() {
+        // Potência (W) = Tensão (V) * Corrente (A)* fator de potência (entre 0 e 1)
+
+        int tensao = 0;
+        if(lpClandest.getTensao()!=null){
+            if(!lpClandest.getTensao().equals("")){
+                tensao = Integer.valueOf(lpClandest.getTensao());
+            }
+        }
+
+        int corrente = 0;
+        if(lpClandest.getCorrente()!=null){
+            if(!lpClandest.getCorrente().equals("")){
+                corrente = Integer.parseInt(lpClandest.getCorrente());
+            }
+        }
+
+        float fatorPotencia = 0;
+        if(lpClandest.getFatorPotencia()!=null){
+            if(!lpClandest.getFatorPotencia().equals("")){
+                fatorPotencia = Float.parseFloat(lpClandest.getFatorPotencia());
+            }
+        }
+
+
+        float potEncontrada = tensao * corrente * fatorPotencia;
+        textViewPotCalculada.setText("Potência encontrada: "+potEncontrada+" W");
+    }
+
+    private void setCalculus() {
+        textInputLayoutClandestTensao.getEditText().addTextChangedListener(new TextWatcher() {
+            @Override
+            public void afterTextChanged(Editable s) {
+                if(s!=null || !String.valueOf(s).equals("")){
+                    lpClandest.setTensao(String.valueOf(s));
+                }else{
+                    lpClandest.setTensao(null);
+                }
+                calculaPotEncontrada();
+            }
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+            }
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {}
+        });
+
+        textInputLayoutClandestCorrente.getEditText().addTextChangedListener(new TextWatcher() {
+            @Override
+            public void afterTextChanged(Editable s) {
+                if(s!=null || !String.valueOf(s).equals("")){
+                    lpClandest.setCorrente(s.toString());
+                }else{
+                    lpClandest.setCorrente(null);
+                }
+
+                calculaPotEncontrada();
+            }
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+            }
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {}
+        });
+
+        textInputLayoutClandestFatorPotencia.getEditText().addTextChangedListener(new TextWatcher() {
+            @Override
+            public void afterTextChanged(Editable s) {
+                if(s!=null || !String.valueOf(s).equals("")){
+                    lpClandest.setFatorPotencia(s.toString());
+                }else{
+                    lpClandest.setFatorPotencia(null);
+                }
+                calculaPotEncontrada();
+            }
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+            }
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {}
+        });
     }
 
     private void setFields() {
@@ -205,6 +300,7 @@ public class clandestinoFormActivity extends AppCompatActivity {
         textInputLayoutClandestDescricao = this.findViewById(R.id.textInputLayoutClandesDescricao);
 
         textViewClandestLatLong = this.findViewById(R.id.textViewClandestLatLong);
+        textViewPotCalculada = this.findViewById(R.id.textViewPotCalculada);
     }
 
     @Override
@@ -298,7 +394,32 @@ public class clandestinoFormActivity extends AppCompatActivity {
         setValidateEmpty(textInputLayoutClandestFatorPotencia);
         setValidateEmpty(textInputLayoutClandestCarga);
         setValidateEmpty(textInputLayoutClandestDescricao);
+
+        setValidateFatPotencia(textInputLayoutClandestFatorPotencia);
     }
+
+    private boolean setValidateFatPotencia(final TextInputLayout textInputLayout) {
+        final EditText campo = textInputLayout.getEditText();
+        assert campo != null;
+        campo.setOnFocusChangeListener(new View.OnFocusChangeListener() {
+            @Override
+            public void onFocusChange(View v, boolean hasFocus) {
+                textInputLayout.setError(null);
+                textInputLayout.setErrorEnabled(false);
+                if(!hasFocus){
+                    String text = campo.getText().toString();
+                    if(Float.parseFloat(text) < 0 || Float.parseFloat(text) > 1){
+                        textInputLayout.setError("Valor deve ser entre 0 e 1");
+                    }
+                }else{
+                    textInputLayout.setError(null);
+                    textInputLayout.setErrorEnabled(false);
+                }
+            }
+        });
+        return false;
+    }
+
 
     private void setValidateEmpty(final TextInputLayout textInputCampo){
         final EditText campo = textInputCampo.getEditText();
@@ -331,8 +452,9 @@ public class clandestinoFormActivity extends AppCompatActivity {
         if(fieldIsEmpty(textInputLayoutClandestCarga)){return "false";}
         if(fieldIsEmpty(textInputLayoutClandestDescricao)){return "false";}
 
-        if(lpClandest.getAutoLat().isEmpty() || lpClandest.getAutoLong().isEmpty()){return "gps";
-        }
+        if(setValidateFatPotencia(textInputLayoutClandestFatorPotencia)){return "false";}
+
+        if(lpClandest.getAutoLat().isEmpty() || lpClandest.getAutoLong().isEmpty()){return "gps";}
 
         return "true";
     }
