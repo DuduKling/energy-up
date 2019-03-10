@@ -29,30 +29,16 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
-    <ImageView
-        android:id="@+id/imageViewSplashRemoveFlicker"
-        android:layout_width="0dp"
-        android:layout_height="0dp"
-        app:layout_constraintBottom_toBottomOf="@+id/videoViewSplashLogo"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="1.0"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="@+id/videoViewSplashLogo"
-        app:layout_constraintVertical_bias="1.0"
-        app:srcCompat="@android:color/background_light" />
-
-    <!--<TextView-->
-    <!--android:id="@+id/textViewSplashLogo"-->
-    <!--android:layout_width="wrap_content"-->
-    <!--android:layout_height="wrap_content"-->
-    <!--android:layout_marginTop="16dp"-->
-    <!--android:text="@string/app_name"-->
-    <!--android:textColor="@android:color/white"-->
-    <!--android:textSize="36sp"-->
-    <!--app:layout_constraintBottom_toBottomOf="parent"-->
-    <!--app:layout_constraintEnd_toEndOf="parent"-->
-    <!--app:layout_constraintStart_toStartOf="parent"-->
-    <!--app:layout_constraintTop_toBottomOf="@+id/imageViewSplashLogo"-->
-    <!--app:layout_constraintVertical_bias="0.0" />-->
+    <!--<ImageView-->
+        <!--android:id="@+id/imageViewSplashRemoveFlicker"-->
+        <!--android:layout_width="0dp"-->
+        <!--android:layout_height="0dp"-->
+        <!--app:layout_constraintBottom_toBottomOf="@+id/videoViewSplashLogo"-->
+        <!--app:layout_constraintEnd_toEndOf="parent"-->
+        <!--app:layout_constraintHorizontal_bias="1.0"-->
+        <!--app:layout_constraintStart_toStartOf="parent"-->
+        <!--app:layout_constraintTop_toTopOf="@+id/videoViewSplashLogo"-->
+        <!--app:layout_constraintVertical_bias="1.0"-->
+        <!--app:srcCompat="@android:color/background_light" />-->
 
 </android.support.constraint.ConstraintLayout>

@@ -15,22 +15,22 @@ public class splashActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_splash);
 
-        final ImageView imageRemoveFlicker = findViewById(R.id.imageViewSplashRemoveFlicker);
-        imageRemoveFlicker.setVisibility(View.VISIBLE);
+//        final ImageView imageRemoveFlicker = findViewById(R.id.imageViewSplashRemoveFlicker);
+//        imageRemoveFlicker.setVisibility(View.VISIBLE);
 
-        VideoView mVideoView = findViewById(R.id.videoViewSplashLogo);
+        final VideoView mVideoView = findViewById(R.id.videoViewSplashLogo);
         String path = "android.resource://" + getPackageName() + "/" + R.raw.enel;
         mVideoView.setVideoURI(Uri.parse(path));
+        mVideoView.setZOrderOnTop(true);
         mVideoView.start();
 
-        Handler handle2 = new Handler();
-        handle2.postDelayed(new Runnable() {
-            @Override
-            public void run() {
-                imageRemoveFlicker.setVisibility(View.GONE);
-            }
-        }, 500);
-
+//        Handler handle2 = new Handler();
+//        handle2.postDelayed(new Runnable() {
+//            @Override
+//            public void run() {
+//                imageRemoveFlicker.setVisibility(View.GONE);
+//            }
+//        }, 500);
 
 
         Handler handle = new Handler();
@@ -39,7 +39,7 @@ public class splashActivity extends AppCompatActivity {
             public void run() {
                 showLauncher();
             }
-        }, 1800);
+        }, 3000);
     }
 
     private void showLauncher() {
