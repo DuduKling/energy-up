@@ -63,9 +63,9 @@ public class mapFragment extends SupportMapFragment implements OnMapReadyCallbac
 
             MarkerOptions marker = new MarkerOptions();
             marker.position(posicao);
-            marker.title(lp.getOrdem());
+            marker.title(lp.getCliente());
             marker.icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_AZURE));
-            marker.snippet("Ordem atual");
+            marker.snippet(lp.getTipoOrdem());
             googleMap.addMarker(marker);
         }else{
             // ENEL: -22.502650, -43.171077
@@ -78,7 +78,7 @@ public class mapFragment extends SupportMapFragment implements OnMapReadyCallbac
 
             MarkerOptions marker = new MarkerOptions();
             marker.position(posicao);
-            marker.title(lp.getOrdem());
+            marker.title(lp.getCliente());
             marker.icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_AZURE));
             marker.snippet("Sem informações de GPS");
             googleMap.addMarker(marker);
@@ -109,7 +109,8 @@ public class mapFragment extends SupportMapFragment implements OnMapReadyCallbac
 
                 MarkerOptions marker2 = new MarkerOptions();
                 marker2.position(posicao2);
-                marker2.title(ordem);
+                marker2.title(lp.getCliente());
+                marker2.snippet(lp.getTipoOrdem());
 
                 switch(etapa.substring(0, 3)){
                     case "CAC":
