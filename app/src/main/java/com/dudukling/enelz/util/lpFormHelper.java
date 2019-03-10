@@ -29,8 +29,8 @@ public class lpFormHelper {
     private TextView TextViewObservacoes;
     private TextView TextViewRetorno;
     private TextView TextViewObservacaoExe;
-    private TextView TextViewTempoMaxServico;
-    private TextView TextViewPercTempoMaximo;
+//    private TextView TextViewTempoMaxServico;
+//    private TextView TextViewPercTempoMaximo;
 
     private TextInputLayout textInputObs;
     private TextInputLayout textInputCargaMedida;
@@ -53,8 +53,8 @@ public class lpFormHelper {
         TextViewObservacoes = activity.findViewById(R.id.TextViewFormObservacoes);
         TextViewRetorno = activity.findViewById(R.id.TextViewFormDescRetorno);
         TextViewObservacaoExe = activity.findViewById(R.id.TextViewFormObservacaoExe);
-        TextViewTempoMaxServico = activity.findViewById(R.id.TextViewFormTempoMaxServico);
-        TextViewPercTempoMaximo = activity.findViewById(R.id.TextViewFormPercTempoMaximo);
+//        TextViewTempoMaxServico = activity.findViewById(R.id.TextViewFormTempoMaxServico);
+//        TextViewPercTempoMaximo = activity.findViewById(R.id.TextViewFormPercTempoMaximo);
 
         setFields();
 
@@ -81,8 +81,8 @@ public class lpFormHelper {
         TextViewObservacoes.setText(lp.getObservacoes());
         TextViewRetorno.setText(lp.getDescricao_retorno());
         TextViewObservacaoExe.setText(lp.getObservacao_exe());
-        TextViewTempoMaxServico.setText(lp.getTempo_max_servico());
-        TextViewPercTempoMaximo.setText(lp.getPerc_tempo_maximo());
+//        TextViewTempoMaxServico.setText(lp.getTempo_max_servico());
+//        TextViewPercTempoMaximo.setText(lp.getPerc_tempo_maximo());
 
         fieldObs.setText(lp.getUserObservacao());
         fieldCargaMedida.setText(lp.getUserCargaMedida());

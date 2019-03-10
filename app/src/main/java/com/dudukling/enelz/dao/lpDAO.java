@@ -30,8 +30,8 @@ public class lpDAO extends SQLiteOpenHelper {
                 " observacoes TEXT NOT NULL," +
                 " descricao_retorno TEXT NOT NULL," +
                 " observacao_exe TEXT NOT NULL," +
-                " tempo_max_servico TEXT NOT NULL," +
-                " perc_tempo_maximo TEXT NOT NULL," +
+//                " tempo_max_servico TEXT NOT NULL," +
+//                " perc_tempo_maximo TEXT NOT NULL," +
                 " userObservacao TEXT NOT NULL," +
                 " userCargaMedida TEXT NOT NULL," +
                 " tipo_ordem TEXT NOT NULL," +
@@ -152,8 +152,8 @@ public class lpDAO extends SQLiteOpenHelper {
             lp.setObservacoes(c.getString(c.getColumnIndex("observacoes")));
             lp.setDescricao_retorno(c.getString(c.getColumnIndex("descricao_retorno")));
             lp.setObservacao_exe(c.getString(c.getColumnIndex("observacao_exe")));
-            lp.setTempo_max_servico(c.getString(c.getColumnIndex("tempo_max_servico")));
-            lp.setPerc_tempo_maximo(c.getString(c.getColumnIndex("perc_tempo_maximo")));
+//            lp.setTempo_max_servico(c.getString(c.getColumnIndex("tempo_max_servico")));
+//            lp.setPerc_tempo_maximo(c.getString(c.getColumnIndex("perc_tempo_maximo")));
 
             lp.setUserObservacao(c.getString(c.getColumnIndex("userObservacao")));
             lp.setUserCargaMedida(c.getString(c.getColumnIndex("userCargaMedida")));
@@ -234,8 +234,8 @@ public class lpDAO extends SQLiteOpenHelper {
         queryData.put("observacoes", lp.getObservacoes());
         queryData.put("descricao_retorno", lp.getDescricao_retorno());
         queryData.put("observacao_exe", lp.getObservacao_exe());
-        queryData.put("tempo_max_servico", lp.getTempo_max_servico());
-        queryData.put("perc_tempo_maximo", lp.getPerc_tempo_maximo());
+//        queryData.put("tempo_max_servico", lp.getTempo_max_servico());
+//        queryData.put("perc_tempo_maximo", lp.getPerc_tempo_maximo());
 
         queryData.put("userObservacao", lp.getUserObservacao());
         queryData.put("userCargaMedida", lp.getUserCargaMedida());

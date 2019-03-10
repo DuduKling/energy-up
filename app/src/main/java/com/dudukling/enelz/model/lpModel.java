@@ -17,8 +17,8 @@ public class lpModel implements Serializable {
     private String observacoes;
     private String descricao_retorno;
     private String observacao_exe;
-    private String tempo_max_servico;
-    private String perc_tempo_maximo;
+//    private String tempo_max_servico;
+//    private String perc_tempo_maximo;
 
     private List<String> imagesList  = new ArrayList<>();
 
@@ -116,19 +116,19 @@ public class lpModel implements Serializable {
         this.observacao_exe = observacao_exe;
     }
 
-    public String getTempo_max_servico() {
-        return tempo_max_servico;
-    }
-    public void setTempo_max_servico(String tempo_max_servico) {
-        this.tempo_max_servico = tempo_max_servico;
-    }
-
-    public String getPerc_tempo_maximo() {
-        return perc_tempo_maximo;
-    }
-    public void setPerc_tempo_maximo(String perc_tempo_maximo) {
-        this.perc_tempo_maximo = perc_tempo_maximo;
-    }
+//    public String getTempo_max_servico() {
+//        return tempo_max_servico;
+//    }
+//    public void setTempo_max_servico(String tempo_max_servico) {
+//        this.tempo_max_servico = tempo_max_servico;
+//    }
+//
+//    public String getPerc_tempo_maximo() {
+//        return perc_tempo_maximo;
+//    }
+//    public void setPerc_tempo_maximo(String perc_tempo_maximo) {
+//        this.perc_tempo_maximo = perc_tempo_maximo;
+//    }
 
     public int getId() {
         return id;

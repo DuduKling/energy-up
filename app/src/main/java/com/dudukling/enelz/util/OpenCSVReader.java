@@ -72,8 +72,8 @@ public class OpenCSVReader {
                 lp.setObservacoes(stripAccents(nextRecord[14]));
                 lp.setDescricao_retorno(stripAccents(nextRecord[15]));
                 lp.setObservacao_exe(stripAccents(nextRecord[28]));
-                lp.setTempo_max_servico(stripAccents(nextRecord[31]));
-                lp.setPerc_tempo_maximo(stripAccents(nextRecord[32]));
+//                lp.setTempo_max_servico(stripAccents(nextRecord[31]));
+//                lp.setPerc_tempo_maximo(stripAccents(nextRecord[32]));
 
                 lp.setTipoOrdem(stripAccents(nextRecord[6]));
                 lp.setEtapa(stripAccents(nextRecord[11]));
