@@ -70,7 +70,7 @@ public class clandestino_recyclerAdapter extends RecyclerView.Adapter {
                     Intent goToFormActivity = new Intent(context, clandestinoFormActivity.class);
                     goToFormActivity
                             .putExtra("clandest", clandest)
-                            .putExtra("lpID", 0)
+                            .putExtra("lpOrdem", "")
                             .putExtra("type", "readOnly");
                     context.startActivity(goToFormActivity);
 
@@ -91,7 +91,7 @@ public class clandestino_recyclerAdapter extends RecyclerView.Adapter {
                     Intent goToFormActivity = new Intent(context, clandestinoFormActivity.class);
                     goToFormActivity
                             .putExtra("clandest", clandest)
-                            .putExtra("lpID", 0)
+                            .putExtra("lpOrdem", "")
                             .putExtra("type", "edit");
                     context.startActivity(goToFormActivity);
 

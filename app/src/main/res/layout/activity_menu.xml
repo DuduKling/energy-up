@@ -2,7 +2,6 @@
 <android.support.constraint.ConstraintLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
@@ -20,7 +19,7 @@
         app:cardCornerRadius="3dp"
         app:cardElevation="1dp"
         app:contentPadding="5dp"
-        app:layout_constraintEnd_toStartOf="@+id/cardViewMenuFiscal"
+        app:layout_constraintEnd_toStartOf="@+id/cardViewMenuClandestino"
         app:layout_constraintHorizontal_chainStyle="spread_inside"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent">
@@ -67,7 +66,7 @@
     </android.support.v7.widget.CardView>
 
     <android.support.v7.widget.CardView
-        android:id="@+id/cardViewMenuFiscal"
+        android:id="@+id/cardViewMenuClandestino"
         android:layout_width="0dp"
         android:layout_height="150dp"
         android:layout_marginStart="4dp"
@@ -77,7 +76,7 @@
         android:layout_marginRight="8dp"
         android:clickable="true"
         android:foreground="?android:attr/selectableItemBackground"
-        app:cardBackgroundColor="@android:color/darker_gray"
+        app:cardBackgroundColor="@android:color/holo_orange_light"
         app:cardCornerRadius="3dp"
         app:cardElevation="1dp"
         app:contentPadding="5dp"
@@ -90,7 +89,7 @@
             android:layout_height="match_parent">
 
             <ImageView
-                android:id="@+id/imageViewFiscal"
+                android:id="@+id/imageViewClandest"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="8dp"
@@ -98,7 +97,68 @@
                 android:layout_marginTop="8dp"
                 android:layout_marginEnd="8dp"
                 android:layout_marginRight="8dp"
-                app:layout_constraintBottom_toTopOf="@+id/imageViewFiscal2"
+                app:layout_constraintBottom_toTopOf="@+id/imageViewClandestl2"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintVertical_chainStyle="packed"
+                app:srcCompat="@drawable/ic_warning_dark" />
+
+            <TextView
+                android:id="@+id/imageViewClandestl2"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="8dp"
+                android:layout_marginLeft="8dp"
+                android:layout_marginTop="8dp"
+                android:layout_marginEnd="8dp"
+                android:layout_marginRight="8dp"
+                android:layout_marginBottom="8dp"
+                android:text="Ligações Clandestinas"
+                android:textAppearance="@style/TextAppearance.AppCompat.Widget.Button"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/imageViewClandest"
+                app:layout_constraintVertical_bias="0.0" />
+
+        </android.support.constraint.ConstraintLayout>
+    </android.support.v7.widget.CardView>
+
+    <android.support.v7.widget.CardView
+        android:id="@+id/cardViewMenuFiscal"
+        android:layout_width="0dp"
+        android:layout_height="150dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginLeft="8dp"
+        android:layout_marginTop="8dp"
+        android:layout_marginEnd="8dp"
+        android:layout_marginRight="8dp"
+        android:clickable="true"
+        android:foreground="?android:attr/selectableItemBackground"
+        app:cardBackgroundColor="@android:color/darker_gray"
+        app:cardCornerRadius="3dp"
+        app:cardElevation="1dp"
+        app:contentPadding="5dp"
+        app:layout_constraintEnd_toStartOf="@+id/cardViewMenuImportar"
+        app:layout_constraintHorizontal_chainStyle="spread_inside"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/cardViewMenuLP">
+
+        <android.support.constraint.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <ImageView
+                android:id="@+id/cardViewIntentFiscal"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="8dp"
+                android:layout_marginLeft="8dp"
+                android:layout_marginTop="8dp"
+                android:layout_marginEnd="8dp"
+                android:layout_marginRight="8dp"
+                app:layout_constraintBottom_toTopOf="@+id/cardViewIntentFiscal2"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
@@ -106,7 +166,7 @@
                 app:srcCompat="@drawable/ic_ficalizacao" />
 
             <TextView
-                android:id="@+id/imageViewFiscal2"
+                android:id="@+id/cardViewIntentFiscal2"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="8dp"
@@ -120,7 +180,7 @@
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/imageViewFiscal"
+                app:layout_constraintTop_toBottomOf="@+id/cardViewIntentFiscal"
                 app:layout_constraintVertical_bias="0.0" />
 
         </android.support.constraint.ConstraintLayout>
@@ -130,8 +190,6 @@
         android:id="@+id/cardViewMenuImportar"
         android:layout_width="0dp"
         android:layout_height="150dp"
-        android:layout_marginStart="8dp"
-        android:layout_marginLeft="8dp"
         android:layout_marginTop="8dp"
         android:layout_marginEnd="8dp"
         android:layout_marginRight="8dp"
@@ -140,10 +198,9 @@
         app:cardCornerRadius="3dp"
         app:cardElevation="1dp"
         app:contentPadding="5dp"
-        app:layout_constraintEnd_toStartOf="@+id/cardViewMenuFiscal"
-        app:layout_constraintHorizontal_bias="0.0"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/cardViewMenuLP">
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/cardViewMenuFiscal"
+        app:layout_constraintTop_toBottomOf="@+id/cardViewMenuClandestino">
 
         <android.support.constraint.ConstraintLayout
             android:layout_width="match_parent"

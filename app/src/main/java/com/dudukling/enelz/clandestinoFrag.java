@@ -64,6 +64,13 @@ public class clandestinoFrag extends Fragment {
         dao.close();
     }
 
+
+
+
+
+
+
+
 //    public interface OnItemSelectedListener {
 //        void onItemSelected(lpClandestino clandest, int lpID, String type);
 //    }

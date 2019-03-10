@@ -207,7 +207,7 @@ public class ligProvFormActivity extends AppCompatActivity {
                 Intent goToClandestino = new Intent(ligProvFormActivity.this, clandestinoFormActivity.class);
                 goToClandestino
                         .putExtra("clandest", new lpClandestino())
-                        .putExtra("lpID", lp.getId())
+                        .putExtra("lpOrdem", lp.getOrdem())
                         .putExtra("type", "new");
                 startActivity(goToClandestino);
             }

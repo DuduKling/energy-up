@@ -64,8 +64,7 @@ public class lpDAO extends SQLiteOpenHelper {
                 "descricao TEXT NOT NULL," +
                 "autoLat TEXT NOT NULL," +
                 "autoLong TEXT NOT NULL," +
-                "lpID INTEGER NOT NULL," +
-                "FOREIGN KEY (lpID) REFERENCES lpTable(id)" +
+                "NumeroOrdemLP INTEGER NOT NULL" +
                 ");";
         db.execSQL(sql3);
     }
@@ -106,10 +105,14 @@ public class lpDAO extends SQLiteOpenHelper {
         db.delete("lpImages","lpID = ? AND id = ?", params);
     }
 
-    public void truncateDBs() {
+    public void truncateLPs() {
         SQLiteDatabase db = getWritableDatabase();
         db.delete("lpTable", null,null);
         db.delete("lpImages", null,null);
+    }
+
+    public void truncateClandests() {
+        SQLiteDatabase db = getWritableDatabase();
         db.delete("lpClandestino", null,null);
     }
 
@@ -273,7 +276,7 @@ public class lpDAO extends SQLiteOpenHelper {
 
 
     // CLANDESTINO
-    public void insertClandestino(lpClandestino clandest, int idLP) {
+    public void insertClandestino(lpClandestino clandest, String LPOrdem) {
         SQLiteDatabase db = getWritableDatabase();
 
         ContentValues queryData = new ContentValues();
@@ -289,7 +292,7 @@ public class lpDAO extends SQLiteOpenHelper {
         queryData.put("autoLat", clandest.getAutoLat());
         queryData.put("autoLong", clandest.getAutoLong());
 
-        queryData.put("lpID", idLP);
+        queryData.put("NumeroOrdemLP", LPOrdem);
 
         db.insert("lpClandestino", null, queryData);
     }
@@ -298,20 +301,20 @@ public class lpDAO extends SQLiteOpenHelper {
         SQLiteDatabase db = getReadableDatabase();
 
         String sql = "SELECT " +
-                "lpClandestino.id as idClandest, " +
-                "lpClandestino.endereco as enderecoClandest, " +
-                "lpClandestino.transformador as transformadorClandest, " +
-                "lpClandestino.tensao as tensaoClandest, " +
-                "lpClandestino.corrente as correnteClandest, " +
-                "lpClandestino.protecao as protecaoClandest, " +
-                "lpClandestino.fatorPotencia as fpClandest, " +
-                "lpClandestino.carga as cargaClandest, " +
-                "lpClandestino.descricao as descricaoClandest, " +
-                "lpTable.ordem as ordemLP, " +
-                "lpClandestino.autoLat as latitude, " +
-                "lpClandestino.autoLong as longitude " +
+                "id as idClandest, " +
+                "endereco as enderecoClandest, " +
+                "transformador as transformadorClandest, " +
+                "tensao as tensaoClandest, " +
+                "corrente as correnteClandest, " +
+                "protecao as protecaoClandest, " +
+                "fatorPotencia as fpClandest, " +
+                "carga as cargaClandest, " +
+                "descricao as descricaoClandest, " +
+                "NumeroOrdemLP as ordemLP, " +
+                "autoLat as latitude, " +
+                "autoLong as longitude " +
                 "FROM lpClandestino " +
-                "INNER JOIN lpTable ON lpClandestino.lpID=lpTable.id ORDER BY idClandest DESC";
+                "ORDER BY idClandest DESC";
 
         Cursor c = db.rawQuery(sql, null);
         List<lpClandestino> lpClandestList = new ArrayList<>();

@@ -42,7 +42,7 @@ public class clandestinoFormActivity extends AppCompatActivity {
     private static final String REQUIRED_FIELD_ERROR_MSG = "Campo obrigatório!";
     private static final int GPS_REQUEST_CODE = 999;
 
-    private int LPid;
+    private String LPOrdem;
     private lpClandestino lpClandest = new lpClandestino();
     private String tipoForm;
 
@@ -75,7 +75,7 @@ public class clandestinoFormActivity extends AppCompatActivity {
         setTitle("Ponto clandestino");
 
         Intent intent = getIntent();
-        LPid = (int) intent.getSerializableExtra("lpID");
+        LPOrdem = (String) intent.getSerializableExtra("lpOrdem");
         lpClandest = (lpClandestino) intent.getSerializableExtra("clandest");
         tipoForm = (String) intent.getSerializableExtra("type");
 
@@ -401,7 +401,7 @@ public class clandestinoFormActivity extends AppCompatActivity {
 
         lpClandestino clandestSave = getLPFromForm();
         if(tipoForm.equals("new")){
-            dao.insertClandestino(clandestSave, LPid);
+            dao.insertClandestino(clandestSave, LPOrdem);
         }else{
             dao.updateClandestino(clandestSave);
         }

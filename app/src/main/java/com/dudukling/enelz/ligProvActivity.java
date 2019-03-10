@@ -237,19 +237,17 @@ public class ligProvActivity extends AppCompatActivity {
             case android.R.id.home:
                 this.finish();
                 break;
-            case R.id.menu_delete_all:
+
+            case R.id.menu_delete_lp:
                 if (lpList != null) {
                     if (!lpList.isEmpty()) {
                         deleteAll();
                     }
                 }
                 break;
-            case R.id.menu_export_file:
+
+            case R.id.menu_export_lp:
                 checkPermissionBeforeExport();
-                break;
-            case R.id.menu_clandestinos:
-                Intent goToClandestinoList = new Intent(ligProvActivity.this, clandestinoActivity.class);
-                startActivity(goToClandestinoList);
                 break;
         }
         return super.onOptionsItemSelected(item);
@@ -274,7 +272,7 @@ public class ligProvActivity extends AppCompatActivity {
                         }
 
                         lpDAO dao = new lpDAO(ligProvActivity.this);
-                        dao.truncateDBs();
+                        dao.truncateLPs();
                         dao.close();
 
                         lpList.clear();
@@ -291,7 +289,7 @@ public class ligProvActivity extends AppCompatActivity {
         };
 
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
-        builder.setMessage("Tem certeza que deseja deletar tudo (Ligações provisórias e Clandestinos)?").setPositiveButton("Confirmar", dialogClickListener)
+        builder.setMessage("Tem certeza que deseja deletar todas as Ligações provisórias?").setPositiveButton("Confirmar", dialogClickListener)
                 .setNegativeButton("Cancelar", dialogClickListener).show();
     }
 
@@ -305,89 +303,6 @@ public class ligProvActivity extends AppCompatActivity {
         }
     }
 
-    private void exportImages() {
-        /* Example: zipFileAtPath("downloads/myfolder", "downloads/myFolder.zip"); */
-
-        String sourcePath = "/Download";
-        //Environment.getExternalStorageDirectory()
-        String toLocation = this.getFilesDir().getPath() + "/mysFolder.zip";
-        // java.io.FileNotFoundException: /myFolder.zip (Read-only file system)
-
-        final int BUFFER = 2048;
-
-        File sourceFile = new File(sourcePath);
-
-        Toast.makeText(this, "BB: " + sourcePath, Toast.LENGTH_SHORT).show();
-
-        try {
-            BufferedInputStream origin = null;
-            FileOutputStream dest = new FileOutputStream(toLocation);
-            ZipOutputStream out = new ZipOutputStream(new BufferedOutputStream(
-                    dest));
-            if (sourceFile.isDirectory()) {
-                zipSubFolder(out, sourceFile, sourceFile.getParent().length());
-            } else {
-                byte data[] = new byte[BUFFER];
-                FileInputStream fi = new FileInputStream(sourcePath);
-                origin = new BufferedInputStream(fi, BUFFER);
-                ZipEntry entry = new ZipEntry(getLastPathComponent(sourcePath));
-                entry.setTime(sourceFile.lastModified()); // to keep modification time after unzipping
-                out.putNextEntry(entry);
-                int count;
-                while ((count = origin.read(data, 0, BUFFER)) != -1) {
-                    out.write(data, 0, count);
-                }
-            }
-            out.close();
-
-            Toast.makeText(this, "AAAAAA!", Toast.LENGTH_LONG).show();
-
-        } catch (Exception e) {
-            e.printStackTrace();
-//          return false;
-        }
-//       return true;
-    }
-
-    /* Zips a subfolder */
-    private void zipSubFolder(ZipOutputStream out, File folder, int basePathLength) throws IOException {
-
-        final int BUFFER = 2048;
-
-        File[] fileList = folder.listFiles();
-        BufferedInputStream origin = null;
-        for (File file : fileList) {
-            if (file.isDirectory()) {
-                zipSubFolder(out, file, basePathLength);
-            } else {
-                byte data[] = new byte[BUFFER];
-                String unmodifiedFilePath = file.getPath();
-                String relativePath = unmodifiedFilePath
-                        .substring(basePathLength);
-                FileInputStream fi = new FileInputStream(unmodifiedFilePath);
-                origin = new BufferedInputStream(fi, BUFFER);
-                ZipEntry entry = new ZipEntry(relativePath);
-                entry.setTime(file.lastModified()); // to keep modification time after unzipping
-                out.putNextEntry(entry);
-                int count;
-                while ((count = origin.read(data, 0, BUFFER)) != -1) {
-                    out.write(data, 0, count);
-                }
-                origin.close();
-            }
-        }
-    }
-
-    /*Example: getLastPathComponent("downloads/example/fileToZip"); Result: "fileToZip" */
-    public String getLastPathComponent(String filePath) {
-        String[] segments = filePath.split("/");
-        if (segments.length == 0)
-            return "";
-        String lastPathComponent = segments[segments.length - 1];
-        return lastPathComponent;
-    }
-
-
     private void exportDB(String type) {
         lpDAO dao = new lpDAO(this);
 
@@ -399,71 +314,7 @@ public class ligProvActivity extends AppCompatActivity {
             Toast.makeText(this, "Não há LPs cadastradas para exportar.", Toast.LENGTH_SHORT).show();
         }
 
-        long qtdCSVClandest = DatabaseUtils.queryNumEntries(db, "lpClandestino");
-        if (qtdCSVClandest != 0) {
-            exportClandests(type, db);
-        } else if (!type.equals("backup")) {
-            Toast.makeText(this, "Não há clandestinos para exportar.", Toast.LENGTH_SHORT).show();
-        }
-
         dao.close();
-    }
-
-    private void exportClandests(String type, SQLiteDatabase db) {
-        File exportDir = new File(Environment.getExternalStorageDirectory(), "");
-        if (!exportDir.exists()) {
-            boolean dirCreated = exportDir.mkdirs();
-            Log.d("TAG1", "exportDB() called: " + dirCreated);
-        }
-
-        @SuppressLint("SimpleDateFormat") String timeStamp = new SimpleDateFormat("ddMMyyyy_HHmmss").format(new Date());
-        File file;
-        if (type.equals("backup")) {
-            file = new File(exportDir, "EnelBackupClandestinos_" + timeStamp + ".csv");
-        } else {
-            file = new File(exportDir, "EnelExportClandestinos_" + timeStamp + ".csv");
-        }
-
-
-        try {
-            boolean fileCreated = file.createNewFile();
-            Log.d("TAG2", "createNewFile() called: " + fileCreated);
-            CSVWriter csvWrite = new CSVWriter(new FileWriter(file));
-
-            Cursor curCSV = db.rawQuery("SELECT lpClandestino.id, ordem, lpClandestino.endereco, transformador, tensao, corrente, protecao, fatorPotencia, carga, descricao, lpClandestino.autoLat, lpClandestino.autoLong FROM lpClandestino " +
-                    "INNER JOIN lpTable ON lpClandestino.lpID=lpTable.id", null);
-
-            String[] str = {"ID", "ordem", "endereco", "transformador", "tensao", "corrente", "protecao", "fator de potencia", "carga", "descricao", "latitude", "longitude"};
-
-            csvWrite.writeNext(str);
-            while (curCSV.moveToNext()) {
-                String id = curCSV.getString(0);
-                String ordem = curCSV.getString(1);
-                String endereco = stripAccents(curCSV.getString(2));
-                String transformador = stripAccents(curCSV.getString(3));
-                String tensao = stripAccents(curCSV.getString(4));
-                String corrente = stripAccents(curCSV.getString(5));
-                String protecao = stripAccents(curCSV.getString(6));
-                String fatorPotencia = stripAccents(curCSV.getString(7));
-                String carga = stripAccents(curCSV.getString(8));
-                String descricao = stripAccents(curCSV.getString(9));
-                String latitude = stripAccents(curCSV.getString(10));
-                String longitude = stripAccents(curCSV.getString(11));
-
-                String arrStr[] = {id, ordem, endereco, transformador, tensao, corrente, protecao, fatorPotencia, carga, descricao, latitude, longitude};
-
-                csvWrite.writeNext(arrStr);
-            }
-            csvWrite.close();
-            curCSV.close();
-
-            if (!type.equals("backup")) {
-                Toast.makeText(this, "Clandestinos Exportados!", Toast.LENGTH_SHORT).show();
-            }
-
-        } catch (Exception sqlEx) {
-            Log.e("MainActivity", sqlEx.getMessage(), sqlEx);
-        }
     }
 
     private void exportLPs(String type, SQLiteDatabase db) {
@@ -554,6 +405,93 @@ public class ligProvActivity extends AppCompatActivity {
                 exportDB("");
             }
         }
+    }
+
+
+
+
+
+
+    private void exportImages() {
+        /* Example: zipFileAtPath("downloads/myfolder", "downloads/myFolder.zip"); */
+
+        String sourcePath = "/Download";
+        //Environment.getExternalStorageDirectory()
+        String toLocation = this.getFilesDir().getPath() + "/mysFolder.zip";
+        // java.io.FileNotFoundException: /myFolder.zip (Read-only file system)
+
+        final int BUFFER = 2048;
+
+        File sourceFile = new File(sourcePath);
+
+        Toast.makeText(this, "BB: " + sourcePath, Toast.LENGTH_SHORT).show();
+
+        try {
+            BufferedInputStream origin = null;
+            FileOutputStream dest = new FileOutputStream(toLocation);
+            ZipOutputStream out = new ZipOutputStream(new BufferedOutputStream(
+                    dest));
+            if (sourceFile.isDirectory()) {
+                zipSubFolder(out, sourceFile, sourceFile.getParent().length());
+            } else {
+                byte data[] = new byte[BUFFER];
+                FileInputStream fi = new FileInputStream(sourcePath);
+                origin = new BufferedInputStream(fi, BUFFER);
+                ZipEntry entry = new ZipEntry(getLastPathComponent(sourcePath));
+                entry.setTime(sourceFile.lastModified()); // to keep modification time after unzipping
+                out.putNextEntry(entry);
+                int count;
+                while ((count = origin.read(data, 0, BUFFER)) != -1) {
+                    out.write(data, 0, count);
+                }
+            }
+            out.close();
+
+            Toast.makeText(this, "AAAAAA!", Toast.LENGTH_LONG).show();
+
+        } catch (Exception e) {
+            e.printStackTrace();
+//          return false;
+        }
+//       return true;
+    }
+
+    /* Zips a subfolder */
+    private void zipSubFolder(ZipOutputStream out, File folder, int basePathLength) throws IOException {
+
+        final int BUFFER = 2048;
+
+        File[] fileList = folder.listFiles();
+        BufferedInputStream origin = null;
+        for (File file : fileList) {
+            if (file.isDirectory()) {
+                zipSubFolder(out, file, basePathLength);
+            } else {
+                byte data[] = new byte[BUFFER];
+                String unmodifiedFilePath = file.getPath();
+                String relativePath = unmodifiedFilePath
+                        .substring(basePathLength);
+                FileInputStream fi = new FileInputStream(unmodifiedFilePath);
+                origin = new BufferedInputStream(fi, BUFFER);
+                ZipEntry entry = new ZipEntry(relativePath);
+                entry.setTime(file.lastModified()); // to keep modification time after unzipping
+                out.putNextEntry(entry);
+                int count;
+                while ((count = origin.read(data, 0, BUFFER)) != -1) {
+                    out.write(data, 0, count);
+                }
+                origin.close();
+            }
+        }
+    }
+
+    /*Example: getLastPathComponent("downloads/example/fileToZip"); Result: "fileToZip" */
+    public String getLastPathComponent(String filePath) {
+        String[] segments = filePath.split("/");
+        if (segments.length == 0)
+            return "";
+        String lastPathComponent = segments[segments.length - 1];
+        return lastPathComponent;
     }
 
 

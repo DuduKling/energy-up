@@ -11,6 +11,7 @@ public class menuActivity extends AppCompatActivity {
     private CardView cardViewLP;
     private CardView cardViewImportar;
     private CardView cardViewFiscal;
+    private CardView cardViewMenuClandestino;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -36,6 +37,17 @@ public class menuActivity extends AppCompatActivity {
                 startActivity(intent);
             }
         });
+
+        cardViewMenuClandestino = this.findViewById(R.id.cardViewMenuClandestino);
+        cardViewMenuClandestino.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(menuActivity.this, clandestinoActivity.class);
+                startActivity(intent);
+            }
+        });
+
+
 
         cardViewFiscal = this.findViewById(R.id.cardViewMenuFiscal);
         cardViewFiscal.setOnClickListener(new View.OnClickListener() {
