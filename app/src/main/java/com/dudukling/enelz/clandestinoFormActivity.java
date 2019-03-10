@@ -232,7 +232,12 @@ public class clandestinoFormActivity extends AppCompatActivity {
 
 
         float potEncontrada = tensao * corrente * fatorPotencia;
-        textViewPotCalculada.setText("Potência encontrada: "+potEncontrada+" W");
+        if(potEncontrada==0){
+            textViewPotCalculada.setText("Potência encontrada: ---");
+        }else{
+            textViewPotCalculada.setText("Potência encontrada: "+(potEncontrada/1000)+" KWh");
+        }
+
     }
 
     private void setCalculus() {
@@ -391,7 +396,7 @@ public class clandestinoFormActivity extends AppCompatActivity {
         setValidateEmpty(textInputLayoutClandestTensao);
         setValidateEmpty(textInputLayoutClandestCorrente);
         setValidateEmpty(textInputLayoutClandestProtecao);
-        setValidateEmpty(textInputLayoutClandestFatorPotencia);
+//        setValidateEmpty(textInputLayoutClandestFatorPotencia);
         setValidateEmpty(textInputLayoutClandestCarga);
         setValidateEmpty(textInputLayoutClandestDescricao);
 
@@ -408,8 +413,12 @@ public class clandestinoFormActivity extends AppCompatActivity {
                 textInputLayout.setErrorEnabled(false);
                 if(!hasFocus){
                     String text = campo.getText().toString();
-                    if(Float.parseFloat(text) < 0 || Float.parseFloat(text) > 1){
-                        textInputLayout.setError("Valor deve ser entre 0 e 1");
+                    if(text.isEmpty()){
+                        textInputLayout.setError(REQUIRED_FIELD_ERROR_MSG);
+                    }else{
+                        if(Float.parseFloat(text) < 0 || Float.parseFloat(text) > 1){
+                            textInputLayout.setError("Valor deve ser entre 0 e 1");
+                        }
                     }
                 }else{
                     textInputLayout.setError(null);
