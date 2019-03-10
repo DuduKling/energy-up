@@ -16,6 +16,7 @@ import android.support.annotation.NonNull;
 import android.support.annotation.RequiresApi;
 import android.support.v4.app.ActivityCompat;
 import android.support.v7.app.AppCompatActivity;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
@@ -25,6 +26,7 @@ import com.dudukling.enelz.dao.lpDAO;
 import com.dudukling.enelz.util.OpenCSVReader;
 
 import java.io.IOException;
+import java.util.Objects;
 
 public class importActivity extends AppCompatActivity {
     private static final int WRITE_PERMISSION_CODE = 111;
@@ -37,9 +39,11 @@ public class importActivity extends AppCompatActivity {
     private Button buttonImportFileFiscal;
     private TextView textViewImportFileFiscal2;
 
+    @RequiresApi(api = Build.VERSION_CODES.KITKAT)
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        Objects.requireNonNull(getSupportActionBar()).setDisplayHomeAsUpEnabled(true);
         setTitle("Importar bases");
         setContentView(R.layout.activity_import);
 
@@ -94,6 +98,15 @@ public class importActivity extends AppCompatActivity {
         }
     }
 
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case android.R.id.home:
+                this.finish();
+                break;
+        }
+        return super.onOptionsItemSelected(item);
+    }
 
     private void callFileChooser(){
         Intent intent = new Intent(Intent.ACTION_GET_CONTENT);

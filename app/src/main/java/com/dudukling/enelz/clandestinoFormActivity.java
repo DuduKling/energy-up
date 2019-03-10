@@ -23,8 +23,11 @@ import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.EditText;
 import android.widget.ProgressBar;
+import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -33,7 +36,6 @@ import com.dudukling.enelz.model.lpClandestino;
 
 import java.util.Objects;
 
-import static java.lang.Float.parseFloat;
 import static java.lang.Integer.parseInt;
 
 public class clandestinoFormActivity extends AppCompatActivity {
@@ -49,15 +51,18 @@ public class clandestinoFormActivity extends AppCompatActivity {
     private TextInputLayout textInputLayoutClandestTensao;
     private TextInputLayout textInputLayoutClandestCorrente;
     private TextInputLayout textInputLayoutClandestProtecao;
-    private TextInputLayout textInputLayoutClandestFatorPotencia;
     private TextInputLayout textInputLayoutClandestCarga;
     private TextInputLayout textInputLayoutClandestDescricao;
     private TextView textViewClandestNumero;
     private TextView textViewClandestLatLong;
     private TextView textViewPotCalculada;
 
+    private Spinner spinnerFatPot;
+    private ArrayAdapter<CharSequence> spinnerFatPotAdapter;
+
     private LocationManager locationManager;
     private LocationListener locationListener;
+
 
 
     @RequiresApi(api = Build.VERSION_CODES.KITKAT)
@@ -174,9 +179,15 @@ public class clandestinoFormActivity extends AppCompatActivity {
         disable(textInputLayoutClandestTensao);
         disable(textInputLayoutClandestCorrente);
         disable(textInputLayoutClandestProtecao);
-        disable(textInputLayoutClandestFatorPotencia);
         disable(textInputLayoutClandestCarga);
         disable(textInputLayoutClandestDescricao);
+
+        disableSpinner(spinnerFatPot);
+    }
+
+    private void disableSpinner(Spinner spinner) {
+        spinner.setEnabled(false);
+        spinner.setClickable(false);
     }
 
     private void disable(TextInputLayout textInputCampo) {
@@ -195,13 +206,17 @@ public class clandestinoFormActivity extends AppCompatActivity {
         textInputLayoutClandestTensao.getEditText().setText(lpClandest.getTensao());
         textInputLayoutClandestCorrente.getEditText().setText(lpClandest.getCorrente());
         textInputLayoutClandestProtecao.getEditText().setText(lpClandest.getProtecao());
-        textInputLayoutClandestFatorPotencia.getEditText().setText(lpClandest.getFatorPotencia());
+
         textInputLayoutClandestCarga.getEditText().setText(lpClandest.getCarga());
         textInputLayoutClandestDescricao.getEditText().setText(lpClandest.getDescricao());
 
         textViewClandestLatLong.setText("Lat: "+lpClandest.getAutoLat()+" | Long: "+lpClandest.getAutoLong());
 
         textViewClandestNumero.setText("Clandestino #"+lpClandest.getId());
+
+
+        spinnerFatPot.setSelection(spinnerFatPotAdapter.getPosition(lpClandest.getFatorPotencia()));
+
 
         calculaPotEncontrada();
     }
@@ -225,7 +240,7 @@ public class clandestinoFormActivity extends AppCompatActivity {
 
         float fatorPotencia = 0;
         if(lpClandest.getFatorPotencia()!=null){
-            if(!lpClandest.getFatorPotencia().equals("")){
+            if(!lpClandest.getFatorPotencia().equals("Selecione")){
                 fatorPotencia = Float.parseFloat(lpClandest.getFatorPotencia());
             }
         }
@@ -276,21 +291,22 @@ public class clandestinoFormActivity extends AppCompatActivity {
             public void onTextChanged(CharSequence s, int start, int before, int count) {}
         });
 
-        textInputLayoutClandestFatorPotencia.getEditText().addTextChangedListener(new TextWatcher() {
+        spinnerFatPot.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
-            public void afterTextChanged(Editable s) {
-                if(s!=null || !String.valueOf(s).equals("")){
-                    lpClandest.setFatorPotencia(s.toString());
+            public void onItemSelected(AdapterView<?> parentView, View selectedItemView, int position, long id) {
+                String selected = spinnerFatPot.getSelectedItem().toString();
+                if(!selected.equals("Selecione")){
+                    lpClandest.setFatorPotencia(selected);
                 }else{
                     lpClandest.setFatorPotencia(null);
                 }
                 calculaPotEncontrada();
             }
+
             @Override
-            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+            public void onNothingSelected(AdapterView<?> parentView) {
+                // your code here
             }
-            @Override
-            public void onTextChanged(CharSequence s, int start, int before, int count) {}
         });
     }
 
@@ -300,12 +316,16 @@ public class clandestinoFormActivity extends AppCompatActivity {
         textInputLayoutClandestTensao = this.findViewById(R.id.textInputLayoutClandestTensao);
         textInputLayoutClandestCorrente = this.findViewById(R.id.textInputLayoutClandestCorrente);
         textInputLayoutClandestProtecao = this.findViewById(R.id.textInputLayoutClandestProtecao);
-        textInputLayoutClandestFatorPotencia = this.findViewById(R.id.textInputLayoutClandestFatorPotencia);
         textInputLayoutClandestCarga = this.findViewById(R.id.textInputLayoutClandestCarga);
         textInputLayoutClandestDescricao = this.findViewById(R.id.textInputLayoutClandesDescricao);
 
         textViewClandestLatLong = this.findViewById(R.id.textViewClandestLatLong);
         textViewPotCalculada = this.findViewById(R.id.textViewPotCalculada);
+
+        spinnerFatPot = findViewById(R.id.spinnerClandestFatPot);
+        spinnerFatPotAdapter = ArrayAdapter.createFromResource(this, R.array.fatorPotencia, android.R.layout.simple_spinner_item);
+        spinnerFatPotAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        spinnerFatPot.setAdapter(spinnerFatPotAdapter);
     }
 
     @Override
@@ -400,35 +420,56 @@ public class clandestinoFormActivity extends AppCompatActivity {
         setValidateEmpty(textInputLayoutClandestCarga);
         setValidateEmpty(textInputLayoutClandestDescricao);
 
-        setValidateFatPotencia(textInputLayoutClandestFatorPotencia);
-    }
-
-    private boolean setValidateFatPotencia(final TextInputLayout textInputLayout) {
-        final EditText campo = textInputLayout.getEditText();
-        assert campo != null;
-        campo.setOnFocusChangeListener(new View.OnFocusChangeListener() {
+//        setValidateFatPotencia(textInputLayoutClandestFatorPotencia);
+        spinnerFatPot.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
-            public void onFocusChange(View v, boolean hasFocus) {
-                textInputLayout.setError(null);
-                textInputLayout.setErrorEnabled(false);
-                if(!hasFocus){
-                    String text = campo.getText().toString();
-                    if(text.isEmpty()){
-                        textInputLayout.setError(REQUIRED_FIELD_ERROR_MSG);
-                    }else{
-                        if(Float.parseFloat(text) < 0 || Float.parseFloat(text) > 1){
-                            textInputLayout.setError("Valor deve ser entre 0 e 1");
-                        }
-                    }
-                }else{
-                    textInputLayout.setError(null);
-                    textInputLayout.setErrorEnabled(false);
+            public void onItemSelected(AdapterView<?> parentView, View selectedItemView, int position, long id) {
+                String selected = spinnerFatPot.getSelectedItem().toString();
+                if(selected.equals("Selecione")){
+                    setValidateFatPotencia(spinnerFatPot);
                 }
             }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parentView) {
+                // your code here
+            }
         });
-        return false;
     }
 
+    private boolean setValidateFatPotencia(Spinner spinner) {
+        String selected = spinnerFatPot.getSelectedItem().toString();
+        if(selected.equals("Selecione")){
+            Toast.makeText(this, "Selecione um Fator de Potência", Toast.LENGTH_SHORT).show();
+            return true;
+        }
+        return false;
+    }
+//    private boolean setValidateFatPotencia(final TextInputLayout textInputLayout) {
+//        final EditText campo = textInputLayout.getEditText();
+//        assert campo != null;
+//        campo.setOnFocusChangeListener(new View.OnFocusChangeListener() {
+//            @Override
+//            public void onFocusChange(View v, boolean hasFocus) {
+//                textInputLayout.setError(null);
+//                textInputLayout.setErrorEnabled(false);
+//                if(!hasFocus){
+//                    String text = campo.getText().toString();
+//                    if(text.isEmpty()){
+//                        textInputLayout.setError(REQUIRED_FIELD_ERROR_MSG);
+//                    }else{
+//                        if(Float.parseFloat(text) < 0 || Float.parseFloat(text) > 1){
+//                            textInputLayout.setError("Valor deve ser entre 0 e 1");
+//                        }
+//                    }
+//                }else{
+//                    textInputLayout.setError(null);
+//                    textInputLayout.setErrorEnabled(false);
+//                }
+//            }
+//        });
+//        return false;
+//    }
 
     private void setValidateEmpty(final TextInputLayout textInputCampo){
         final EditText campo = textInputCampo.getEditText();
@@ -457,11 +498,11 @@ public class clandestinoFormActivity extends AppCompatActivity {
         if(fieldIsEmpty(textInputLayoutClandestTensao)){return "false";}
         if(fieldIsEmpty(textInputLayoutClandestCorrente)){return "false";}
         if(fieldIsEmpty(textInputLayoutClandestProtecao)){return "false";}
-        if(fieldIsEmpty(textInputLayoutClandestFatorPotencia)){return "false";}
+//        if(fieldIsEmpty(textInputLayoutClandestFatorPotencia)){return "false";}
         if(fieldIsEmpty(textInputLayoutClandestCarga)){return "false";}
         if(fieldIsEmpty(textInputLayoutClandestDescricao)){return "false";}
 
-        if(setValidateFatPotencia(textInputLayoutClandestFatorPotencia)){return "false";}
+        if(setValidateFatPotencia(spinnerFatPot)){return "false";}
 
         if(lpClandest.getAutoLat().isEmpty() || lpClandest.getAutoLong().isEmpty()){return "gps";}
 
@@ -488,9 +529,10 @@ public class clandestinoFormActivity extends AppCompatActivity {
         lpClandest.setTensao(textInputLayoutClandestTensao.getEditText().getText().toString());
         lpClandest.setCorrente(textInputLayoutClandestCorrente.getEditText().getText().toString());
         lpClandest.setProtecao(textInputLayoutClandestProtecao.getEditText().getText().toString());
-        lpClandest.setFatorPotencia(textInputLayoutClandestFatorPotencia.getEditText().getText().toString());
         lpClandest.setCarga(textInputLayoutClandestCarga.getEditText().getText().toString());
         lpClandest.setDescricao(textInputLayoutClandestDescricao.getEditText().getText().toString());
+
+        lpClandest.setFatorPotencia(spinnerFatPot.getSelectedItem().toString());
 
         return lpClandest;
     }

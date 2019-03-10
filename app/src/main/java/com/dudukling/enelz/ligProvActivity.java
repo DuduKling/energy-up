@@ -55,6 +55,7 @@ import java.text.Normalizer;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
+import java.util.Objects;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipOutputStream;
 
@@ -71,9 +72,11 @@ public class ligProvActivity extends AppCompatActivity {
     private Spinner spinnerEtapa;
 
 
+    @RequiresApi(api = Build.VERSION_CODES.KITKAT)
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        Objects.requireNonNull(getSupportActionBar()).setDisplayHomeAsUpEnabled(true);
         setTitle("Ligações Provisórias");
         setContentView(R.layout.activity_lig_prov);
         recyclerView = findViewById(R.id.recyclerViewLP);
@@ -231,6 +234,9 @@ public class ligProvActivity extends AppCompatActivity {
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
+            case android.R.id.home:
+                this.finish();
+                break;
             case R.id.menu_delete_all:
                 if (lpList != null) {
                     if (!lpList.isEmpty()) {
