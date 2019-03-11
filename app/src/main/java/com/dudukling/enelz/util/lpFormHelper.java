@@ -33,10 +33,10 @@ public class lpFormHelper {
 //    private TextView TextViewPercTempoMaximo;
 
     private TextInputLayout textInputObs;
-    private TextInputLayout textInputCargaMedida;
+//    private TextInputLayout textInputCargaMedida;
 
     private EditText fieldObs;
-    private EditText fieldCargaMedida;
+//    private EditText fieldCargaMedida;
 
 
     public lpFormHelper(final ligProvFormActivity activity1, String formType, lpModel lp1) {
@@ -66,7 +66,7 @@ public class lpFormHelper {
 
         if (formType.equals("readOnly")) {
             disableEditText(fieldObs);
-            disableEditText(fieldCargaMedida);
+//            disableEditText(fieldCargaMedida);
         }
     }
 
@@ -85,7 +85,7 @@ public class lpFormHelper {
 //        TextViewPercTempoMaximo.setText(lp.getPerc_tempo_maximo());
 
         fieldObs.setText(lp.getUserObservacao());
-        fieldCargaMedida.setText(lp.getUserCargaMedida());
+//        fieldCargaMedida.setText(lp.getUserCargaMedida());
     }
 
     private void setFields() {
@@ -93,14 +93,14 @@ public class lpFormHelper {
         fieldObs = textInputObs.getEditText();
         setValidateEmpty(textInputObs);
 
-        textInputCargaMedida = activity.findViewById(R.id.TextInputCargaMedida);
-        fieldCargaMedida = textInputCargaMedida.getEditText();
-        setValidateEmpty(textInputCargaMedida);
+//        textInputCargaMedida = activity.findViewById(R.id.TextInputCargaMedida);
+//        fieldCargaMedida = textInputCargaMedida.getEditText();
+//        setValidateEmpty(textInputCargaMedida);
     }
 
     public lpModel getLPFromForm(lpModel lp) {
 
-        lp.setUserCargaMedida(fieldCargaMedida.getText().toString());
+//        lp.setUserCargaMedida(fieldCargaMedida.getText().toString());
         lp.setUserObservacao(fieldObs.getText().toString());
 
         return lp;
@@ -151,7 +151,7 @@ public class lpFormHelper {
 
     public String validateForm(lpModel lp) {
         if(fieldIsEmpty(textInputObs)){return "false";}
-        if(fieldIsEmpty(textInputCargaMedida)){return "false";}
+//        if(fieldIsEmpty(textInputCargaMedida)){return "false";}
 
         if(
             lp.getAutoLat().isEmpty() ||

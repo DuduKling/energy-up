@@ -1,2 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
-<resources></resources>
+<resources>
+    <string-array name="unidades">
+        <item>Selecione</item>
+        <item>KVA</item>
+        <item>KW</item>
+        <item>Watts</item>
+        <item>Amperes</item>
+        <item>KWh</item>
+    </string-array>
+</resources>

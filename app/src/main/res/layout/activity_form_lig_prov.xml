@@ -113,7 +113,6 @@
             app:layout_constraintHorizontal_bias="0.458"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/mapBottomHeader" />
-
         <TextView
             android:id="@+id/TextViewFormCliente"
             android:layout_width="0dp"
@@ -143,7 +142,6 @@
             app:layout_constraintEnd_toEndOf="@+id/TextViewFormCliente"
             app:layout_constraintStart_toStartOf="@+id/TextViewLP1"
             app:layout_constraintTop_toBottomOf="@+id/TextViewFormCliente" />
-
         <TextView
             android:id="@+id/TextViewFormEndereco"
             android:layout_width="0dp"
@@ -172,7 +170,6 @@
             app:layout_constraintEnd_toEndOf="@+id/TextViewFormEndereco"
             app:layout_constraintStart_toStartOf="@+id/TextViewLP2"
             app:layout_constraintTop_toBottomOf="@+id/TextViewFormEndereco" />
-
         <TextView
             android:id="@+id/TextViewnNumeroCliente"
             android:layout_width="0dp"
@@ -199,7 +196,6 @@
             app:layout_constraintEnd_toEndOf="@+id/TextViewnNumeroCliente"
             app:layout_constraintStart_toStartOf="@+id/TextViewLP3"
             app:layout_constraintTop_toBottomOf="@+id/TextViewnNumeroCliente" />
-
         <TextView
             android:id="@+id/TextViewFormBairro"
             android:layout_width="0dp"
@@ -226,7 +222,6 @@
             app:layout_constraintEnd_toEndOf="@+id/TextViewFormBairro"
             app:layout_constraintStart_toStartOf="@+id/TextViewLP4"
             app:layout_constraintTop_toBottomOf="@+id/TextViewFormBairro" />
-
         <TextView
             android:id="@+id/TextViewFormDescEtapa"
             android:layout_width="0dp"
@@ -253,7 +248,6 @@
             app:layout_constraintEnd_toEndOf="@+id/TextViewFormDescEtapa"
             app:layout_constraintStart_toStartOf="@+id/TextViewLP5"
             app:layout_constraintTop_toBottomOf="@+id/TextViewFormDescEtapa" />
-
         <TextView
             android:id="@+id/TextViewFormObservacoes"
             android:layout_width="0dp"
@@ -280,7 +274,6 @@
             app:layout_constraintEnd_toEndOf="@+id/TextViewFormObservacoes"
             app:layout_constraintStart_toStartOf="@+id/TextViewLP6"
             app:layout_constraintTop_toBottomOf="@+id/TextViewFormObservacoes" />
-
         <TextView
             android:id="@+id/TextViewFormDescRetorno"
             android:layout_width="0dp"
@@ -307,7 +300,6 @@
             app:layout_constraintEnd_toEndOf="@+id/TextViewFormDescRetorno"
             app:layout_constraintStart_toStartOf="@+id/TextViewLP7"
             app:layout_constraintTop_toBottomOf="@+id/TextViewFormDescRetorno" />
-
         <TextView
             android:id="@+id/TextViewFormObservacaoExe"
             android:layout_width="0dp"
@@ -322,67 +314,61 @@
             tools:text="TextViewFormObservacaoExe" />
 
 
-        <!--&lt;!&ndash; TempoMaxServico &ndash;&gt;-->
-        <!--<TextView-->
-            <!--android:id="@+id/TextViewLP9"-->
-            <!--android:layout_width="0dp"-->
-            <!--android:layout_height="wrap_content"-->
-            <!--android:layout_marginTop="16dp"-->
-            <!--android:text="Tempo Max Serviço"-->
-            <!--android:textSize="20sp"-->
-            <!--android:textStyle="bold"-->
-            <!--app:layout_constraintEnd_toEndOf="@+id/TextViewFormObservacaoExe"-->
-            <!--app:layout_constraintStart_toStartOf="@+id/TextViewLP8"-->
-            <!--app:layout_constraintTop_toBottomOf="@+id/TextViewFormObservacaoExe" />-->
+        <include
+            android:id="@+id/calcDec"
+            layout="@layout/activity_form_lig_prov_calc_dec"
 
-        <!--<TextView-->
-            <!--android:id="@+id/TextViewFormTempoMaxServico"-->
-            <!--android:layout_width="0dp"-->
-            <!--android:layout_height="wrap_content"-->
-            <!--android:layout_marginStart="16dp"-->
-            <!--android:layout_marginLeft="16dp"-->
-            <!--android:layout_marginTop="8dp"-->
-            <!--android:textSize="20sp"-->
-            <!--app:layout_constraintEnd_toEndOf="@+id/TextViewLP9"-->
-            <!--app:layout_constraintStart_toStartOf="@+id/TextViewLP9"-->
-            <!--app:layout_constraintTop_toBottomOf="@+id/TextViewLP9"-->
-            <!--tools:text="TextViewFormTempoMaxServico" />-->
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
+            android:layout_marginLeft="8dp"
+            android:layout_marginTop="16dp"
+            android:layout_marginEnd="8dp"
+            android:layout_marginRight="8dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/TextViewFormObservacaoExe" />
 
+        <include
+            android:id="@+id/calcEnc"
+            layout="@layout/activity_form_lig_prov_calc_enc"
 
-        <!--&lt;!&ndash; PercTempoMaximo &ndash;&gt;-->
-        <!--<TextView-->
-            <!--android:id="@+id/TextViewLP10"-->
-            <!--android:layout_width="0dp"-->
-            <!--android:layout_height="wrap_content"-->
-            <!--android:layout_marginTop="16dp"-->
-            <!--android:text="Perc Tempo Maximo"-->
-            <!--android:textSize="20sp"-->
-            <!--android:textStyle="bold"-->
-            <!--app:layout_constraintEnd_toEndOf="@+id/TextViewFormTempoMaxServico"-->
-            <!--app:layout_constraintStart_toStartOf="@+id/TextViewLP9"-->
-            <!--app:layout_constraintTop_toBottomOf="@+id/TextViewFormTempoMaxServico" />-->
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
+            android:layout_marginLeft="8dp"
+            android:layout_marginTop="16dp"
+            android:layout_marginEnd="8dp"
+            android:layout_marginRight="8dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/calcDec" />
 
-        <!--<TextView-->
-            <!--android:id="@+id/TextViewFormPercTempoMaximo"-->
-            <!--android:layout_width="0dp"-->
-            <!--android:layout_height="wrap_content"-->
-            <!--android:layout_marginStart="16dp"-->
-            <!--android:layout_marginLeft="16dp"-->
-            <!--android:layout_marginTop="8dp"-->
-            <!--android:textSize="20sp"-->
-            <!--app:layout_constraintEnd_toEndOf="@+id/TextViewLP10"-->
-            <!--app:layout_constraintStart_toStartOf="@+id/TextViewLP10"-->
-            <!--app:layout_constraintTop_toBottomOf="@+id/TextViewLP10"-->
-            <!--tools:text="TextViewFormPercTempoMaximo" />-->
+        <include
+            android:id="@+id/calcInfo"
+            layout="@layout/activity_form_lig_prov_calc_info"
+
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
+            android:layout_marginLeft="8dp"
+            android:layout_marginTop="16dp"
+            android:layout_marginEnd="8dp"
+            android:layout_marginRight="8dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/calcEnc" />
 
         <android.support.design.widget.TextInputLayout
             android:id="@+id/TextInputObs"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_marginTop="32dp"
-            app:layout_constraintEnd_toEndOf="@+id/TextViewFormObservacaoExe"
-            app:layout_constraintStart_toStartOf="@+id/TextViewLP8"
-            app:layout_constraintTop_toBottomOf="@+id/TextViewFormObservacaoExe">
+            android:layout_marginTop="16dp"
+            android:layout_marginBottom="32dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="@+id/calcInfo"
+            app:layout_constraintStart_toStartOf="@+id/calcInfo"
+            app:layout_constraintTop_toBottomOf="@+id/calcInfo">
 
             <android.support.design.widget.TextInputEditText
                 android:layout_width="match_parent"
@@ -390,25 +376,6 @@
                 android:hint="Observação"
                 android:inputType="textMultiLine" />
         </android.support.design.widget.TextInputLayout>
-
-        <android.support.design.widget.TextInputLayout
-            android:id="@+id/TextInputCargaMedida"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="8dp"
-            android:layout_marginBottom="32dp"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="@+id/TextInputObs"
-            app:layout_constraintStart_toStartOf="@+id/TextInputObs"
-            app:layout_constraintTop_toBottomOf="@+id/TextInputObs">
-
-            <android.support.design.widget.TextInputEditText
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:hint="Carga Medida"
-                android:inputType="number" />
-        </android.support.design.widget.TextInputLayout>
-
 
     </android.support.constraint.ConstraintLayout>
 </ScrollView>
