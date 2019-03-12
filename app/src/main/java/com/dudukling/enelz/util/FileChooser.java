@@ -44,7 +44,8 @@ public class FileChooser {
         dialog = new Dialog(activity);
         list = new ListView(activity);
         list.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override public void onItemClick(AdapterView<?> parent, View view, int which, long id) {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int which, long id) {
                 String fileChosen = (String) list.getItemAtPosition(which);
                 File chosenFile = getChosenFile(fileChosen);
                 if (chosenFile.isDirectory()) {
@@ -74,7 +75,8 @@ public class FileChooser {
         this.currentPath = path;
         if (path.exists()) {
             File[] dirs = path.listFiles(new FileFilter() {
-                @Override public boolean accept(File file) {
+                @Override
+                public boolean accept(File file) {
                     return (file.isDirectory() && file.canRead());
                 }
             });
@@ -112,7 +114,8 @@ public class FileChooser {
             dialog.setTitle(currentPath.getPath());
             list.setAdapter(new ArrayAdapter(activity,
                     android.R.layout.simple_list_item_1, fileList) {
-                @Override public View getView(int pos, View view, ViewGroup parent) {
+                @Override
+                public View getView(int pos, View view, ViewGroup parent) {
                     view = super.getView(pos, view, parent);
                     ((TextView) view).setSingleLine(true);
                     return view;

@@ -228,9 +228,11 @@ public class ligProvFormActivity extends AppCompatActivity {
                     case "true":
                         salvaLP();
                         break;
+
                     case "false":
                         Toast.makeText(ligProvFormActivity.this, "Favor preencher todos os campos obrigatórios!", Toast.LENGTH_LONG).show();
                         break;
+
                     case "gps":
                         DialogInterface.OnClickListener dialogClickListener = new DialogInterface.OnClickListener() {
                             @Override

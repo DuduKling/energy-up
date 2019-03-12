@@ -17,8 +17,6 @@ public class lpModel implements Serializable {
     private String observacoes;
     private String descricao_retorno;
     private String observacao_exe;
-//    private String tempo_max_servico;
-//    private String perc_tempo_maximo;
 
     private List<String> imagesList  = new ArrayList<>();
 
@@ -36,6 +34,19 @@ public class lpModel implements Serializable {
     private String autoLat;
     private String autoLong;
 
+
+    private String calcDecValor;
+    private String calcDecFatorPotencia;
+    private String calcDecPeriodo;
+    private String calcDecTempo;
+    private String calcDecTensao;
+    private String calcDecKwh;
+
+
+    private String calcEncPeriodo;
+    private String calcEncTempo;
+    private String calcEncCorrente;
+    private String calcEncTensao;
 
 
 
@@ -116,19 +127,6 @@ public class lpModel implements Serializable {
         this.observacao_exe = observacao_exe;
     }
 
-//    public String getTempo_max_servico() {
-//        return tempo_max_servico;
-//    }
-//    public void setTempo_max_servico(String tempo_max_servico) {
-//        this.tempo_max_servico = tempo_max_servico;
-//    }
-//
-//    public String getPerc_tempo_maximo() {
-//        return perc_tempo_maximo;
-//    }
-//    public void setPerc_tempo_maximo(String perc_tempo_maximo) {
-//        this.perc_tempo_maximo = perc_tempo_maximo;
-//    }
 
     public int getId() {
         return id;
@@ -193,4 +191,76 @@ public class lpModel implements Serializable {
         this.autoLong = autoLong;
     }
 
+
+    public String getCalcDecValor() {
+        return calcDecValor;
+    }
+    public void setCalcDecValor(String calcDecValor) {
+        this.calcDecValor = calcDecValor;
+    }
+
+    public String getCalcDecFatorPotencia() {
+        return calcDecFatorPotencia;
+    }
+    public void setCalcDecFatorPotencia(String calcDecFatorPotencia) {
+        this.calcDecFatorPotencia = calcDecFatorPotencia;
+    }
+
+    public String getCalcDecPeriodo() {
+        return calcDecPeriodo;
+    }
+    public void setCalcDecPeriodo(String calcDecPeriodo) {
+        this.calcDecPeriodo = calcDecPeriodo;
+    }
+
+    public String getCalcDecTempo() {
+        return calcDecTempo;
+    }
+    public void setCalcDecTempo(String calcDecTempo) {
+        this.calcDecTempo = calcDecTempo;
+    }
+
+    public String getCalcDecTensao() {
+        return calcDecTensao;
+    }
+    public void setCalcDecTensao(String calcDecTensao) {
+        this.calcDecTensao = calcDecTensao;
+    }
+
+    public String getCalcDecKwh() {
+        return calcDecKwh;
+    }
+    public void setCalcDecKwh(String calcDecKwh) {
+        this.calcDecKwh = calcDecKwh;
+    }
+
+
+    public String getCalcEncPeriodo() {
+        return calcEncPeriodo;
+    }
+    public void setCalcEncPeriodo(String calcEncPeriodo) {
+        this.calcEncPeriodo = calcEncPeriodo;
+    }
+
+    public String getCalcEncTempo() {
+        return calcEncTempo;
+    }
+    public void setCalcEncTempo(String calcEncTempo) {
+        this.calcEncTempo = calcEncTempo;
+    }
+
+    public String getCalcEncCorrente() {
+        return calcEncCorrente;
+    }
+    public void setCalcEncCorrente(String calcEncCorrente) {
+        this.calcEncCorrente = calcEncCorrente;
+    }
+
+
+    public String getCalcEncTensao() {
+        return calcEncTensao;
+    }
+    public void setCalcEncTensao(String calcEncTensao) {
+        this.calcEncTensao = calcEncTensao;
+    }
 }

@@ -250,7 +250,7 @@ public class clandestinoFormActivity extends AppCompatActivity {
         if(potEncontrada==0){
             textViewPotCalculada.setText("Potência encontrada: ---");
         }else{
-            textViewPotCalculada.setText("Potência encontrada: "+(potEncontrada/1000)+" KWh");
+            textViewPotCalculada.setText("Potência encontrada: "+(potEncontrada/1000)+" kW");
         }
 
     }

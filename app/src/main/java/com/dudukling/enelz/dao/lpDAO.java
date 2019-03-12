@@ -30,8 +30,6 @@ public class lpDAO extends SQLiteOpenHelper {
                 " observacoes TEXT NOT NULL," +
                 " descricao_retorno TEXT NOT NULL," +
                 " observacao_exe TEXT NOT NULL," +
-//                " tempo_max_servico TEXT NOT NULL," +
-//                " perc_tempo_maximo TEXT NOT NULL," +
                 " userObservacao TEXT NOT NULL," +
                 " userCargaMedida TEXT NOT NULL," +
                 " tipo_ordem TEXT NOT NULL," +
@@ -39,8 +37,22 @@ public class lpDAO extends SQLiteOpenHelper {
                 " localidade TEXT NOT NULL," +
                 " latitude TEXT NOT NULL," +
                 " longitude TEXT NOT NULL," +
+
                 " autoLat TEXT NOT NULL," +
-                " autoLong TEXT NOT NULL" +
+                " autoLong TEXT NOT NULL," +
+
+                " calcDecValor TEXT NOT NULL," +
+                " calcDecFatorPotencia TEXT NOT NULL," +
+                " calcDecPeriodo TEXT NOT NULL," +
+                " calcDecTempo TEXT NOT NULL," +
+                " calcDecTensao TEXT NOT NULL," +
+                " calcDecKwh TEXT NOT NULL," +
+
+                " calcEncPeriodo TEXT NOT NULL," +
+                " calcEncTempo TEXT NOT NULL," +
+                " calcEncCorrente TEXT NOT NULL," +
+                " calcEncTensao TEXT NOT NULL" +
+
                 ");";
         db.execSQL(sql);
 
@@ -88,6 +100,17 @@ public class lpDAO extends SQLiteOpenHelper {
         queryData.put("autoLat", "");
         queryData.put("autoLong", "");
 
+        queryData.put("calcDecValor", "");
+        queryData.put("calcDecFatorPotencia", "");
+        queryData.put("calcDecPeriodo", "");
+        queryData.put("calcDecTempo", "");
+        queryData.put("calcDecTensao", "");
+        queryData.put("calcDecKwh", "");
+
+        queryData.put("calcEncPeriodo", "");
+        queryData.put("calcEncTempo", "");
+        queryData.put("calcEncCorrente", "");
+        queryData.put("calcEncTensao", "");
 
         db.insert("lpTable", null, queryData);
     }
@@ -152,8 +175,6 @@ public class lpDAO extends SQLiteOpenHelper {
             lp.setObservacoes(c.getString(c.getColumnIndex("observacoes")));
             lp.setDescricao_retorno(c.getString(c.getColumnIndex("descricao_retorno")));
             lp.setObservacao_exe(c.getString(c.getColumnIndex("observacao_exe")));
-//            lp.setTempo_max_servico(c.getString(c.getColumnIndex("tempo_max_servico")));
-//            lp.setPerc_tempo_maximo(c.getString(c.getColumnIndex("perc_tempo_maximo")));
 
             lp.setUserObservacao(c.getString(c.getColumnIndex("userObservacao")));
             lp.setUserCargaMedida(c.getString(c.getColumnIndex("userCargaMedida")));
@@ -167,6 +188,18 @@ public class lpDAO extends SQLiteOpenHelper {
             lp.setAutoLat(c.getString(c.getColumnIndex("autoLat")));
             lp.setAutoLong(c.getString(c.getColumnIndex("autoLong")));
 
+
+            lp.setCalcDecValor(c.getString(c.getColumnIndex("calcDecValor")));
+            lp.setCalcDecFatorPotencia(c.getString(c.getColumnIndex("calcDecFatorPotencia")));
+            lp.setCalcDecPeriodo(c.getString(c.getColumnIndex("calcDecPeriodo")));
+            lp.setCalcDecTempo(c.getString(c.getColumnIndex("calcDecTempo")));
+            lp.setCalcDecTensao(c.getString(c.getColumnIndex("calcDecTensao")));
+            lp.setCalcDecKwh(c.getString(c.getColumnIndex("calcDecKwh")));
+
+            lp.setCalcEncPeriodo(c.getString(c.getColumnIndex("calcEncPeriodo")));
+            lp.setCalcEncTempo(c.getString(c.getColumnIndex("calcEncTempo")));
+            lp.setCalcEncCorrente(c.getString(c.getColumnIndex("calcEncCorrente")));
+            lp.setCalcEncTensao(c.getString(c.getColumnIndex("calcEncTensao")));
 
             // Imagens:
             List<String> imagesList = getImagesDB(dbLPID);
@@ -234,8 +267,6 @@ public class lpDAO extends SQLiteOpenHelper {
         queryData.put("observacoes", lp.getObservacoes());
         queryData.put("descricao_retorno", lp.getDescricao_retorno());
         queryData.put("observacao_exe", lp.getObservacao_exe());
-//        queryData.put("tempo_max_servico", lp.getTempo_max_servico());
-//        queryData.put("perc_tempo_maximo", lp.getPerc_tempo_maximo());
 
         queryData.put("userObservacao", lp.getUserObservacao());
         queryData.put("userCargaMedida", lp.getUserCargaMedida());
@@ -246,8 +277,49 @@ public class lpDAO extends SQLiteOpenHelper {
 
         queryData.put("latitude", lp.getLatitude());
         queryData.put("longitude", lp.getLongitude());
-        queryData.put("autoLat", lp.getAutoLat());
-        queryData.put("autoLong", lp.getAutoLong());
+
+
+
+        if(lp.getAutoLat()==null){queryData.put("autoLat", "");}
+        else{queryData.put("autoLat", lp.getAutoLat());}
+
+        if(lp.getAutoLong()==null){queryData.put("autoLong", "");}
+        else{queryData.put("autoLong", lp.getAutoLong());}
+
+
+
+        if(lp.getCalcDecValor()==null){queryData.put("calcDecValor", "");}
+        else{queryData.put("calcDecValor", lp.getCalcDecValor());}
+
+        if(lp.getCalcDecFatorPotencia()==null){queryData.put("calcDecFatorPotencia", "");}
+        else{queryData.put("calcDecFatorPotencia", lp.getCalcDecFatorPotencia());}
+
+        if(lp.getCalcDecPeriodo()==null){queryData.put("calcDecPeriodo", "");}
+        else{queryData.put("calcDecPeriodo", lp.getCalcDecPeriodo());}
+
+        if(lp.getCalcDecTensao()==null){queryData.put("calcDecTensao", "");}
+        else{queryData.put("calcDecTensao", lp.getCalcDecTensao());}
+
+        if(lp.getCalcDecTempo()==null){queryData.put("calcDecTempo", "");}
+        else{queryData.put("calcDecTempo", lp.getCalcDecTempo());}
+
+        if(lp.getCalcDecKwh()==null){queryData.put("calcDecKwh", "");}
+        else{queryData.put("calcDecKwh", lp.getCalcDecKwh());}
+
+
+
+        if(lp.getCalcEncPeriodo()==null){queryData.put("calcEncPeriodo", "");}
+        else{queryData.put("calcEncPeriodo", lp.getCalcEncPeriodo());}
+
+        if(lp.getCalcEncTempo()==null){queryData.put("calcEncTempo", "");}
+        else{queryData.put("calcEncTempo", lp.getCalcEncTempo());}
+
+        if(lp.getCalcEncCorrente()==null){queryData.put("calcEncCorrente", "");}
+        else{queryData.put("calcEncCorrente", lp.getCalcEncCorrente());}
+
+        if(lp.getCalcEncTensao()==null){queryData.put("calcEncTensao", "");}
+        else{queryData.put("calcEncTensao", lp.getCalcEncTensao());}
+
 
         return queryData;
     }
