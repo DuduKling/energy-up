@@ -1,7 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-    package="com.dudukling.enelz">
+    package="com.dudukling.energyup">
+
     <!--
          The ACCESS_COARSE/FINE_LOCATION permissions are not required to use
          Google Maps Android API v2, but you must specify either coarse or fine
@@ -23,9 +24,7 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
         tools:ignore="AllowBackup,GoogleAppIndexingWarning">
-        <activity android:name=".LigProvLevCargaActivity"></activity>
-        <activity android:name=".clandestinoActivity" />
-        <activity android:name=".clandestinoFormActivity" />
+
         <!--
              The API key for Google Maps-based APIs is defined as a string resource.
              (See the file "res/values/google_maps_api.xml").
@@ -38,12 +37,16 @@
             android:name="com.google.android.geo.API_KEY"
             android:value="@string/google_maps_key" />
 
+        <activity android:name=".LigProvLevCargaActivity" />
+        <activity android:name=".clandestinoActivity" />
         <activity android:name=".ligProvActivity" />
         <activity android:name=".ligProvFormActivity" />
         <activity android:name=".ligProvAlbumActivity" />
         <activity android:name=".ligProvImageActivity" />
         <activity android:name=".menuActivity" />
         <activity android:name=".importActivity" />
+        <activity android:name=".clandestinoFormActivity" />
+        <activity android:name=".LigProvLevCargaFormActivity" />
         <activity
             android:name=".splashActivity"
             android:theme="@style/AppCompat.fullScreen">
@@ -53,17 +56,17 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".LigProvLevCargaFormActivity" />
 
         <provider
             android:name="android.support.v4.content.FileProvider"
-            android:authorities="com.dudukling.enelz.fileProvider"
+            android:authorities="com.dudukling.energyup.fileProvider"
             android:exported="false"
             android:grantUriPermissions="true">
             <meta-data
                 android:name="android.support.FILE_PROVIDER_PATHS"
                 android:resource="@xml/file_paths" />
         </provider>
+
     </application>
 
 </manifest>
