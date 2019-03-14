@@ -12,6 +12,7 @@ public class menuActivity extends AppCompatActivity {
     private CardView cardViewImportar;
     private CardView cardViewFiscal;
     private CardView cardViewMenuClandestino;
+    private CardView cardViewMenuFaq;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -47,6 +48,14 @@ public class menuActivity extends AppCompatActivity {
             }
         });
 
+        cardViewMenuFaq = this.findViewById(R.id.cardViewMenuFaq);
+        cardViewMenuFaq.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(menuActivity.this, faqActivity.class);
+                startActivity(intent);
+            }
+        });
 
 
         cardViewFiscal = this.findViewById(R.id.cardViewMenuFiscal);
