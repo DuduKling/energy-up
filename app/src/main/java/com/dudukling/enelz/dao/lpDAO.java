@@ -32,7 +32,6 @@ public class lpDAO extends SQLiteOpenHelper {
                 " descricao_retorno TEXT NOT NULL," +
                 " observacao_exe TEXT NOT NULL," +
                 " userObservacao TEXT NOT NULL," +
-                " userCargaMedida TEXT NOT NULL," +
                 " tipo_ordem TEXT NOT NULL," +
                 " etapa TEXT NOT NULL," +
                 " localidade TEXT NOT NULL," +
@@ -116,7 +115,6 @@ public class lpDAO extends SQLiteOpenHelper {
         ContentValues queryData = getContentValues(lp);
 
         queryData.put("userObservacao", "");
-        queryData.put("userCargaMedida", "");
         queryData.put("autoLat", "");
         queryData.put("autoLong", "");
 
@@ -200,7 +198,6 @@ public class lpDAO extends SQLiteOpenHelper {
             lp.setObservacao_exe(c.getString(c.getColumnIndex("observacao_exe")));
 
             lp.setUserObservacao(c.getString(c.getColumnIndex("userObservacao")));
-            lp.setUserCargaMedida(c.getString(c.getColumnIndex("userCargaMedida")));
 
             lp.setTipoOrdem(c.getString(c.getColumnIndex("tipo_ordem")));
             lp.setEtapa(c.getString(c.getColumnIndex("etapa")));
@@ -254,7 +251,7 @@ public class lpDAO extends SQLiteOpenHelper {
     public List<lpModel> getGPSList(int id) {
         SQLiteDatabase db = getReadableDatabase();
 
-        String sql = "SELECT * FROM lpTable WHERE id != ? AND (userObservacao=='' OR userCargaMedida=='')  ORDER BY id DESC";
+        String sql = "SELECT * FROM lpTable WHERE id != ? AND userObservacao==''  ORDER BY id DESC";
         Cursor c = db.rawQuery(sql, new String[]{String.valueOf(id)});
 
         List<lpModel> lpList = new ArrayList<>();
@@ -293,7 +290,6 @@ public class lpDAO extends SQLiteOpenHelper {
         queryData.put("observacao_exe", lp.getObservacao_exe());
 
         queryData.put("userObservacao", lp.getUserObservacao());
-        queryData.put("userCargaMedida", lp.getUserCargaMedida());
 
         queryData.put("tipo_ordem", lp.getTipoOrdem());
         queryData.put("etapa", lp.getEtapa());

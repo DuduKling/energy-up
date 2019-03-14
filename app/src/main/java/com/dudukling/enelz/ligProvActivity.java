@@ -307,7 +307,7 @@ public class ligProvActivity extends AppCompatActivity {
         lpDAO dao = new lpDAO(this);
 
         SQLiteDatabase db = dao.getReadableDatabase();
-        long qtdCSV = DatabaseUtils.queryNumEntries(db, "lpTable", "userObservacao<>'' AND userCargaMedida!=''");
+        long qtdCSV = DatabaseUtils.queryNumEntries(db, "lpTable", "userObservacao<>''");
         if (qtdCSV != 0) {
             exportLPs(type, db);
         } else if (!type.equals("backup")) {
@@ -339,10 +339,11 @@ public class ligProvActivity extends AppCompatActivity {
             CSVWriter csvWrite = new CSVWriter(new FileWriter(file));
 
 
-            Cursor curCSV = db.rawQuery("SELECT id, ordem, userObservacao, userCargaMedida, autoLat, autoLong FROM lpTable " +
-                    "WHERE userObservacao <> '' OR userCargaMedida != ''", null);
+            Cursor curCSV = db.rawQuery("SELECT id, ordem, userObservacao, autoLat, autoLong, calcDecValor, calcDecFatorPotencia, calcDecPeriodo, calcDecTempo, calcDecTensao, calcDecKwh, calcEncPeriodo, calcEncTempo, calcEncCorrente, calcEncTensao, calcEncKwh " +
+                    "FROM lpTable " +
+                    "WHERE userObservacao <> ''", null);
 
-            String[] str = {"ID", "ordem", "Observacao", "CargaMedida", "latitudeGPS", "longitudeGPS"};
+            String[] str = {"ID", "ordem", "Observacao", "latitudeGPS", "longitudeGPS", "ValorDeclarado", "FatorPotenciaDeclarado", "PeriodoDeclarado", "TempoDeclarado", "TensaoDeclarado", "KwhTotalDeclarado", "PeriodoExcedenteEncontrado", "TempoExcedenteEncontrado", "CorrenteEncontrado", "TensaoEncontrado", "KwhTotalEncontrado"};
 
             csvWrite.writeNext(str);
 
@@ -351,11 +352,23 @@ public class ligProvActivity extends AppCompatActivity {
                 String id = curCSV.getString(0);
                 String ordem = curCSV.getString(1);
                 String userObservacao = stripAccents(curCSV.getString(2));
-                String userCargaMedida = stripAccents(curCSV.getString(3));
-                String autoLat = stripAccents(curCSV.getString(4));
-                String autoLong = stripAccents(curCSV.getString(5));
+                String autoLat = stripAccents(curCSV.getString(3));
+                String autoLong = stripAccents(curCSV.getString(4));
 
-                String arrStr[] = {id, ordem, userObservacao, userCargaMedida, autoLat, autoLong};
+                String calcDecValor = stripAccents(curCSV.getString(5));
+                String calcDecFatorPotencia = stripAccents(curCSV.getString(6));
+                String calcDecPeriodo = stripAccents(curCSV.getString(7));
+                String calcDecTempo = stripAccents(curCSV.getString(8));
+                String calcDecTensao = stripAccents(curCSV.getString(9));
+                String calcDecKwh = stripAccents(curCSV.getString(10));
+
+                String calcEncPeriodo = stripAccents(curCSV.getString(11));
+                String calcEncTempo = stripAccents(curCSV.getString(12));
+                String calcEncCorrente = stripAccents(curCSV.getString(13));
+                String calcEncTensao = stripAccents(curCSV.getString(14));
+                String calcEncKwh = stripAccents(curCSV.getString(15));
+
+                String arrStr[] = {id, ordem, userObservacao, autoLat, autoLong, calcDecValor, calcDecFatorPotencia, calcDecPeriodo, calcDecTempo, calcDecTensao, calcDecKwh, calcEncPeriodo, calcEncTempo, calcEncCorrente, calcEncTensao, calcEncKwh};
 
                 csvWrite.writeNext(arrStr);
             }

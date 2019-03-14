@@ -22,7 +22,6 @@ public class lpModel implements Serializable {
 
 
     private String userObservacao;
-    private String userCargaMedida;
 
     private String tipoOrdem;
     private String etapa;
@@ -77,13 +76,6 @@ public class lpModel implements Serializable {
     }
     public void setUserObservacao(String userObservacao) {
         this.userObservacao = userObservacao;
-    }
-
-    public String getUserCargaMedida() {
-        return userCargaMedida;
-    }
-    public void setUserCargaMedida(String userCargaMedida) {
-        this.userCargaMedida = userCargaMedida;
     }
 
     public String getNumero_cliente() {
