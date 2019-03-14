@@ -263,55 +263,9 @@
 
 
         <!-- DescRetorno -->
-        <TextView
-            android:id="@+id/TextViewLP7"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="16dp"
-            android:text="Descrição Retorno"
-            android:textSize="20sp"
-            android:textStyle="bold"
-            app:layout_constraintEnd_toEndOf="@+id/TextViewFormObservacoes"
-            app:layout_constraintStart_toStartOf="@+id/TextViewLP6"
-            app:layout_constraintTop_toBottomOf="@+id/TextViewFormObservacoes" />
-        <TextView
-            android:id="@+id/TextViewFormDescRetorno"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="16dp"
-            android:layout_marginLeft="16dp"
-            android:layout_marginTop="8dp"
-            android:textSize="20sp"
-            app:layout_constraintEnd_toEndOf="@+id/TextViewLP7"
-            app:layout_constraintStart_toStartOf="@+id/TextViewLP7"
-            app:layout_constraintTop_toBottomOf="@+id/TextViewLP7"
-            tools:text="TextViewFormDescRetorno" />
 
 
         <!-- ObservacaoExe -->
-        <TextView
-            android:id="@+id/TextViewLP8"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="16dp"
-            android:text="Observação Exe"
-            android:textSize="20sp"
-            android:textStyle="bold"
-            app:layout_constraintEnd_toEndOf="@+id/TextViewFormDescRetorno"
-            app:layout_constraintStart_toStartOf="@+id/TextViewLP7"
-            app:layout_constraintTop_toBottomOf="@+id/TextViewFormDescRetorno" />
-        <TextView
-            android:id="@+id/TextViewFormObservacaoExe"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="16dp"
-            android:layout_marginLeft="16dp"
-            android:layout_marginTop="8dp"
-            android:textSize="20sp"
-            app:layout_constraintEnd_toEndOf="@+id/TextViewLP8"
-            app:layout_constraintStart_toStartOf="@+id/TextViewLP8"
-            app:layout_constraintTop_toBottomOf="@+id/TextViewLP8"
-            tools:text="TextViewFormObservacaoExe" />
 
 
         <include
@@ -322,12 +276,12 @@
             android:layout_height="wrap_content"
             android:layout_marginStart="8dp"
             android:layout_marginLeft="8dp"
-            android:layout_marginTop="24dp"
+            android:layout_marginTop="32dp"
             android:layout_marginEnd="8dp"
             android:layout_marginRight="8dp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/TextViewFormObservacaoExe" />
+            app:layout_constraintTop_toBottomOf="@+id/TextViewFormObservacoes" />
 
         <include
             android:id="@+id/calcEnc"

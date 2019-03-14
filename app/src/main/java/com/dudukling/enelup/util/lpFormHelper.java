@@ -43,8 +43,6 @@ public class lpFormHelper {
     private TextView TextViewBairro;
     private TextView TextViewDescEtapa;
     private TextView TextViewObservacoes;
-    private TextView TextViewRetorno;
-    private TextView TextViewObservacaoExe;
 
     private TextInputLayout textInputObs;
     private EditText fieldObs;
@@ -95,8 +93,6 @@ public class lpFormHelper {
         TextViewBairro = activity.findViewById(R.id.TextViewFormBairro);
         TextViewDescEtapa = activity.findViewById(R.id.TextViewFormDescEtapa);
         TextViewObservacoes = activity.findViewById(R.id.TextViewFormObservacoes);
-        TextViewRetorno = activity.findViewById(R.id.TextViewFormDescRetorno);
-        TextViewObservacaoExe = activity.findViewById(R.id.TextViewFormObservacaoExe);
 
         setFields();
 
@@ -146,8 +142,6 @@ public class lpFormHelper {
         TextViewBairro.setText(lp.getBairro());
         TextViewDescEtapa.setText(lp.getDescricao_etapa());
         TextViewObservacoes.setText(lp.getObservacoes());
-        TextViewRetorno.setText(lp.getDescricao_retorno());
-        TextViewObservacaoExe.setText(lp.getObservacao_exe());
 
         fieldObs.setText(lp.getUserObservacao());
 

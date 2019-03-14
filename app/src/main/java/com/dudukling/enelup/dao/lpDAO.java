@@ -29,8 +29,6 @@ public class lpDAO extends SQLiteOpenHelper {
                 " numero_cliente TEXT NOT NULL," +
                 " descricao_etapa TEXT NOT NULL," +
                 " observacoes TEXT NOT NULL," +
-                " descricao_retorno TEXT NOT NULL," +
-                " observacao_exe TEXT NOT NULL," +
                 " userObservacao TEXT NOT NULL," +
                 " tipo_ordem TEXT NOT NULL," +
                 " etapa TEXT NOT NULL," +
@@ -194,8 +192,6 @@ public class lpDAO extends SQLiteOpenHelper {
             lp.setBairro(c.getString(c.getColumnIndex("bairro")));
             lp.setDescricao_etapa(c.getString(c.getColumnIndex("descricao_etapa")));
             lp.setObservacoes(c.getString(c.getColumnIndex("observacoes")));
-            lp.setDescricao_retorno(c.getString(c.getColumnIndex("descricao_retorno")));
-            lp.setObservacao_exe(c.getString(c.getColumnIndex("observacao_exe")));
 
             lp.setUserObservacao(c.getString(c.getColumnIndex("userObservacao")));
 
@@ -286,8 +282,6 @@ public class lpDAO extends SQLiteOpenHelper {
         queryData.put("bairro", lp.getBairro());
         queryData.put("descricao_etapa", lp.getDescricao_etapa());
         queryData.put("observacoes", lp.getObservacoes());
-        queryData.put("descricao_retorno", lp.getDescricao_retorno());
-        queryData.put("observacao_exe", lp.getObservacao_exe());
 
         queryData.put("userObservacao", lp.getUserObservacao());
 

@@ -201,7 +201,7 @@
             <android.support.design.widget.TextInputEditText
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:hint="Proteção" />
+                android:hint="Proteção (Disjuntor)" />
         </android.support.design.widget.TextInputLayout>
 
         <android.support.design.widget.TextInputLayout

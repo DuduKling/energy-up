@@ -15,8 +15,6 @@ public class lpModel implements Serializable {
     private String bairro;
     private String descricao_etapa;
     private String observacoes;
-    private String descricao_retorno;
-    private String observacao_exe;
 
     private List<String> imagesList  = new ArrayList<>();
 
@@ -105,21 +103,6 @@ public class lpModel implements Serializable {
     public void setObservacoes(String observacoes) {
         this.observacoes = observacoes;
     }
-
-    public String getDescricao_retorno() {
-        return descricao_retorno;
-    }
-    public void setDescricao_retorno(String descricao_retorno) {
-        this.descricao_retorno = descricao_retorno;
-    }
-
-    public String getObservacao_exe() {
-        return observacao_exe;
-    }
-    public void setObservacao_exe(String observacao_exe) {
-        this.observacao_exe = observacao_exe;
-    }
-
 
     public int getId() {
         return id;
