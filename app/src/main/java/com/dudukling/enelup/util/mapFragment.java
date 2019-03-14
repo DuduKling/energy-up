@@ -75,12 +75,12 @@ public class mapFragment extends SupportMapFragment implements OnMapReadyCallbac
             CameraUpdate update = CameraUpdateFactory.newLatLngZoom(posicao, 11);
             googleMap.moveCamera(update);
 
-            MarkerOptions marker = new MarkerOptions();
-            marker.position(posicao);
-            marker.title(lp.getCliente());
-            marker.icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_AZURE));
-            marker.snippet("Sem informações de GPS");
-            googleMap.addMarker(marker);
+//            MarkerOptions marker = new MarkerOptions();
+//            marker.position(posicao);
+//            marker.title(lp.getCliente());
+//            marker.icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_AZURE));
+//            marker.snippet("Sem informações de GPS");
+//            googleMap.addMarker(marker);
         }
 
 
