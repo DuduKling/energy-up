@@ -23,7 +23,7 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
         tools:ignore="AllowBackup,GoogleAppIndexingWarning">
-        <activity android:name=".LigProvFormLevCargaActivity"></activity>
+        <activity android:name=".LigProvLevCargaActivity"></activity>
         <activity android:name=".clandestinoActivity" />
         <activity android:name=".clandestinoFormActivity" />
         <!--
@@ -53,6 +53,7 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+        <activity android:name=".LigProvLevCargaFormActivity" />
 
         <provider
             android:name="android.support.v4.content.FileProvider"

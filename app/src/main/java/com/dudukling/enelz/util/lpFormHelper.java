@@ -1,29 +1,29 @@
 package com.dudukling.enelz.util;
 
+import android.content.Intent;
 import android.graphics.Color;
+import android.os.Parcelable;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.TextInputLayout;
-import android.support.v7.widget.RecyclerView;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
-import android.widget.AutoCompleteTextView;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
 import android.widget.EditText;
-import android.widget.MultiAutoCompleteTextView;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.dudukling.enelz.LigProvLevCargaActivity;
 import com.dudukling.enelz.R;
+import com.dudukling.enelz.dao.lpDAO;
 import com.dudukling.enelz.ligProvFormActivity;
 import com.dudukling.enelz.model.lpModel;
-
-import org.w3c.dom.Text;
+import com.dudukling.enelz.model.lpPotencia;
 
 import java.io.File;
 import java.util.List;
@@ -36,6 +36,7 @@ public class lpFormHelper {
 
     private static ligProvFormActivity activity;
     private final lpModel lp;
+    private final String formType;
 
     private TextView TextViewOrdem;
     private TextView TextViewCliente;
@@ -53,6 +54,9 @@ public class lpFormHelper {
 
     private TextView textViewInfoTotDec;
     private TextView textViewInfoCorrente;
+    private TextView textViewInfoLevCarga;
+    private TextView textViewInfoTotEnc;
+    private TextView textViewInfoDiferenca;
 
 
     private Spinner spinnerCalcDec;
@@ -76,12 +80,14 @@ public class lpFormHelper {
     private TextInputLayout textInputLayoutCalcEncTensao;
 
     private CheckBox checkBoxCalcEncLevCarga;
-
+    private FloatingActionButton floatingActionButtonCalcEncLevCarga;
+    private int potenciaTotalLevCarga;
 
 
     public lpFormHelper(final ligProvFormActivity activity1, String formType, lpModel lp1) {
         activity = activity1;
         lp = lp1;
+        this.formType = formType;
 
         TextViewOrdem = activity.findViewById(R.id.TextViewFormOrdem);
         TextViewCliente = activity.findViewById(R.id.TextViewFormCliente);
@@ -129,6 +135,7 @@ public class lpFormHelper {
             disableCheckbox(checkBoxCalcEncExcedente);
             disableCheckbox(checkBoxCalcEncCorrente);
             disableCheckbox(checkBoxCalcEncLevCarga);
+
         }
     }
 
@@ -525,7 +532,10 @@ public class lpFormHelper {
             textViewInfoTotDec.setText("Carga Total Declarada: "+ total +" kWh");
             lp.setCalcDecKwh(String.valueOf(total));
         }
+
+        calculaDiferenca();
     }
+
 
     private void setValidateDecFields() {
         setValidateEmpty(textInputLayoutCalcDecValor);
@@ -666,23 +676,35 @@ public class lpFormHelper {
             }
         });
 
+        floatingActionButtonCalcEncLevCarga = activity.findViewById(R.id.floatingActionButtonCalcEncLevCarga);
+        floatingActionButtonCalcEncLevCarga.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent goToLevCarga = new Intent(activity, LigProvLevCargaActivity.class);
+                if(formType.equals("readOnly")){
+                    goToLevCarga
+                        .putExtra("LPid", lp.getId())
+                        .putExtra("type", "readOnly");
+                }else{
+                    goToLevCarga
+                            .putExtra("LPid", lp.getId())
+                            .putExtra("type", "");
+                }
+                activity.startActivityForResult(goToLevCarga, 1123);
+            }
+        });
 
         checkBoxCalcEncLevCarga = activity.findViewById(R.id.checkBoxCalcEncLevCarga);
         checkBoxCalcEncLevCarga.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton buttonView,boolean isChecked) {
                 if(isChecked){
-                    // Intent pra tela nova...
-//                    Intent goToClandestino = new Intent(ligProvFormActivity.this, clandestinoFormActivity.class);
-//                    goToClandestino
-//                            .putExtra("clandest", new lpClandestino())
-//                            .putExtra("lpOrdem", lp.getOrdem())
-//                            .putExtra("type", "new");
-//                    startActivity(goToClandestino);
+                    floatingActionButtonCalcEncLevCarga.setVisibility(View.VISIBLE);
+                }else{
+                    floatingActionButtonCalcEncLevCarga.setVisibility(View.GONE);
                 }
             }
         });
-
 
         textInputLayoutCalcEncPeriodo.getEditText().addTextChangedListener(new TextWatcher() {
             @Override
@@ -814,6 +836,47 @@ public class lpFormHelper {
 
 
 
+        // Levantamento:
+        int totalLevCarga = 0;
+
+        lpDAO dao = new lpDAO(activity);
+        potenciaTotalLevCarga = dao.getLPPotenciaTotal(lp.getId());
+        dao.close();
+
+        if(potenciaTotalLevCarga!=0 && periodo!=0 && tempo!=0){
+            if(periodoExcedente!=0 && tempoExcedente!=0){
+                totalLevCarga = (potenciaTotalLevCarga * periodo * tempo) + (potenciaTotalLevCarga * periodoExcedente * tempoExcedente);
+                totalLevCarga = totalLevCarga /1000;
+            }else{
+                totalLevCarga = potenciaTotalLevCarga * periodo * tempo;
+                totalLevCarga = totalLevCarga /1000;
+            }
+        }
+
+        if(totalLevCarga==0){
+            textViewInfoLevCarga.setText("Levantamento: ---");
+        }else{
+            textViewInfoLevCarga.setText("Levantamento: "+ totalLevCarga +" kWh");
+        }
+
+
+
+
+        // Total:
+        float totalEncontrado;
+        if(totalLevCarga!=0 || totalCorrente!=0) {
+            if(totalLevCarga > totalCorrente){
+                totalEncontrado = totalLevCarga;
+            }else{
+                totalEncontrado = totalCorrente;
+            }
+            textViewInfoTotEnc.setText("Carga Total Encontrada: "+totalEncontrado+" kWh");
+            lp.setCalcEncKwh(String.valueOf(totalEncontrado));
+        }else{
+            textViewInfoTotEnc.setText("Carga Total Encontrada: ---");
+        }
+
+        calculaDiferenca();
     }
 
     private void setValidateEncFields() {
@@ -833,6 +896,16 @@ public class lpFormHelper {
         if(checkBoxCalcEncCorrente.isChecked()){
             if(fieldIsEmpty(textInputLayoutCalcEncCorrente)){valid = false;}
             if(fieldIsEmpty(textInputLayoutCalcEncTensao)){valid = false;}
+        }
+
+        if(checkBoxCalcEncLevCarga.isChecked()){
+            lpDAO dao = new lpDAO(activity);
+            List<lpPotencia> potlist = dao.getLPPotenciaList(lp.getId());
+            dao.close();
+            if(potlist.size()<1){
+                Toast.makeText(activity, "Favor preencher a área de Levantamento de Carga!", Toast.LENGTH_SHORT).show();
+                valid = false;
+            }
         }
 
 
@@ -861,6 +934,16 @@ public class lpFormHelper {
             textInputLayoutCalcEncTensao.getEditText().setText(lp.getCalcEncTensao());
             disableEditText(textInputLayoutCalcEncTensao.getEditText());
         }
+
+
+        lpDAO dao = new lpDAO(activity);
+        List<lpPotencia> potlist = dao.getLPPotenciaList(lp.getId());
+        dao.close();
+        if(potlist.size()>0){
+            checkBoxCalcEncLevCarga.setChecked(true);
+            floatingActionButtonCalcEncLevCarga.setVisibility(View.VISIBLE);
+        }
+
     }
 
 
@@ -869,6 +952,9 @@ public class lpFormHelper {
     private void setCalcInfoFields() {
         textViewInfoTotDec = activity.findViewById(R.id.textViewInfoTotDec);
         textViewInfoCorrente = activity.findViewById(R.id.textViewInfoCorrente);
+        textViewInfoLevCarga = activity.findViewById(R.id.textViewInfoLevCarga);
+        textViewInfoTotEnc = activity.findViewById(R.id.textViewInfoTotEnc);
+        textViewInfoDiferenca = activity.findViewById(R.id.textViewInfoDiferenca);
     }
 
     private void fillCalcInfoForm() {
@@ -878,6 +964,27 @@ public class lpFormHelper {
             }else{
                 textViewInfoTotDec.setText("Carga Total Declarada: "+ lp.getCalcDecKwh() +" kWh");
             }
+        }
+        calculaEncontrado();
+    }
+
+    public void updateInfoLevCarga(){
+        calculaEncontrado();
+    }
+
+    private void calculaDiferenca() {
+        if(lp.getCalcDecKwh()!=null && lp.getCalcEncKwh()!=null){
+            if(!lp.getCalcDecKwh().equals("") && !lp.getCalcEncKwh().equals("")) {
+                float diferenca = parseFloat(lp.getCalcEncKwh()) - parseFloat(lp.getCalcDecKwh());
+                if (diferenca > 0) {
+                    textViewInfoDiferenca.setTextColor(Color.parseColor("#f44336"));
+                } else {
+                    textViewInfoDiferenca.setTextColor(Color.parseColor("#808080"));
+                }
+                textViewInfoDiferenca.setText("Diferença de consumo: "+ diferenca +" kWh");
+            }
+        }else{
+            textViewInfoDiferenca.setText("Diferença de consumo: ---");
         }
     }
 

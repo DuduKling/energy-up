@@ -47,6 +47,7 @@ public class lpModel implements Serializable {
     private String calcEncTempo;
     private String calcEncCorrente;
     private String calcEncTensao;
+    private String calcEncKwh;
 
 
 
@@ -262,5 +263,13 @@ public class lpModel implements Serializable {
     }
     public void setCalcEncTensao(String calcEncTensao) {
         this.calcEncTensao = calcEncTensao;
+    }
+
+
+    public String getCalcEncKwh() {
+        return calcEncKwh;
+    }
+    public void setCalcEncKwh(String calcEncKwh) {
+        this.calcEncKwh = calcEncKwh;
     }
 }

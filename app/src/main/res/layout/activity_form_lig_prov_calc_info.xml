@@ -56,13 +56,13 @@
             app:layout_constraintTop_toBottomOf="@+id/imageView11" />
 
         <TextView
-            android:id="@+id/textView14"
+            android:id="@+id/textViewInfoTotEnc"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="8dp"
             android:layout_marginEnd="8dp"
             android:layout_marginRight="8dp"
-            android:text="Carga Total Encontrada: XXX KWh"
+            android:text="Carga Total Encontrada: ---"
             android:textSize="14sp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.0"
@@ -82,34 +82,34 @@
             android:textSize="14sp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.0"
-            app:layout_constraintStart_toStartOf="@+id/textView14"
-            app:layout_constraintTop_toBottomOf="@+id/textView14" />
+            app:layout_constraintStart_toStartOf="@+id/textViewInfoTotEnc"
+            app:layout_constraintTop_toBottomOf="@+id/textViewInfoTotEnc" />
 
         <TextView
-            android:id="@+id/textView16"
+            android:id="@+id/textViewInfoLevCarga"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="8dp"
-            android:text="Levantamento: XXX KWh"
+            android:text="Levantamento: ---"
             android:textSize="14sp"
             app:layout_constraintStart_toStartOf="@+id/textViewInfoCorrente"
             app:layout_constraintTop_toBottomOf="@+id/textViewInfoCorrente" />
 
         <TextView
-            android:id="@+id/textView17"
+            android:id="@+id/textViewInfoDiferenca"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="8dp"
             android:layout_marginEnd="8dp"
             android:layout_marginRight="8dp"
             android:layout_marginBottom="8dp"
-            android:text="Diferença de consumo: XXX KWh"
+            android:text="Diferença de consumo: ---"
             android:textSize="14sp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.0"
-            app:layout_constraintStart_toStartOf="@+id/textView14"
-            app:layout_constraintTop_toBottomOf="@+id/textView16"
+            app:layout_constraintStart_toStartOf="@+id/textViewInfoTotEnc"
+            app:layout_constraintTop_toBottomOf="@+id/textViewInfoLevCarga"
             app:layout_constraintVertical_bias="0.0" />
     </android.support.constraint.ConstraintLayout>
 </android.support.v7.widget.CardView>

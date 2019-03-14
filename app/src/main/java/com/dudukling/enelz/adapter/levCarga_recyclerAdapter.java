@@ -9,31 +9,35 @@ import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageButton;
 import android.widget.TextView;
 
+import com.dudukling.enelz.LigProvLevCargaActivity;
 import com.dudukling.enelz.R;
 import com.dudukling.enelz.clandestinoFormActivity;
 import com.dudukling.enelz.dao.lpDAO;
 import com.dudukling.enelz.model.lpClandestino;
+import com.dudukling.enelz.model.lpPotencia;
 
 import java.util.List;
 
 public class levCarga_recyclerAdapter extends RecyclerView.Adapter {
-    //    private final clandestinoFrag.OnItemSelectedListener listener;
+    private final int lpID;
+    private final String typeofForm;
     private Context context;
+    private List<lpPotencia> lpPotencia;
 
-    private List<lpClandestino> lpClandest;
-
-    public levCarga_recyclerAdapter(List<lpClandestino> lpClandest, Context context) {
-        this.lpClandest = lpClandest;
+    public levCarga_recyclerAdapter(List<lpPotencia> lpPotencia, LigProvLevCargaActivity context, int lpID, String typeofForm) {
+        this.lpPotencia = lpPotencia;
         this.context = context;
-//        this.listener = listener;
+        this.lpID = lpID;
+        this.typeofForm = typeofForm;
     }
 
     @NonNull
     @Override
     public RecyclerView.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        View view = LayoutInflater.from(context).inflate(R.layout.item_clandestino, parent, false);
+        View view = LayoutInflater.from(context).inflate(R.layout.item_calc_lev_carga, parent, false);
 
         return new aViewHolder(view);
     }
@@ -41,90 +45,61 @@ public class levCarga_recyclerAdapter extends RecyclerView.Adapter {
     @Override
     public void onBindViewHolder(@NonNull RecyclerView.ViewHolder viewHolder, int position) {
         aViewHolder holder = (aViewHolder) viewHolder;
-        lpClandestino clandest  = lpClandest.get(position);
+        lpPotencia pot  = lpPotencia.get(position);
 
-        holder.viewClandestNome.setText("Clandestino #"+clandest.getId());
-        holder.viewClandestEndereco.setText(clandest.getEndereco());
-        holder.viewClandestOrdem.setText(clandest.getOrdem());
+        holder.textViewLevCargaQuantidade.setText(pot.getQuantidade());
+        holder.textViewLevCargaDescricao.setText(pot.getDescricao());
+        holder.textViewLevCargaPotencia.setText(pot.getPotencia() + " W");
+
+        if(typeofForm.equals("readOnly")){
+            holder.imageButtonLevCargaDelete.setVisibility(View.GONE);
+        }else{
+            holder.imageButtonLevCargaDelete.setVisibility(View.VISIBLE);
+        }
     }
 
     class aViewHolder extends RecyclerView.ViewHolder implements View.OnCreateContextMenuListener {
 
-        final TextView viewClandestEndereco;
-        final TextView viewClandestNome;
-        final TextView viewClandestOrdem;
+        final TextView textViewLevCargaQuantidade;
+        final TextView textViewLevCargaDescricao;
+        final TextView textViewLevCargaPotencia;
+        final ImageButton imageButtonLevCargaDelete;
 
         aViewHolder(View view) {
             super(view);
-            viewClandestNome = view.findViewById(R.id.textViewClandestNome);
-            viewClandestEndereco = view.findViewById(R.id.textViewClandestEndereco);
-            viewClandestOrdem = view.findViewById(R.id.textViewClandestOrdem);
+            textViewLevCargaQuantidade = view.findViewById(R.id.textViewLevCargaQuantidade);
+            textViewLevCargaDescricao = view.findViewById(R.id.textViewLevCargaDescricao);
+            textViewLevCargaPotencia = view.findViewById(R.id.textViewLevCargaPotencia);
+            imageButtonLevCargaDelete = view.findViewById(R.id.imageButtonLevCargaDelete);
 
-            view.setOnCreateContextMenuListener(this);
-            view.setOnClickListener(new View.OnClickListener() {
+            ImageButton imageButtonLevCargaDelete = view.findViewById(R.id.imageButtonLevCargaDelete);
+            imageButtonLevCargaDelete.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
                     int position = getAdapterPosition();
-                    lpClandestino clandest  = lpClandest.get(position);
+                    lpPotencia oPotencia = lpPotencia.get(position);
+                    int oPotenciaID = oPotencia.getId();
 
-                    Intent goToFormActivity = new Intent(context, clandestinoFormActivity.class);
-                    goToFormActivity
-                            .putExtra("clandest", clandest)
-                            .putExtra("lpOrdem", "")
-                            .putExtra("type", "readOnly");
-                    context.startActivity(goToFormActivity);
+                    lpDAO dao = new lpDAO(context);
+                    dao.deletePotencia(oPotenciaID);
+                    lpPotencia = dao.getLPPotenciaList(lpID);
+                    dao.close();
 
-//                    listener.onItemSelected(clandest, 0, "readOnly");
+                    notifyDataSetChanged();
                 }
             });
         }
 
         @Override
         public void onCreateContextMenu(ContextMenu menu, View v, final ContextMenu.ContextMenuInfo menuInfo) {
-            MenuItem menuEdit = menu.add("Editar");
-            menuEdit.setOnMenuItemClickListener(new MenuItem.OnMenuItemClickListener() {
-                @Override
-                public boolean onMenuItemClick(MenuItem item) {
-                    int position = getAdapterPosition();
-                    lpClandestino clandest  = lpClandest.get(position);
 
-                    Intent goToFormActivity = new Intent(context, clandestinoFormActivity.class);
-                    goToFormActivity
-                            .putExtra("clandest", clandest)
-                            .putExtra("lpOrdem", "")
-                            .putExtra("type", "edit");
-                    context.startActivity(goToFormActivity);
-
-//                    listener.onItemSelected(clandest, 0, "readOnly");
-
-                    return false;
-                }
-            });
-
-            MenuItem menuDelete = menu.add("Delete");
-            menuDelete.setOnMenuItemClickListener(new MenuItem.OnMenuItemClickListener() {
-                @Override
-                public boolean onMenuItemClick(MenuItem item) {
-                    int position = getAdapterPosition();
-                    lpClandestino clandest  = lpClandest.get(position);
-
-                    lpDAO dao = new lpDAO(context);
-                    dao.deleteClandestino(clandest);
-                    lpClandest = dao.getClandestinoList();
-                    dao.close();
-
-                    notifyDataSetChanged();
-
-                    return false;
-                }
-            });
         }
 
     }
 
     @Override
     public int getItemCount() {
-        return lpClandest.size();
+        return lpPotencia.size();
     }
 
 }

@@ -223,7 +223,7 @@ public class ligProvFormActivity extends AppCompatActivity {
                 this.finish();
                 break;
 
-            case R.id.menu_saveLP_button:
+            case R.id.menu_save_button:
                 switch (formHelper.validateForm(lp)) {
                     case "true":
                         salvaLP();
@@ -288,10 +288,10 @@ public class ligProvFormActivity extends AppCompatActivity {
     public boolean onCreateOptionsMenu(Menu menu) {
         if(formType.equals("readOnly")){
             MenuInflater inflater = getMenuInflater();
-            inflater.inflate(R.menu.menu_form_lig_prov_read, menu);
+            inflater.inflate(R.menu.menu_form_edit, menu);
         }else{
             MenuInflater inflater = getMenuInflater();
-            inflater.inflate(R.menu.menu_form_lig_prov, menu);
+            inflater.inflate(R.menu.menu_form_save, menu);
         }
 
         return super.onCreateOptionsMenu(menu);
@@ -312,4 +312,15 @@ public class ligProvFormActivity extends AppCompatActivity {
 ////            }
 //        }
     }
+
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        switch (requestCode) {
+            case 1123:
+                if (resultCode == 2222) {
+                    formHelper.updateInfoLevCarga();
+                }
+                break;
+        }
+    }
+
 }

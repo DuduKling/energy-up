@@ -332,9 +332,9 @@ public class clandestinoFormActivity extends AppCompatActivity {
     public boolean onCreateOptionsMenu(Menu menu) {
         MenuInflater inflater = getMenuInflater();
         if(tipoForm.equals("readOnly")){
-            inflater.inflate(R.menu.menu_form_lig_prov_read, menu);
+            inflater.inflate(R.menu.menu_form_edit, menu);
         }else{
-            inflater.inflate(R.menu.menu_form_lig_prov, menu);
+            inflater.inflate(R.menu.menu_form_save, menu);
         }
         return super.onCreateOptionsMenu(menu);
     }
@@ -346,7 +346,7 @@ public class clandestinoFormActivity extends AppCompatActivity {
                 this.finish();
                 break;
 
-            case R.id.menu_saveLP_button:
+            case R.id.menu_save_button:
                 switch (validateForm()) {
                     case "true":
                         salvaClandest();
