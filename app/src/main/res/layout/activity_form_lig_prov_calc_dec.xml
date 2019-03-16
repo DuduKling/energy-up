@@ -3,9 +3,12 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    xmlns:tools="http://schemas.android.com/tools"
     app:cardBackgroundColor="#f5f5f5"
     app:cardCornerRadius="5dp"
-    app:cardElevation="1dp">
+    app:cardElevation="1dp"
+    xmlns:mask="http://schemas.android.com/apk/res-auto"
+    >
 
     <android.support.constraint.ConstraintLayout
         android:layout_width="match_parent"
@@ -147,6 +150,30 @@
                 android:inputType="number" />
         </android.support.design.widget.TextInputLayout>
 
+        <!--<android.support.design.widget.TextInputLayout-->
+            <!--android:id="@+id/textInputLayoutCalcDecTempo"-->
+            <!--android:layout_width="0dp"-->
+            <!--android:layout_height="wrap_content"-->
+            <!--android:layout_marginStart="8dp"-->
+            <!--android:layout_marginLeft="8dp"-->
+            <!--android:layout_marginTop="8dp"-->
+            <!--android:layout_marginEnd="8dp"-->
+            <!--android:layout_marginRight="8dp"-->
+            <!--android:layout_marginBottom="8dp"-->
+            <!--app:layout_constraintBottom_toBottomOf="parent"-->
+            <!--app:layout_constraintEnd_toEndOf="parent"-->
+            <!--app:layout_constraintStart_toStartOf="parent"-->
+            <!--app:layout_constraintTop_toBottomOf="@+id/textInputLayoutCalcDecPeriodo"-->
+            <!--app:layout_constraintVertical_bias="0.0">-->
+
+            <!--<android.support.design.widget.TextInputEditText-->
+                <!--android:layout_width="match_parent"-->
+                <!--android:layout_height="wrap_content"-->
+                <!--android:hint="Tempo (Horas)"-->
+                <!--android:inputType="number" />-->
+        <!--</android.support.design.widget.TextInputLayout>-->
+
+
         <android.support.design.widget.TextInputLayout
             android:id="@+id/textInputLayoutCalcDecTempo"
             android:layout_width="0dp"
@@ -159,16 +186,25 @@
             android:layout_marginBottom="8dp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.0"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/textInputLayoutCalcDecPeriodo"
             app:layout_constraintVertical_bias="0.0">
 
-            <android.support.design.widget.TextInputEditText
+            <br.com.sapereaude.maskedEditText.MaskedEditText
+                android:id="@+id/maskedEditTextCalcDecTempo"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:hint="Tempo (Horas)"
-                android:inputType="number" />
+                android:hint="Tempo (Horas) [XX:XX]"
+                android:inputType="number"
+                app:layout_constraintEnd_toEndOf="@+id/textInputLayoutCalcDecTempo"
+                app:layout_constraintStart_toStartOf="@+id/textInputLayoutCalcDecTempo"
+                app:layout_constraintTop_toBottomOf="@+id/textInputLayoutCalcDecTempo"
+                mask:allowed_chars="1234567890"
+                mask:mask="##:##" />
         </android.support.design.widget.TextInputLayout>
+
+
 
     </android.support.constraint.ConstraintLayout>
 </android.support.v7.widget.CardView>

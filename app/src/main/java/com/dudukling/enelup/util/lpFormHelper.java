@@ -25,7 +25,10 @@ import com.dudukling.enelup.model.lpModel;
 import com.dudukling.enelup.model.lpPotencia;
 
 import java.io.File;
+import java.math.BigDecimal;
 import java.util.List;
+
+import br.com.sapereaude.maskedEditText.MaskedEditText;
 
 import static java.lang.Float.parseFloat;
 
@@ -66,12 +69,14 @@ public class lpFormHelper {
     private TextInputLayout textInputLayoutCalcDecValor;
     private TextInputLayout textInputLayoutCalcDecPeriodo;
     private TextInputLayout textInputLayoutCalcDecTempo;
+    private MaskedEditText maskedEditTextCalcDecTempo;
     private TextInputLayout textInputLayoutCalcDecTensao;
 
     private CheckBox checkBoxCalcEncExcedente;
     private CheckBox checkBoxCalcEncCorrente;
     private TextInputLayout textInputLayoutCalcEncPeriodo;
     private TextInputLayout textInputLayoutCalcEncTempo;
+    private MaskedEditText maskedEditTextCalcEncTempo;
     private TextInputLayout textInputLayoutCalcEncCorrente;
     private TextInputLayout textInputLayoutCalcEncTensao;
 
@@ -129,7 +134,10 @@ public class lpFormHelper {
             disableCheckbox(checkBoxCalcEncExcedente);
             disableCheckbox(checkBoxCalcEncCorrente);
             disableCheckbox(checkBoxCalcEncLevCarga);
-
+            disableEditText(textInputLayoutCalcEncPeriodo.getEditText());
+            disableEditText(textInputLayoutCalcEncTempo.getEditText());
+            disableEditText(textInputLayoutCalcEncCorrente.getEditText());
+            disableEditText(textInputLayoutCalcEncTensao.getEditText());
         }
     }
 
@@ -208,11 +216,30 @@ public class lpFormHelper {
         });
     }
 
+    private void setValidateZeros(final TextInputLayout textInputCampo){
+        final EditText campo = textInputCampo.getEditText();
+        campo.setOnFocusChangeListener(new View.OnFocusChangeListener() {
+            @Override
+            public void onFocusChange(View v, boolean hasFocus) {
+                textInputCampo.setError(null);
+                textInputCampo.setErrorEnabled(false);
+                if(!hasFocus){
+                    String text = campo.getText().toString();
+                    if(text.equals("0.00")){
+                        textInputCampo.setError(REQUIRED_FIELD_ERROR_MSG);
+                    }
+                }else{
+                    textInputCampo.setError(null);
+                    textInputCampo.setErrorEnabled(false);
+                }
+            }
+        });
+    }
+
     public String validateForm(lpModel lp) {
         if(fieldIsEmpty(textInputObs)){return "false";}
 
         if(fieldIsEmpty(textInputLayoutCalcDecPeriodo)){return "false";}
-        if(fieldIsEmpty(textInputLayoutCalcDecTempo)){return "false";}
 
         if(!isCalcDecValid()){return "false";}
 
@@ -239,6 +266,69 @@ public class lpFormHelper {
             textInputCampo.setErrorEnabled(false);
         }
         return text.isEmpty();
+    }
+
+    private boolean fieldTimeIsValid(final TextInputLayout textInputCampo, final MaskedEditText maskedEditText) {
+        textInputCampo.setError(null);
+        textInputCampo.setErrorEnabled(false);
+        String text = maskedEditText.getRawText();
+        if(maskedEditText.getRawText().equals("")) {
+            textInputCampo.setError("Campo obrigatório!");
+            return true;
+        }else{
+            if (text.length() < 4) {
+                textInputCampo.setError("Formato incorreto!");
+                return true;
+            }else{
+                if (Integer.parseInt(text.substring(0, 2)) > 24) {
+                    textInputCampo.setError("Formato da hora incorreto!");
+                    return true;
+                }else if (Integer.parseInt(text.substring(2)) > 59) {
+                    textInputCampo.setError("Formato do minuto incorreto!");
+                    return true;
+                }
+            }
+        }
+        return false;
+    }
+
+    private void setValidateTime(final TextInputLayout textInputCampo, final MaskedEditText maskedEditText){
+        final EditText campo = textInputCampo.getEditText();
+        campo.setOnFocusChangeListener(new View.OnFocusChangeListener() {
+            @Override
+            public void onFocusChange(View v, boolean hasFocus) {
+                textInputCampo.setError(null);
+                textInputCampo.setErrorEnabled(false);
+                if(!hasFocus){
+                    String text = maskedEditText.getRawText();
+                    if(text.length()<4){
+                        textInputCampo.setError("Formato incorreto!");
+                    }else if(Integer.parseInt(text.substring(0,2)) > 24){
+                        textInputCampo.setError("Formato da hora incorreto!");
+                    }else if(Integer.parseInt(text.substring(2)) > 59){
+                        textInputCampo.setError("Formato do minuto incorreto!");
+                    }
+                }else{
+                    textInputCampo.setError(null);
+                    textInputCampo.setErrorEnabled(false);
+                }
+            }
+        });
+    }
+
+    private boolean fieldZerosIsValid(final TextInputLayout textInputCampo){
+        final EditText campo = textInputCampo.getEditText();
+        textInputCampo.setError(null);
+        textInputCampo.setErrorEnabled(false);
+        String text = campo.getText().toString();
+        if(text.equals("0.00")){
+            textInputCampo.setError(REQUIRED_FIELD_ERROR_MSG);
+            return true;
+        }else{
+            textInputCampo.setError(null);
+            textInputCampo.setErrorEnabled(false);
+            return false;
+        }
     }
 
 
@@ -414,14 +504,39 @@ public class lpFormHelper {
         });
 
         textInputLayoutCalcDecTempo = activity.findViewById(R.id.textInputLayoutCalcDecTempo);
-        textInputLayoutCalcDecTempo.getEditText().addTextChangedListener(new TextWatcher() {
+
+        maskedEditTextCalcDecTempo = activity.findViewById(R.id.maskedEditTextCalcDecTempo);
+        maskedEditTextCalcDecTempo.setKeepHint(false);
+        maskedEditTextCalcDecTempo.setOnFocusChangeListener(new View.OnFocusChangeListener() {
+            @Override
+            public void onFocusChange(View v, boolean hasFocus) {
+                if(hasFocus){
+                    maskedEditTextCalcDecTempo.setKeepHint(true);
+                    maskedEditTextCalcDecTempo.setHint("XXXX");
+                    maskedEditTextCalcDecTempo.setMask("##:##");
+                }else{
+                    maskedEditTextCalcDecTempo.setKeepHint(false);
+                    maskedEditTextCalcDecTempo.setHint(null);
+                }
+            }
+        });
+        maskedEditTextCalcDecTempo.addTextChangedListener(new TextWatcher() {
             @Override
             public void afterTextChanged(Editable s) {
-                if(s!=null || !String.valueOf(s).equals("")){
-                    lp.setCalcDecTempo(s.toString());
-                }else{
-                    lp.setCalcDecTempo(null);
-                }
+//                if(s!=null || !String.valueOf(s).equals("")){
+                    String rawTempo = maskedEditTextCalcDecTempo.getRawText();
+                    if(rawTempo.length()>3){
+//                        textInputLayoutCalcDecTempo.setError(null);
+//                        textInputLayoutCalcDecTempo.setErrorEnabled(false)
+                        lp.setCalcDecTempo(formatTimeToNumber(rawTempo));
+
+                    }else if(!rawTempo.equals("")){
+//                        textInputLayoutCalcDecTempo.setError("Formato errado!");
+                        lp.setCalcDecTempo(null);
+                    }
+//                }else{
+
+//                }
                 calculaDeclarado();
                 calculaEncontrado();
             }
@@ -431,6 +546,8 @@ public class lpFormHelper {
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {}
         });
+
+
 
         textInputLayoutCalcDecTensao = activity.findViewById(R.id.textInputLayoutCalcDecTensao);
         textInputLayoutCalcDecTensao.getEditText().addTextChangedListener(new TextWatcher() {
@@ -483,10 +600,10 @@ public class lpFormHelper {
             }
         }
 
-        int tempo = 0;
+        float tempo = 0;
         if(lp.getCalcDecTempo()!=null){
             if(!lp.getCalcDecTempo().equals("")){
-                tempo = Integer.valueOf(lp.getCalcDecTempo());
+                tempo = Float.valueOf(lp.getCalcDecTempo());
             }
         }
 
@@ -528,11 +645,12 @@ public class lpFormHelper {
         calculaDiferenca();
     }
 
-
     private void setValidateDecFields() {
         setValidateEmpty(textInputLayoutCalcDecValor);
         setValidateEmpty(textInputLayoutCalcDecPeriodo);
-        setValidateEmpty(textInputLayoutCalcDecTempo);
+
+//        setValidateEmpty(textInputLayoutCalcDecTempo);
+        setValidateTime(textInputLayoutCalcDecTempo, maskedEditTextCalcDecTempo);
         setValidateEmpty(textInputLayoutCalcDecTensao);
     }
 
@@ -595,13 +713,11 @@ public class lpFormHelper {
             lp.getCalcDecFatorPotencia().equals("") &&
             lp.getCalcDecTensao().equals("")
         ){
-            if(parseFloat(lp.getCalcDecValor()) * parseFloat(lp.getCalcDecPeriodo()) * parseFloat(lp.getCalcDecTempo())
-                    == parseFloat(lp.getCalcDecKwh())){
+            if(round(parseFloat(lp.getCalcDecValor()) * parseFloat(lp.getCalcDecPeriodo()) * parseFloat(lp.getCalcDecTempo()),1) == round(parseFloat(lp.getCalcDecKwh()),1)){
 
                 spinnerCalcDec.setSelection(2); // kW
 
-            }else if((parseFloat(lp.getCalcDecValor()) * parseFloat(lp.getCalcDecPeriodo()) * parseFloat(lp.getCalcDecTempo()))/1000
-                    == parseFloat(lp.getCalcDecKwh())){
+            }else if(round((parseFloat(lp.getCalcDecValor()) * parseFloat(lp.getCalcDecPeriodo()) * parseFloat(lp.getCalcDecTempo()))/1000,1) == round(parseFloat(lp.getCalcDecKwh()),1)){
 
                 spinnerCalcDec.setSelection(3); // Watts
 
@@ -614,7 +730,9 @@ public class lpFormHelper {
 
         textInputLayoutCalcDecValor.getEditText().setText(lp.getCalcDecValor());
         textInputLayoutCalcDecPeriodo.getEditText().setText(lp.getCalcDecPeriodo());
-        textInputLayoutCalcDecTempo.getEditText().setText(lp.getCalcDecTempo());
+
+        maskedEditTextCalcDecTempo.setText(formatNumberToTime(lp.getCalcDecTempo()));
+
         textInputLayoutCalcDecTensao.getEditText().setText(lp.getCalcDecTensao());
         if(lp.getCalcDecFatorPotencia()!=null){
             if(!lp.getCalcDecFatorPotencia().equals("")){
@@ -626,6 +744,11 @@ public class lpFormHelper {
 
     }
 
+    public static float round(float d, int decimalPlace) {
+        BigDecimal bd = new BigDecimal(Float.toString(d));
+        bd = bd.setScale(decimalPlace, BigDecimal.ROUND_HALF_UP);
+        return bd.floatValue();
+    }
 
 
     // CÁLCULO ENCONTRADO
@@ -714,12 +837,45 @@ public class lpFormHelper {
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {}
         });
-        textInputLayoutCalcEncTempo.getEditText().addTextChangedListener(new TextWatcher() {
+//        textInputLayoutCalcEncTempo.getEditText().addTextChangedListener(new TextWatcher() {
+//            @Override
+//            public void afterTextChanged(Editable s) {
+//                if(s!=null || !String.valueOf(s).equals("")){
+//                    lp.setCalcEncTempo(s.toString());
+//                }else{
+//                    lp.setCalcEncTempo(null);
+//                }
+//                calculaEncontrado();
+//            }
+//            @Override
+//            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+//            }
+//            @Override
+//            public void onTextChanged(CharSequence s, int start, int before, int count) {}
+//        });
+
+        maskedEditTextCalcEncTempo = activity.findViewById(R.id.maskedEditTextCalcEncTempo);
+        maskedEditTextCalcEncTempo.setKeepHint(false);
+        maskedEditTextCalcEncTempo.setOnFocusChangeListener(new View.OnFocusChangeListener() {
+            @Override
+            public void onFocusChange(View v, boolean hasFocus) {
+                if(hasFocus){
+                    maskedEditTextCalcEncTempo.setKeepHint(true);
+                    maskedEditTextCalcEncTempo.setHint("XXXX");
+                    maskedEditTextCalcEncTempo.setMask("##:##");
+                }else{
+                    maskedEditTextCalcEncTempo.setKeepHint(false);
+                    maskedEditTextCalcEncTempo.setHint(null);
+                }
+            }
+        });
+        maskedEditTextCalcEncTempo.addTextChangedListener(new TextWatcher() {
             @Override
             public void afterTextChanged(Editable s) {
-                if(s!=null || !String.valueOf(s).equals("")){
-                    lp.setCalcEncTempo(s.toString());
-                }else{
+                String rawTempo = maskedEditTextCalcEncTempo.getRawText();
+                if(rawTempo.length()>3){
+                    lp.setCalcEncTempo(formatTimeToNumber(rawTempo));
+                }else if(!rawTempo.equals("")){
                     lp.setCalcEncTempo(null);
                 }
                 calculaEncontrado();
@@ -730,32 +886,87 @@ public class lpFormHelper {
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {}
         });
-        textInputLayoutCalcEncCorrente.getEditText().addTextChangedListener(new TextWatcher() {
+
+
+        final EditText editTextCalcEncCorrente = textInputLayoutCalcEncCorrente.getEditText();
+        if(lp.getCalcEncCorrente()==null||lp.getCalcEncCorrente().equals("")){editTextCalcEncCorrente.setText("0.00");}
+        editTextCalcEncCorrente.setSelection(editTextCalcEncCorrente.getText().length()); // After initialization keep cursor on right side
+        editTextCalcEncCorrente.setCursorVisible(false);  // Disable the cursor.
+        editTextCalcEncCorrente.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                editTextCalcEncCorrente.setSelection(editTextCalcEncCorrente.getText().length());
+            }
+        });
+        editTextCalcEncCorrente.addTextChangedListener(new TextWatcher() {
             @Override
             public void afterTextChanged(Editable s) {
-                if(s!=null || !String.valueOf(s).equals("")){
+                if(!s.toString().matches("^(\\d+)(\\.\\d{2})?$"))
+                {
+                    String userInput= ""+s.toString().replaceAll("[^\\d]", "");
+                    StringBuilder cashAmountBuilder = new StringBuilder(userInput);
+
+                    while (cashAmountBuilder.length() > 3 && cashAmountBuilder.charAt(0) == '0') {
+                        cashAmountBuilder.deleteCharAt(0);
+                    }
+                    while (cashAmountBuilder.length() < 3) {
+                        cashAmountBuilder.insert(0, '0');
+                    }
+                    cashAmountBuilder.insert(cashAmountBuilder.length()-2, '.');
+
+                    editTextCalcEncCorrente.setText(cashAmountBuilder.toString());
+                    editTextCalcEncCorrente.setSelection(cashAmountBuilder.toString().length());
+
                     lp.setCalcEncCorrente(s.toString());
                 }else{
-                    lp.setCalcDecValor(null);
+                    lp.setCalcEncCorrente("");
                 }
                 calculaEncontrado();
             }
+
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
             }
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {}
         });
-        textInputLayoutCalcEncTensao.getEditText().addTextChangedListener(new TextWatcher() {
+
+        final EditText editTextCalcEncTensao = textInputLayoutCalcEncTensao.getEditText();
+        if(lp.getCalcEncTensao()==null||lp.getCalcEncCorrente().equals("")){editTextCalcEncTensao.setText("0.00");}
+        editTextCalcEncTensao.setSelection(editTextCalcEncTensao.getText().length());
+        editTextCalcEncTensao.setCursorVisible(false);
+        editTextCalcEncTensao.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                editTextCalcEncTensao.setSelection(editTextCalcEncTensao.getText().length());
+            }
+        });
+        editTextCalcEncTensao.addTextChangedListener(new TextWatcher() {
             @Override
             public void afterTextChanged(Editable s) {
-                if(s!=null || !String.valueOf(s).equals("")){
+                if(!s.toString().matches("^(\\d+)(\\.\\d{2})?$"))
+                {
+                    String userInput= ""+s.toString().replaceAll("[^\\d]", "");
+                    StringBuilder cashAmountBuilder = new StringBuilder(userInput);
+
+                    while (cashAmountBuilder.length() > 3 && cashAmountBuilder.charAt(0) == '0') {
+                        cashAmountBuilder.deleteCharAt(0);
+                    }
+                    while (cashAmountBuilder.length() < 3) {
+                        cashAmountBuilder.insert(0, '0');
+                    }
+                    cashAmountBuilder.insert(cashAmountBuilder.length()-2, '.');
+
+                    editTextCalcEncTensao.setText(cashAmountBuilder.toString());
+                    editTextCalcEncTensao.setSelection(cashAmountBuilder.toString().length());
+
                     lp.setCalcEncTensao(s.toString());
                 }else{
-                    lp.setCalcEncTensao(null);
+                    lp.setCalcEncTensao("");
                 }
                 calculaEncontrado();
             }
+
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
             }
@@ -775,10 +986,10 @@ public class lpFormHelper {
             }
         }
 
-        int tempo = 0;
+        float tempo = 0;
         if(lp.getCalcDecTempo()!=null){
             if(!lp.getCalcDecTempo().equals("")){
-                tempo = Integer.valueOf(lp.getCalcDecTempo());
+                tempo = Float.valueOf(lp.getCalcDecTempo());
             }
         }
 
@@ -789,24 +1000,24 @@ public class lpFormHelper {
             }
         }
 
-        int periodoExcedente = 0;
+        float periodoExcedente = 0;
         if(lp.getCalcEncPeriodo()!=null){
             if(!lp.getCalcEncPeriodo().equals("")){
-                periodoExcedente = Integer.valueOf(lp.getCalcEncPeriodo());
+                periodoExcedente = Float.valueOf(lp.getCalcEncPeriodo());
             }
         }
 
-        int tempoExcedente = 0;
+        float tempoExcedente = 0;
         if(lp.getCalcEncTempo()!=null){
             if(!lp.getCalcEncTempo().equals("")){
-                tempoExcedente = Integer.valueOf(lp.getCalcEncTempo());
+                tempoExcedente = Float.valueOf(lp.getCalcEncTempo());
             }
         }
 
-        int tensao = 0;
+        float tensao = 0;
         if(lp.getCalcEncTensao()!=null){
             if(!lp.getCalcEncTensao().equals("")){
-                tensao = Integer.valueOf(lp.getCalcEncTensao());
+                tensao = Float.valueOf(lp.getCalcEncTensao());
             }
         }
 
@@ -829,7 +1040,7 @@ public class lpFormHelper {
 
 
         // Levantamento:
-        int totalLevCarga = 0;
+        float totalLevCarga = 0;
 
         lpDAO dao = new lpDAO(activity);
         potenciaTotalLevCarga = dao.getLPPotenciaTotal(lp.getId());
@@ -873,21 +1084,24 @@ public class lpFormHelper {
 
     private void setValidateEncFields() {
         setValidateEmpty(textInputLayoutCalcEncPeriodo);
-        setValidateEmpty(textInputLayoutCalcEncTempo);
-        setValidateEmpty(textInputLayoutCalcEncCorrente);
-        setValidateEmpty(textInputLayoutCalcEncTensao);
+
+//        setValidateEmpty(textInputLayoutCalcEncTempo);
+        setValidateTime(textInputLayoutCalcEncTempo, maskedEditTextCalcEncTempo);
+        setValidateZeros(textInputLayoutCalcEncCorrente);
+        setValidateZeros(textInputLayoutCalcEncTensao);
     }
 
     private boolean isCalcEncValid() {
         Boolean valid = true;
         if(checkBoxCalcEncExcedente.isChecked()){
             if(fieldIsEmpty(textInputLayoutCalcEncPeriodo)){valid = false;}
-            if(fieldIsEmpty(textInputLayoutCalcEncTempo)){valid = false;}
+//            if(fieldIsEmpty(textInputLayoutCalcEncTempo)){valid = false;}
+            if(fieldTimeIsValid(textInputLayoutCalcEncTempo, maskedEditTextCalcEncTempo)){valid = false;}
         }
 
         if(checkBoxCalcEncCorrente.isChecked()){
-            if(fieldIsEmpty(textInputLayoutCalcEncCorrente)){valid = false;}
-            if(fieldIsEmpty(textInputLayoutCalcEncTensao)){valid = false;}
+            if(fieldZerosIsValid(textInputLayoutCalcEncCorrente)){valid = false;}
+            if(fieldZerosIsValid(textInputLayoutCalcEncTensao)){valid = false;}
         }
 
         if(checkBoxCalcEncLevCarga.isChecked()){
@@ -908,25 +1122,17 @@ public class lpFormHelper {
         if(!lp.getCalcEncPeriodo().equals("") && !lp.getCalcEncTempo().equals("")){
             checkBoxCalcEncExcedente.setChecked(true);
 
-
             textInputLayoutCalcEncPeriodo.getEditText().setText(lp.getCalcEncPeriodo());
-            disableEditText(textInputLayoutCalcEncPeriodo.getEditText());
-
-            textInputLayoutCalcEncTempo.getEditText().setText(lp.getCalcEncTempo());
-            disableEditText(textInputLayoutCalcEncTempo.getEditText());
+            maskedEditTextCalcEncTempo.setText(formatNumberToTime(lp.getCalcEncTempo()));
         }
 
         if(!lp.getCalcEncCorrente().equals("") && !lp.getCalcEncTensao().equals("")){
             checkBoxCalcEncCorrente.setChecked(true);
 
-
             textInputLayoutCalcEncCorrente.getEditText().setText(lp.getCalcEncCorrente());
-            disableEditText(textInputLayoutCalcEncCorrente.getEditText());
-
             textInputLayoutCalcEncTensao.getEditText().setText(lp.getCalcEncTensao());
-            disableEditText(textInputLayoutCalcEncTensao.getEditText());
-        }
 
+        }
 
         lpDAO dao = new lpDAO(activity);
         List<lpPotencia> potlist = dao.getLPPotenciaList(lp.getId());
@@ -978,6 +1184,27 @@ public class lpFormHelper {
         }else{
             textViewInfoDiferenca.setText("Diferença de consumo: ---");
         }
+    }
+
+    private String formatTimeToNumber(String rawTempo) {
+        String minutosTempo = rawTempo.substring(2);
+        float minutosReal = Float.valueOf(minutosTempo)/60;
+        String tempoTotal = String.valueOf(Float.valueOf(rawTempo.substring(0,2)) + minutosReal);
+
+        return tempoTotal;
+    }
+    private String formatNumberToTime(String calcDecTempo) {
+        if(!calcDecTempo.equals("")){
+            String tempoTotal = calcDecTempo;
+            String  minutosReal = String.valueOf(Float.valueOf(tempoTotal.substring(2)) * 6);
+            if(minutosReal.length()==1){minutosReal = "0"+minutosReal;}
+            String horasReal = tempoTotal.substring(0, tempoTotal.indexOf('.'));
+            if(horasReal.length()==1){horasReal = "0"+horasReal;}
+            String tempoFormatado = horasReal+":"+ minutosReal;
+
+            return tempoFormatado;
+        }
+        return "";
     }
 
 }
