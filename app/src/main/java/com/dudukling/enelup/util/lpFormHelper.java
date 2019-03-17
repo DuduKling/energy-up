@@ -2,8 +2,12 @@ package com.dudukling.enelup.util;
 
 import android.content.Intent;
 import android.graphics.Color;
+import android.net.Uri;
+import android.os.Environment;
+import android.os.Parcelable;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.TextInputLayout;
+import android.support.v4.content.FileProvider;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
@@ -17,6 +21,7 @@ import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.dudukling.enelup.BuildConfig;
 import com.dudukling.enelup.LigProvLevCargaActivity;
 import com.dudukling.enelup.R;
 import com.dudukling.enelup.dao.lpDAO;
@@ -25,7 +30,10 @@ import com.dudukling.enelup.model.lpModel;
 import com.dudukling.enelup.model.lpPotencia;
 
 import java.io.File;
+import java.io.Serializable;
 import java.math.BigDecimal;
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 import br.com.sapereaude.maskedEditText.MaskedEditText;
@@ -83,6 +91,7 @@ public class lpFormHelper {
     private CheckBox checkBoxCalcEncLevCarga;
     private FloatingActionButton floatingActionButtonCalcEncLevCarga;
     private int potenciaTotalLevCarga;
+    private FloatingActionButton floatingActionButtonInfoSendEmail;
 
 
     public lpFormHelper(final ligProvFormActivity activity1, String formType, lpModel lp1) {
@@ -138,6 +147,17 @@ public class lpFormHelper {
             disableEditText(textInputLayoutCalcEncTempo.getEditText());
             disableEditText(textInputLayoutCalcEncCorrente.getEditText());
             disableEditText(textInputLayoutCalcEncTensao.getEditText());
+
+            if(lp.getCalcDecKwh()!=null && lp.getCalcEncKwh()!=null){
+                if(!lp.getCalcDecKwh().equals("") && !lp.getCalcEncKwh().equals("")) {
+                    float diferenca = parseFloat(lp.getCalcEncKwh()) - parseFloat(lp.getCalcDecKwh());
+                    if (diferenca > 0) {
+                        floatingActionButtonInfoSendEmail.setVisibility(View.VISIBLE);
+                    }else{
+                        floatingActionButtonInfoSendEmail.setVisibility(View.GONE);
+                    }
+                }
+            }
         }
     }
 
@@ -1153,6 +1173,54 @@ public class lpFormHelper {
         textViewInfoLevCarga = activity.findViewById(R.id.textViewInfoLevCarga);
         textViewInfoTotEnc = activity.findViewById(R.id.textViewInfoTotEnc);
         textViewInfoDiferenca = activity.findViewById(R.id.textViewInfoDiferenca);
+
+        floatingActionButtonInfoSendEmail = activity.findViewById(R.id.floatingActionButtonInfoSendEmail);
+
+        floatingActionButtonInfoSendEmail.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+//                Toast.makeText(activity, "aaaa", Toast.LENGTH_SHORT).show();
+                lpDAO dao = new lpDAO(activity);
+                List<String> imagesList = dao.getImagesDB(lp.getId());
+                dao.close();
+
+                Intent intent = new Intent(Intent.ACTION_SEND_MULTIPLE);
+                intent.setType("message/rfc822");
+//                intent.setData(Uri.parse("mailto:")); // only email apps should handle this
+                intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                intent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
+
+                intent.putExtra(Intent.EXTRA_EMAIL, new String[]{"email@enel.com","email222@gmail.com"});
+                intent.putExtra(Intent.EXTRA_SUBJECT, "Ligação Provisória (Fiscalização Gestor Enel) – Nº OS: "+lp.getOrdem());
+                intent.putExtra(Intent.EXTRA_TEXT,
+                        "Segue abaixo as informações da fiscalização executadas no aplicativo Enel Up:\n\n" +
+                        "Carga Total Declarada: "+lp.getCalcDecKwh()+" kWh\n" +
+                        "Carga Total Encontrada: "+lp.getCalcDecKwh()+" kWh\n\n" +
+                        "Diferença de consumo: "+(Float.valueOf(lp.getCalcEncKwh()) - Float.valueOf(lp.getCalcDecKwh()))+" kWh\n\n\n"
+                );
+
+                File caminho = new File(activity.getExternalFilesDir(null)+"/Pictures/"+lp.getOrdem());
+                File[] listaArquivos = caminho.listFiles();
+
+                if(listaArquivos.length>0){
+                    ArrayList<Uri> arrayUriList = new ArrayList<>();
+                    for (File listaArquivo : listaArquivos) {
+                        Uri uri = FileProvider.getUriForFile(
+                                activity,
+                                "com.dudukling.enelup.fileProvider",
+                                listaArquivo);
+                        arrayUriList.add(uri);
+                    }
+                    intent.putExtra(Intent.EXTRA_STREAM, arrayUriList);
+                }
+
+                try {
+                    activity.startActivity(Intent.createChooser(intent, "Enviar e-mail:"));
+                } catch (android.content.ActivityNotFoundException ex) {
+                    Toast.makeText(activity, "Não há um cliente de e-mail instalado.", Toast.LENGTH_SHORT).show();
+                }
+            }
+        });
     }
 
     private void fillCalcInfoForm() {

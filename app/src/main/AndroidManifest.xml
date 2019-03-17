@@ -37,9 +37,7 @@
             android:name="com.google.android.geo.API_KEY"
             android:value="@string/google_maps_key" />
 
-        <activity
-            android:name=".MapsActivity"
-            android:label="@string/title_activity_maps"></activity>
+        <activity android:name=".MapsActivity" android:label="@string/title_activity_maps" />
         <activity android:name=".faqActivity" />
         <activity android:name=".LigProvLevCargaActivity" />
         <activity android:name=".clandestinoActivity" />
@@ -51,9 +49,7 @@
         <activity android:name=".importActivity" />
         <activity android:name=".clandestinoFormActivity" />
         <activity android:name=".LigProvLevCargaFormActivity" />
-        <activity
-            android:name=".splashActivity"
-            android:theme="@style/AppCompat.fullScreen">
+        <activity android:name=".splashActivity" android:theme="@style/AppCompat.fullScreen">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
