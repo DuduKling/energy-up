@@ -70,6 +70,7 @@
             android:clickable="true"
             android:focusable="true"
             app:backgroundTint="@color/colorPrimary"
+            app:fabSize="mini"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="1.0"
             app:layout_constraintStart_toStartOf="parent"
@@ -88,12 +89,13 @@
             android:layout_marginRight="16dp"
             android:clickable="true"
             android:focusable="true"
-            app:backgroundTint="@color/colorAccent"
+            app:backgroundTint="@android:color/holo_orange_light"
+            app:fabSize="mini"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="1.0"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/buttonAlbum"
-            app:srcCompat="@drawable/ic_warning" />
+            app:srcCompat="@drawable/pirata_white" />
 
 
         <!-- Nome cliente-->
