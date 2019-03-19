@@ -34,7 +34,6 @@
                 android:background="@android:color/transparent"
                 android:contentDescription="Imagem trasparente" />
         </RelativeLayout>
-
         <include
             android:id="@+id/mapLegenda"
             layout="@layout/activity_form_lig_prov_legenda"
@@ -48,6 +47,7 @@
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintVertical_bias="0.0" />
 
+
         <include
             android:id="@+id/mapBottomHeader"
             layout="@layout/activity_form_lig_prov_header"
@@ -57,7 +57,6 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/map_layout" />
-
         <android.support.design.widget.FloatingActionButton
             android:id="@+id/buttonAlbum"
             android:layout_width="56dp"
@@ -76,7 +75,6 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="@+id/TextViewLP1"
             app:srcCompat="@drawable/ic_album" />
-
         <android.support.design.widget.FloatingActionButton
             android:id="@+id/buttonClandestino"
             android:layout_width="56dp"
@@ -264,10 +262,35 @@
             tools:text="TextViewFormObservacoes" />
 
 
-        <!-- DescRetorno -->
+        <!-- Endereço da Observacoes -->
+        <TextView
+            android:id="@+id/textViewLP7"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            android:text="Endereço da OS"
+            android:textSize="20sp"
+            android:textStyle="bold"
+            app:layout_constraintEnd_toEndOf="@+id/TextViewFormDescEtapa"
+            app:layout_constraintHorizontal_bias="0.0"
+            app:layout_constraintStart_toStartOf="@+id/TextViewLP5"
+            app:layout_constraintTop_toBottomOf="@+id/TextViewFormObservacoes" />
+        <TextView
+            android:id="@+id/textViewEnderecoDaObs"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            android:layout_marginLeft="16dp"
+            android:layout_marginTop="6dp"
+            android:textSize="20sp"
+            app:layout_constraintEnd_toEndOf="@+id/TextViewLP6"
+            app:layout_constraintHorizontal_bias="1.0"
+            app:layout_constraintStart_toStartOf="@+id/TextViewLP6"
+            app:layout_constraintTop_toBottomOf="@+id/textViewLP7"
+            tools:text="TextViewFormObservacoeEndereco" />
 
 
-        <!-- ObservacaoExe -->
+
 
 
         <include
@@ -282,8 +305,9 @@
             android:layout_marginEnd="8dp"
             android:layout_marginRight="8dp"
             app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="1.0"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/TextViewFormObservacoes" />
+            app:layout_constraintTop_toBottomOf="@+id/textViewEnderecoDaObs" />
 
         <include
             android:id="@+id/calcEnc"

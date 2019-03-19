@@ -54,6 +54,7 @@ public class lpFormHelper {
     private TextView TextViewBairro;
     private TextView TextViewDescEtapa;
     private TextView TextViewObservacoes;
+    private TextView TextViewEnderecoDaObs;
 
     private TextInputLayout textInputObs;
     private EditText fieldObs;
@@ -107,6 +108,7 @@ public class lpFormHelper {
         TextViewBairro = activity.findViewById(R.id.TextViewFormBairro);
         TextViewDescEtapa = activity.findViewById(R.id.TextViewFormDescEtapa);
         TextViewObservacoes = activity.findViewById(R.id.TextViewFormObservacoes);
+        TextViewEnderecoDaObs = activity.findViewById(R.id.textViewEnderecoDaObs);
 
         setFields();
 
@@ -170,6 +172,22 @@ public class lpFormHelper {
         TextViewBairro.setText(lp.getBairro());
         TextViewDescEtapa.setText(lp.getDescricao_etapa());
         TextViewObservacoes.setText(lp.getObservacoes());
+
+
+        String text = lp.getObservacoes();
+        String charr = "**";
+        if(text.contains(charr)){
+            String endereco1 = text.substring(text.indexOf(charr)+charr.length());
+            if(endereco1.contains(charr)) {
+                String endereco2 = endereco1.substring(0, endereco1.indexOf(charr));
+                TextViewEnderecoDaObs.setText(endereco2);
+            }else{
+                TextViewEnderecoDaObs.setText("---");
+            }
+        }else{
+            TextViewEnderecoDaObs.setText("---");
+        }
+
 
         fieldObs.setText(lp.getUserObservacao());
 

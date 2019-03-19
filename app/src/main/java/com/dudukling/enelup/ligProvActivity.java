@@ -414,6 +414,9 @@ public class ligProvActivity extends AppCompatActivity {
 
 
 
+
+
+
     private void exportImages() {
         /* Example: zipFileAtPath("downloads/myfolder", "downloads/myFolder.zip"); */
 
