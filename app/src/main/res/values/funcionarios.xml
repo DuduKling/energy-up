@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string-array name="funcionarios">
+        <item>Selecione</item>
+        <item>ADRIANO FERREIRA CONCEICAO</item>
+        <item>ANDERSON FACINI GOULART COLODETTE</item>
+        <item>BRUNO MARTINS DA ROCHA</item>
+        <item>CLEBER RODRIGUES CEZAR</item>
+        <item>CLEYTON DA CONCEICAO RIBEIRO</item>
+        <item>FABIO BARBOSA GALVAO</item>
+        <item>GILMAR DE OLIVEIRA MARTINS</item>
+        <item>JOAO ANTONIO DE SOUZA DIAS</item>
+        <item>LEANDRO VALENTE TRAVASSOS</item>
+        <item>LUCIANA GOMES PEIXOTO</item>
+        <item>LUCIANO VICENTE</item>
+        <item>MAXUEL CRISPIM ALVES</item>
+        <item>PEDRO PAULO ZANARDI</item>
+        <item>ROGERIO RAPOSO DOS SANTOS</item>
+        <item>RONALDO DA SILVA CORREA</item>
+        <item>SERGIO PAES</item>
+        <item>SILVIO DE OLIVEIRA BARBOSA</item>
+        <item>TADEU FRANCISCO SILVA</item>
+        <item>WELLINGTON DA COSTA SUZARTE</item>
+        <item>WHESLEY FERREIRA PENA</item>
+    </string-array>
+</resources>

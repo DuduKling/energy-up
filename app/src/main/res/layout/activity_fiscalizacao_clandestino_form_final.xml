@@ -1,0 +1,136 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <TextView
+        android:id="@+id/textView48"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:layout_marginLeft="8dp"
+        android:layout_marginTop="8dp"
+        android:text="Cadastro de clandestino"
+        android:textSize="18sp"
+        android:textStyle="bold"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/textView59"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:layout_marginLeft="8dp"
+        android:text="Existe ordem de serviço para o local?"
+        app:layout_constraintBottom_toBottomOf="@+id/radioGroupFiscaOrdemServico"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/radioGroupFiscaOrdemServico"
+        app:layout_constraintVertical_bias="0.0" />
+    <RadioGroup
+        android:id="@+id/radioGroupFiscaOrdemServico"
+        android:layout_width="0dp"
+        android:layout_height="73dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginLeft="8dp"
+        android:layout_marginTop="8dp"
+        android:layout_marginEnd="8dp"
+        android:layout_marginRight="8dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/textView59"
+        app:layout_constraintTop_toBottomOf="@+id/textView48">
+
+        <RadioButton
+            android:id="@+id/radioButtonFiscaOrdemServico1"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="Sim" />
+
+        <RadioButton
+            android:id="@+id/radioButtonFiscaOrdemServico2"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="Não" />
+    </RadioGroup>
+
+    <android.support.design.widget.TextInputLayout
+        android:id="@+id/textInputLayoutFiscaOrdem"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:layout_marginLeft="8dp"
+        android:layout_marginTop="8dp"
+        android:layout_marginEnd="8dp"
+        android:layout_marginRight="8dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/radioGroupFiscaOrdemServico">
+
+        <android.support.design.widget.TextInputEditText
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="Número da ordem"
+            android:inputType="number" />
+    </android.support.design.widget.TextInputLayout>
+
+    <TextView
+        android:id="@+id/textViewFiscaEstadoOrdem"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:layout_marginLeft="8dp"
+        android:text="Estado da ordem"
+        app:layout_constraintBottom_toBottomOf="@+id/radioGroupFiscaEstadoOrdem"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/radioGroupFiscaEstadoOrdem"
+        app:layout_constraintVertical_bias="0.0" />
+
+    <RadioGroup
+        android:id="@+id/radioGroupFiscaEstadoOrdem"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:layout_marginLeft="8dp"
+        android:layout_marginTop="8dp"
+        android:layout_marginEnd="8dp"
+        android:layout_marginRight="8dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/textViewFiscaEstadoOrdem"
+        app:layout_constraintTop_toBottomOf="@+id/textInputLayoutFiscaOrdem">
+
+        <RadioButton
+            android:id="@+id/radioButtonFiscaEstadoOrdem1"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="Finalizado" />
+
+        <RadioButton
+            android:id="@+id/radioButtonFiscaEstadoOrdem2"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="Suspenso" />
+
+        <RadioButton
+            android:id="@+id/radioButtonFiscaEstadoOrdem3"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="Cancelado" />
+
+        <RadioButton
+            android:id="@+id/radioButtonFiscaEstadoOrdem4"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="Pendente" />
+    </RadioGroup>
+
+</android.support.constraint.ConstraintLayout>

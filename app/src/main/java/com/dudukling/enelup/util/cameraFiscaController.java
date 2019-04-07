@@ -1,5 +1,6 @@
 package com.dudukling.enelup.util;
 
+
 import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.content.pm.PackageManager;
@@ -11,26 +12,26 @@ import android.support.annotation.RequiresApi;
 import android.support.v4.content.FileProvider;
 import android.util.Log;
 
-import com.dudukling.enelup.ligProvAlbumActivity;
-import com.dudukling.enelup.model.lpModel;
+import com.dudukling.enelup.fiscalizacaoClandestinoAlbumActivity;
+import com.dudukling.enelup.model.fiscaModel;
 
 import java.io.File;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
-import static com.dudukling.enelup.ligProvAlbumActivity.CAMERA_REQUEST_CODE;
+import static com.dudukling.enelup.fiscalizacaoClandestinoAlbumActivity.CAMERA_REQUEST_CODE;
 
-public class cameraController {
-    private final lpModel lp;
+public class cameraFiscaController {
+    private final fiscaModel fisca;
     private File photoFile = null;
     private String photoPath;
-    private final ligProvAlbumActivity formActivity;
+    private final fiscalizacaoClandestinoAlbumActivity formActivity;
     public File storageDir;
 
-    public cameraController(ligProvAlbumActivity formActivity, lpModel lp) {
+    public cameraFiscaController(fiscalizacaoClandestinoAlbumActivity formActivity, fiscaModel fisca) {
         this.formActivity = formActivity;
-        this.lp = lp;
+        this.fisca = fisca;
     }
 
     @RequiresApi(api = Build.VERSION_CODES.M)
@@ -65,9 +66,9 @@ public class cameraController {
     private File createImageFile() throws IOException {
         @SuppressLint("SimpleDateFormat") String timeStamp = new SimpleDateFormat("ddMMyyy_HHmmss").format(new Date());
 
-        String imageFileName = lp.getOrdem() + "_" + timeStamp;
+        String imageFileName = fisca.getId() + "_" + timeStamp;
 
-        String path = formActivity.getExternalFilesDir(Environment.DIRECTORY_PICTURES) + "/ligacoes-provisorias/" + lp.getOrdem();
+        String path = formActivity.getExternalFilesDir(Environment.DIRECTORY_PICTURES) + "/fiscalizacao-clandestino/" + fisca.getId();
         storageDir = new File(path);
         if(!storageDir.exists()){
             boolean created = storageDir.mkdirs();
@@ -95,15 +96,12 @@ public class cameraController {
     public File getPhotoFile() {
         return photoFile;
     }
-
     public String getPhotoPath() {
         return photoPath;
     }
-
     public void setPhotoFile(File photoFile) {
         this.photoFile = photoFile;
     }
-
     public void setPhotoPath(String photoPath) {
         this.photoPath = photoPath;
     }

@@ -2,7 +2,6 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     package="com.dudukling.energyup">
-
     <!--
          The ACCESS_COARSE/FINE_LOCATION permissions are not required to use
          Google Maps Android API v2, but you must specify either coarse or fine
@@ -24,7 +23,10 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
         tools:ignore="AllowBackup,GoogleAppIndexingWarning">
-
+        <activity android:name=".fiscalizacaoClandestinoAlbumActivity"></activity>
+        <activity android:name=".fiscalizacaoClandestinoFormActivity" />
+        <activity android:name=".fiscalizacaoClandestinoActivity" />
+        <activity android:name=".fiscalizacaoMenuActivity" />
         <!--
              The API key for Google Maps-based APIs is defined as a string resource.
              (See the file "res/values/google_maps_api.xml").
@@ -37,7 +39,9 @@
             android:name="com.google.android.geo.API_KEY"
             android:value="@string/google_maps_key" />
 
-        <activity android:name=".MapsActivity" android:label="@string/title_activity_maps" />
+        <activity
+            android:name=".MapsActivity"
+            android:label="@string/title_activity_maps" />
         <activity android:name=".faqActivity" />
         <activity android:name=".LigProvLevCargaActivity" />
         <activity android:name=".clandestinoActivity" />
@@ -49,7 +53,9 @@
         <activity android:name=".importActivity" />
         <activity android:name=".clandestinoFormActivity" />
         <activity android:name=".LigProvLevCargaFormActivity" />
-        <activity android:name=".splashActivity" android:theme="@style/AppCompat.fullScreen">
+        <activity
+            android:name=".splashActivity"
+            android:theme="@style/AppCompat.fullScreen">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 

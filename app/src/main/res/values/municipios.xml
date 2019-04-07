@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string-array name="municipios">
+        <item>Selecione</item>
+        <item>ANGRA DOS REIS</item>
+        <item>APERIBE</item>
+        <item>ARARUAMA</item>
+        <item>AREAL</item>
+        <item>ARMAÇÃO DOS BÚZIOS</item>
+        <item>ARRAIAL DO CABO</item>
+        <item>BOCAIUVA DE MINAS</item>
+        <item>BOM JARDIM</item>
+        <item>BOM JESUS DE ITABAPOANA</item>
+        <item>CABO FRIO</item>
+        <item>CACHOEIRAS DE MACACU</item>
+        <item>CAMBUCI</item>
+        <item>CAMPOS DOS GOYTACAZES</item>
+        <item>CANTAGALO</item>
+        <item>CARAPEBUS</item>
+        <item>CARDOSO MOREIRA</item>
+        <item>CARMO</item>
+        <item>CASIMIRO DE ABREU</item>
+        <item>CONCEIÇÃO DE MACABU</item>
+        <item>CORDEIRO</item>
+        <item>DUAS BARRAS</item>
+        <item>DUQUE DE CAXIAS</item>
+        <item>GUAPIMIRIM</item>
+        <item>IGUABA GRANDE</item>
+        <item>ITABORAÍ</item>
+        <item>ITALVA</item>
+        <item>ITAOCARA</item>
+        <item>ITAPERUNA</item>
+        <item>ITATIAIA</item>
+        <item>LAJE DE MURIAÉ</item>
+        <item>MACAÉ</item>
+        <item>MACUCO</item>
+        <item>MAGÉ</item>
+        <item>MANGARATIBA</item>
+        <item>MARICÁ</item>
+        <item>MIRACEMA</item>
+        <item>NATIVIDADE</item>
+        <item>NITERÓI</item>
+        <item>NOVA FRIBURGO</item>
+        <item>PARAÍBA DO SUL</item>
+        <item>PARATY</item>
+        <item>PETRÓPOLIS</item>
+        <item>PORCIÚNCULA</item>
+        <item>PORTO REAL</item>
+        <item>QUISSAMÃ</item>
+        <item>RESENDE</item>
+        <item>RIO BONITO</item>
+        <item>RIO DAS OSTRAS</item>
+        <item>SANTA MARIA MADALENA</item>
+        <item>SANTO ANTÔNIO DE PÁDUA</item>
+        <item>SÃO FIDELIS</item>
+        <item>SÃO FRANCISCO DE ITABAPOANA</item>
+        <item>SÃO GONÇALO</item>
+        <item>SÃO JOÃO DA BARRA</item>
+        <item>SÃO JOSÉ DE UBÁ</item>
+        <item>SÃO JOSÉ DO VALE DO RIO PRETO</item>
+        <item>SÃO PEDRO DA ALDEIA</item>
+        <item>SÃO SEBASTIÃO DO ALTO</item>
+        <item>SAQUAREMA</item>
+        <item>SILVA JARDIM</item>
+        <item>SUMIDOURO</item>
+        <item>TANGUÁ</item>
+        <item>TERESÓPOLIS</item>
+        <item>TRAJANO DE MORAIS</item>
+        <item>TRÊS RIOS</item>
+        <item>VARRE-SAI</item>
+    </string-array>
+</resources>

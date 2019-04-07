@@ -216,8 +216,6 @@ public class ligProvFormActivity extends AppCompatActivity {
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-
-
         switch (item.getItemId()){
             case android.R.id.home:
                 this.finish();
@@ -286,11 +284,10 @@ public class ligProvFormActivity extends AppCompatActivity {
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
+        MenuInflater inflater = getMenuInflater();
         if(formType.equals("readOnly")){
-            MenuInflater inflater = getMenuInflater();
             inflater.inflate(R.menu.menu_form_edit, menu);
         }else{
-            MenuInflater inflater = getMenuInflater();
             inflater.inflate(R.menu.menu_form_save, menu);
         }
 

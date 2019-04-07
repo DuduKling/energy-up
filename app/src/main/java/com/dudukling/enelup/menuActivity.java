@@ -62,7 +62,8 @@ public class menuActivity extends AppCompatActivity {
         cardViewFiscal.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Toast.makeText(menuActivity.this, "Indisponível", Toast.LENGTH_SHORT).show();
+                Intent intent = new Intent(menuActivity.this, fiscalizacaoMenuActivity.class);
+                startActivity(intent);
             }
         });
     }
