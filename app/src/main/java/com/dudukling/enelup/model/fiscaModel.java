@@ -16,8 +16,8 @@ public class fiscaModel implements Serializable {
     private String nis;
     private String rg;
     private String data_nascimento;
-    private String medidor_visinho_1;
-    private String medidor_visinho_2;
+    private String medidor_vizinho_1;
+    private String medidor_vizinho_2;
     private String telefone;
     private String celular;
     private String email;
@@ -115,18 +115,18 @@ public class fiscaModel implements Serializable {
         this.data_nascimento = data_nascimento;
     }
 
-    public String getMedidor_visinho_1() {
-        return medidor_visinho_1;
+    public String getMedidor_vizinho_1() {
+        return medidor_vizinho_1;
     }
-    public void setMedidor_visinho_1(String medidor_visinho_1) {
-        this.medidor_visinho_1 = medidor_visinho_1;
+    public void setMedidor_vizinho_1(String medidor_vizinho_1) {
+        this.medidor_vizinho_1 = medidor_vizinho_1;
     }
 
-    public String getMedidor_visinho_2() {
-        return medidor_visinho_2;
+    public String getMedidor_vizinho_2() {
+        return medidor_vizinho_2;
     }
-    public void setMedidor_visinho_2(String medidor_visinho_2) {
-        this.medidor_visinho_2 = medidor_visinho_2;
+    public void setMedidor_vizinho_2(String medidor_vizinho_2) {
+        this.medidor_vizinho_2 = medidor_vizinho_2;
     }
 
     public String getTelefone() {

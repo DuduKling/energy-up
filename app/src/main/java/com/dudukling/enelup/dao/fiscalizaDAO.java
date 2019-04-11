@@ -25,8 +25,8 @@ public class fiscalizaDAO extends SQLiteOpenHelper {
     private String FIELD_NIS = "nis";
     private String FIELD_RG = "rg";
     private String FIELD_DATA_NASCIMENTO = "data_nascimento";
-    private String FIELD_MEDIDOR_1 = "medidor_visinho_1";
-    private String FIELD_MEDIDOR_2 = "medidor_visinho_2";
+    private String FIELD_MEDIDOR_1 = "medidor_vizinho_1";
+    private String FIELD_MEDIDOR_2 = "medidor_vizinho_2";
     private String FIELD_TELEFONE = "telefone";
     private String FIELD_CELULAR = "celular";
     private String FIELD_EMAIL = "email";
@@ -176,8 +176,8 @@ public class fiscalizaDAO extends SQLiteOpenHelper {
             fisca.setNis(c.getString(c.getColumnIndex(FIELD_NIS)));
             fisca.setRg(c.getString(c.getColumnIndex(FIELD_RG)));
             fisca.setData_nascimento(c.getString(c.getColumnIndex(FIELD_DATA_NASCIMENTO)));
-            fisca.setMedidor_visinho_1(c.getString(c.getColumnIndex(FIELD_MEDIDOR_1)));
-            fisca.setMedidor_visinho_2(c.getString(c.getColumnIndex(FIELD_MEDIDOR_2)));
+            fisca.setMedidor_vizinho_1(c.getString(c.getColumnIndex(FIELD_MEDIDOR_1)));
+            fisca.setMedidor_vizinho_2(c.getString(c.getColumnIndex(FIELD_MEDIDOR_2)));
             fisca.setTelefone(c.getString(c.getColumnIndex(FIELD_TELEFONE)));
             fisca.setCelular(c.getString(c.getColumnIndex(FIELD_CELULAR)));
             fisca.setEmail(c.getString(c.getColumnIndex(FIELD_EMAIL)));
@@ -237,7 +237,7 @@ public class fiscalizaDAO extends SQLiteOpenHelper {
 
         queryData.put(FIELD_RG, fisca.getRg());
         queryData.put(FIELD_DATA_NASCIMENTO, fisca.getData_nascimento());
-        queryData.put(FIELD_MEDIDOR_1, fisca.getMedidor_visinho_1());
+        queryData.put(FIELD_MEDIDOR_1, fisca.getMedidor_vizinho_1());
 
         queryData.put(FIELD_LATITUDE, fisca.getLatitude());
         queryData.put(FIELD_LONGITUDE, fisca.getLongitude());
@@ -255,8 +255,8 @@ public class fiscalizaDAO extends SQLiteOpenHelper {
         if(fisca.getNis().isEmpty()){queryData.put(FIELD_NIS, "");}
         else{queryData.put(FIELD_NIS, fisca.getNis());}
 
-        if(fisca.getMedidor_visinho_2().isEmpty()){queryData.put(FIELD_MEDIDOR_2, "");}
-        else{queryData.put(FIELD_MEDIDOR_2, fisca.getMedidor_visinho_2());}
+        if(fisca.getMedidor_vizinho_2().isEmpty()){queryData.put(FIELD_MEDIDOR_2, "");}
+        else{queryData.put(FIELD_MEDIDOR_2, fisca.getMedidor_vizinho_2());}
 
         if(fisca.getTelefone().isEmpty()){queryData.put(FIELD_TELEFONE, "");}
         else{queryData.put(FIELD_TELEFONE, fisca.getTelefone());}

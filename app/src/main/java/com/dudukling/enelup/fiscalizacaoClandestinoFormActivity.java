@@ -227,8 +227,8 @@ public class fiscalizacaoClandestinoFormActivity extends AppCompatActivity {
         fisca.setNis(textInputLayoutFiscaNIS.getEditText().getText().toString());
         fisca.setRg(textInputLayoutFiscaRG.getEditText().getText().toString());
         fisca.setData_nascimento(textInputLayoutFiscaNascimento.getEditText().getText().toString());
-        fisca.setMedidor_visinho_1(textInputLayoutFiscaMedidor1.getEditText().getText().toString());
-        fisca.setMedidor_visinho_2(textInputLayoutFiscaMedidor2.getEditText().getText().toString());
+        fisca.setMedidor_vizinho_1(textInputLayoutFiscaMedidor1.getEditText().getText().toString());
+        fisca.setMedidor_vizinho_2(textInputLayoutFiscaMedidor2.getEditText().getText().toString());
         fisca.setTelefone(textInputLayoutFiscaTelefone.getEditText().getText().toString());
         fisca.setCelular(textInputLayoutFiscaCelular.getEditText().getText().toString());
         fisca.setEmail(textInputLayoutFiscaEmail.getEditText().getText().toString());
@@ -498,8 +498,8 @@ public class fiscalizacaoClandestinoFormActivity extends AppCompatActivity {
         textInputLayoutFiscaNIS.getEditText().setText(fisca.getNis());
         textInputLayoutFiscaRG.getEditText().setText(fisca.getRg());
         textInputLayoutFiscaNascimento.getEditText().setText(fisca.getData_nascimento());
-        textInputLayoutFiscaMedidor1.getEditText().setText(fisca.getMedidor_visinho_1());
-        textInputLayoutFiscaMedidor2.getEditText().setText(fisca.getMedidor_visinho_2());
+        textInputLayoutFiscaMedidor1.getEditText().setText(fisca.getMedidor_vizinho_1());
+        textInputLayoutFiscaMedidor2.getEditText().setText(fisca.getMedidor_vizinho_2());
         textInputLayoutFiscaTelefone.getEditText().setText(fisca.getTelefone());
         textInputLayoutFiscaCelular.getEditText().setText(fisca.getCelular());
         textInputLayoutFiscaEmail.getEditText().setText(fisca.getEmail());

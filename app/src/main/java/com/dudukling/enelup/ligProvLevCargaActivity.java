@@ -20,7 +20,7 @@ import com.dudukling.enelup.model.lpPotencia;
 import java.util.List;
 import java.util.Objects;
 
-public class LigProvLevCargaActivity extends AppCompatActivity {
+public class ligProvLevCargaActivity extends AppCompatActivity {
 
     private RecyclerView recyclerViewLevCarga;
     private List<lpPotencia> lpPotencia;
@@ -51,7 +51,7 @@ public class LigProvLevCargaActivity extends AppCompatActivity {
             floatingActionButtonLevCargaAdd.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    Intent goToLevCargaForm = new Intent(LigProvLevCargaActivity.this, LigProvLevCargaFormActivity.class);
+                    Intent goToLevCargaForm = new Intent(ligProvLevCargaActivity.this, ligProvLevCargaFormActivity.class);
                     goToLevCargaForm
                             .putExtra("LPid", lpID);
                     startActivity(goToLevCargaForm);

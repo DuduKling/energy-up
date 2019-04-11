@@ -23,7 +23,7 @@ import com.dudukling.enelup.model.lpPotencia;
 import java.util.List;
 import java.util.Objects;
 
-public class LigProvLevCargaFormActivity extends AppCompatActivity {
+public class ligProvLevCargaFormActivity extends AppCompatActivity {
     private static final String REQUIRED_FIELD_ERROR_MSG = "Campo obrigatório!";
 
     private TextView textViewLevCargaPotencia;
@@ -71,7 +71,7 @@ public class LigProvLevCargaFormActivity extends AppCompatActivity {
                         textInputLayoutLevCargaOtherPotencia.setVisibility(View.VISIBLE);
                         break;
                     default:
-                        lpDAO dao = new lpDAO(LigProvLevCargaFormActivity.this);
+                        lpDAO dao = new lpDAO(ligProvLevCargaFormActivity.this);
                         String potencia = dao.getPotenciaFromItemID(position);
                         dao.close();
                         textViewLevCargaPotencia.setText("Potência: " +potencia+" W");

@@ -43,7 +43,7 @@
             android:name=".MapsActivity"
             android:label="@string/title_activity_maps" />
         <activity android:name=".faqActivity" />
-        <activity android:name=".LigProvLevCargaActivity" />
+        <activity android:name=".ligProvLevCargaActivity" />
         <activity android:name=".clandestinoActivity" />
         <activity android:name=".ligProvActivity" />
         <activity android:name=".ligProvFormActivity" />
@@ -52,7 +52,7 @@
         <activity android:name=".menuActivity" />
         <activity android:name=".importActivity" />
         <activity android:name=".clandestinoFormActivity" />
-        <activity android:name=".LigProvLevCargaFormActivity" />
+        <activity android:name=".ligProvLevCargaFormActivity" />
         <activity
             android:name=".splashActivity"
             android:theme="@style/AppCompat.fullScreen">

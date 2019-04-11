@@ -3,10 +3,12 @@ package com.dudukling.enelup;
 import android.Manifest;
 import android.annotation.SuppressLint;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.database.Cursor;
 import android.database.DatabaseUtils;
 import android.database.sqlite.SQLiteDatabase;
+import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Environment;
@@ -193,6 +195,11 @@ public class clandestinoActivity extends AppCompatActivity {
             if (!type.equals("backup")) {
                 Toast.makeText(this, "Clandestinos Exportados!", Toast.LENGTH_SHORT).show();
             }
+
+            Intent intent =
+                    new Intent(Intent.ACTION_MEDIA_SCANNER_SCAN_FILE);
+            intent.setData(Uri.fromFile(file));
+            sendBroadcast(intent);
 
         } catch (Exception sqlEx) {
             Log.e("MainActivity", sqlEx.getMessage(), sqlEx);

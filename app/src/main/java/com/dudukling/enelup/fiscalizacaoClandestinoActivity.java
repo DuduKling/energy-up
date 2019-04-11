@@ -9,6 +9,7 @@ import android.content.pm.PackageManager;
 import android.database.Cursor;
 import android.database.DatabaseUtils;
 import android.database.sqlite.SQLiteDatabase;
+import android.net.Uri;
 import android.os.Build;
 import android.os.Environment;
 import android.support.annotation.NonNull;
@@ -239,8 +240,8 @@ public class fiscalizacaoClandestinoActivity extends AppCompatActivity {
                         " nis,"+
                         " rg,"+
                         " data_nascimento,"+
-                        " medidor_visinho_1,"+
-                        " medidor_visinho_2,"+
+                        " medidor_vizinho_1,"+
+                        " medidor_vizinho_2,"+
                         " telefone,"+
                         " celular,"+
                         " email,"+
@@ -271,8 +272,8 @@ public class fiscalizacaoClandestinoActivity extends AppCompatActivity {
                     "nis",
                     "rg",
                     "data_nascimento",
-                    "medidor_visinho_1",
-                    "medidor_visinho_2",
+                    "medidor_vizinho_1",
+                    "medidor_vizinho_2",
                     "telefone",
                     "celular",
                     "email",
@@ -305,8 +306,8 @@ public class fiscalizacaoClandestinoActivity extends AppCompatActivity {
                 String nis = stripAccents(curCSV.getString(8));
                 String rg = stripAccents(curCSV.getString(9));
                 String data_nascimento = stripAccents(curCSV.getString(10));
-                String medidor_visinho_1 = stripAccents(curCSV.getString(11));
-                String medidor_visinho_2 = stripAccents(curCSV.getString(12));
+                String medidor_vizinho_1 = stripAccents(curCSV.getString(11));
+                String medidor_vizinho_2 = stripAccents(curCSV.getString(12));
                 String telefone = stripAccents(curCSV.getString(13));
                 String celular = stripAccents(curCSV.getString(14));
                 String email = stripAccents(curCSV.getString(15));
@@ -336,8 +337,8 @@ public class fiscalizacaoClandestinoActivity extends AppCompatActivity {
                         nis,
                         rg,
                         data_nascimento,
-                        medidor_visinho_1,
-                        medidor_visinho_2,
+                        medidor_vizinho_1,
+                        medidor_vizinho_2,
                         telefone,
                         celular,
                         email,
@@ -364,6 +365,11 @@ public class fiscalizacaoClandestinoActivity extends AppCompatActivity {
             if (!type.equals("backup")) {
                 Toast.makeText(this, "Fiscalizações Exportadas!", Toast.LENGTH_SHORT).show();
             }
+
+            Intent intent =
+                    new Intent(Intent.ACTION_MEDIA_SCANNER_SCAN_FILE);
+            intent.setData(Uri.fromFile(file));
+            sendBroadcast(intent);
 
         } catch (Exception sqlEx) {
             Log.e("MainActivity", sqlEx.getMessage(), sqlEx);

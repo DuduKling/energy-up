@@ -3,8 +3,6 @@ package com.dudukling.enelup.util;
 import android.content.Intent;
 import android.graphics.Color;
 import android.net.Uri;
-import android.os.Environment;
-import android.os.Parcelable;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.TextInputLayout;
 import android.support.v4.content.FileProvider;
@@ -21,8 +19,7 @@ import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.dudukling.enelup.BuildConfig;
-import com.dudukling.enelup.LigProvLevCargaActivity;
+import com.dudukling.enelup.ligProvLevCargaActivity;
 import com.dudukling.enelup.R;
 import com.dudukling.enelup.dao.lpDAO;
 import com.dudukling.enelup.ligProvFormActivity;
@@ -30,10 +27,8 @@ import com.dudukling.enelup.model.lpModel;
 import com.dudukling.enelup.model.lpPotencia;
 
 import java.io.File;
-import java.io.Serializable;
 import java.math.BigDecimal;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 import br.com.sapereaude.maskedEditText.MaskedEditText;
@@ -833,7 +828,7 @@ public class lpFormHelper {
         floatingActionButtonCalcEncLevCarga.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent goToLevCarga = new Intent(activity, LigProvLevCargaActivity.class);
+                Intent goToLevCarga = new Intent(activity, ligProvLevCargaActivity.class);
                 if(formType.equals("readOnly")){
                     goToLevCarga
                         .putExtra("LPid", lp.getId())

@@ -10,7 +10,7 @@ import android.view.ViewGroup;
 import android.widget.ImageButton;
 import android.widget.TextView;
 
-import com.dudukling.enelup.LigProvLevCargaActivity;
+import com.dudukling.enelup.ligProvLevCargaActivity;
 import com.dudukling.enelup.R;
 import com.dudukling.enelup.dao.lpDAO;
 import com.dudukling.enelup.model.lpPotencia;
@@ -23,7 +23,7 @@ public class levCarga_recyclerAdapter extends RecyclerView.Adapter {
     private Context context;
     private List<lpPotencia> lpPotencia;
 
-    public levCarga_recyclerAdapter(List<lpPotencia> lpPotencia, LigProvLevCargaActivity context, int lpID, String typeofForm) {
+    public levCarga_recyclerAdapter(List<lpPotencia> lpPotencia, ligProvLevCargaActivity context, int lpID, String typeofForm) {
         this.lpPotencia = lpPotencia;
         this.context = context;
         this.lpID = lpID;
