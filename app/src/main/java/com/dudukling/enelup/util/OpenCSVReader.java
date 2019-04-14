@@ -25,8 +25,8 @@ public class OpenCSVReader {
 
     @RequiresApi(api = Build.VERSION_CODES.O)
     public static void readCSVFile(Context context, String arquivoPath) throws IOException {
-        Path myPath = Paths.get(arquivoPath);
-        File fileDir = new File(String.valueOf(myPath));
+//        Path myPath = Paths.get(arquivoPath);
+        File fileDir = new File(String.valueOf(arquivoPath));
         String arquivoExtensao = fileDir.getAbsolutePath().substring(fileDir.getAbsolutePath().lastIndexOf("."));
 
         CSVParser parser;
