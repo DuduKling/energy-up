@@ -19,7 +19,6 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
-import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
@@ -29,7 +28,6 @@ import android.widget.Toast;
 
 import com.dudukling.enelup.dao.fiscalizaDAO;
 import com.dudukling.enelup.model.fiscaModel;
-import com.dudukling.enelup.model.lpModel;
 
 import java.util.Objects;
 
@@ -95,7 +93,7 @@ public class fiscalizacaoClandestinoFormActivity extends AppCompatActivity {
         buttonFiscaConsultaCPF.setVisibility(View.GONE);
 
         if(formType.equals("readOnly")){
-            fillForm();
+            fillForm(fisca);
             disableAll();
             floatingActionButtonFiscaAlbum.setVisibility(View.VISIBLE);
             floatingActionButtonFiscaAlbum.setOnClickListener(new View.OnClickListener() {
@@ -109,7 +107,7 @@ public class fiscalizacaoClandestinoFormActivity extends AppCompatActivity {
             });
         }
         if(formType.equals("edit")){
-            fillForm();
+            fillForm(fisca);
         }
         if(formType.equals("edit")||formType.equals("new")){
             buttonFiscaConsultaCPF.setVisibility(View.VISIBLE);
@@ -118,16 +116,20 @@ public class fiscalizacaoClandestinoFormActivity extends AppCompatActivity {
                 public void onClick(View v) {
                     String CPF = textInputLayoutFiscaCPF.getEditText().getText().toString();
 
-                    ClipboardManager clipboard = (ClipboardManager) getSystemService(Context.CLIPBOARD_SERVICE);
-                    ClipData clip = ClipData.newPlainText("cpf copiado", CPF);
-                    clipboard.setPrimaryClip(clip);
+                    if(!CPF.isEmpty()){
+                        ClipboardManager clipboard = (ClipboardManager) getSystemService(Context.CLIPBOARD_SERVICE);
+                        ClipData clip = ClipData.newPlainText("cpf copiado", CPF);
+                        clipboard.setPrimaryClip(clip);
 
-                    Toast.makeText(fiscalizacaoClandestinoFormActivity.this, "CPF "+CPF+" copiado para a área de transferência!", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(fiscalizacaoClandestinoFormActivity.this, "CPF "+CPF+" copiado para a área de transferência!", Toast.LENGTH_SHORT).show();
 
-                    String url = "https://www.situacaocadastral.com.br";
-                    Intent i = new Intent(Intent.ACTION_VIEW);
-                    i.setData(Uri.parse(url));
-                    startActivity(i);
+                        String url = "https://www.situacaocadastral.com.br";
+                        Intent i = new Intent(Intent.ACTION_VIEW);
+                        i.setData(Uri.parse(url));
+                        startActivity(i);
+                    }else{
+                        Toast.makeText(getBaseContext(), "Nenhum CPF informado..", Toast.LENGTH_SHORT).show();
+                    }
                 }
             });
         }
@@ -190,11 +192,11 @@ public class fiscalizacaoClandestinoFormActivity extends AppCompatActivity {
             case R.id.menu_save_button:
                 fiscalizaDAO dao = new fiscalizaDAO(this);
                 if(validadeFields()){
-                    getFiscaFromFields();
+                    fiscaModel fiscaToSave = getFiscaFromFields(fisca);
                     if(formType.equals("new")){
-                        dao.insert(fisca);
+                        dao.insert(fiscaToSave);
                     }else{
-                        dao.update(fisca);
+                        dao.update(fiscaToSave);
                     }
                     finish();
                 }
@@ -216,14 +218,17 @@ public class fiscalizacaoClandestinoFormActivity extends AppCompatActivity {
         return super.onOptionsItemSelected(item);
     }
 
-    private void getFiscaFromFields() {
+    private fiscaModel getFiscaFromFields(fiscaModel fisca) {
         fisca.setFuncionario(spinnerFiscaFuncionario.getSelectedItem().toString());
         fisca.setNome(textInputLayoutFiscaNome.getEditText().getText().toString());
         fisca.setEndereco(textInputLayoutFiscaEndereco.getEditText().getText().toString());
         fisca.setBairro(textInputLayoutFiscaBairro.getEditText().getText().toString());
         fisca.setMunicipio(spinnerFiscaMunicipio.getSelectedItem().toString());
         fisca.setCpf(textInputLayoutFiscaCPF.getEditText().getText().toString());
-        fisca.setCpf_status(((RadioButton)findViewById(radioGroupFiscaCpfConsultado.getCheckedRadioButtonId())).getText().toString());
+
+        if(radioGroupFiscaCpfConsultado.getCheckedRadioButtonId() != -1) {fisca.setCpf_status(((RadioButton)findViewById(radioGroupFiscaCpfConsultado.getCheckedRadioButtonId())).getText().toString());
+        }else{fisca.setCpf_status("");}
+
         fisca.setNis(textInputLayoutFiscaNIS.getEditText().getText().toString());
         fisca.setRg(textInputLayoutFiscaRG.getEditText().getText().toString());
         fisca.setData_nascimento(textInputLayoutFiscaNascimento.getEditText().getText().toString());
@@ -234,26 +239,36 @@ public class fiscalizacaoClandestinoFormActivity extends AppCompatActivity {
         fisca.setEmail(textInputLayoutFiscaEmail.getEditText().getText().toString());
         fisca.setLatitude(textInputLayoutFiscaLatitude.getEditText().getText().toString());
         fisca.setLongitude(textInputLayoutFiscaLongitude.getEditText().getText().toString());
-        if(radioGroupFiscaAreaPreserva.getCheckedRadioButtonId() != -1) {
-            fisca.setPreservacao_ambiental(((RadioButton) findViewById(radioGroupFiscaAreaPreserva.getCheckedRadioButtonId())).getText().toString());
-        }else{
-            fisca.setPreservacao_ambiental("");
-        }
-        fisca.setArea_invadida(((RadioButton)findViewById(radioGroupFiscaInvadida.getCheckedRadioButtonId())).getText().toString());
-        fisca.setTipo_ligacao(((RadioButton)findViewById(radioGroupFiscaLigacao.getCheckedRadioButtonId())).getText().toString());
-        fisca.setRede_local(((RadioButton)findViewById(radioGroupFiscaRede.getCheckedRadioButtonId())).getText().toString());
-        fisca.setPadrao_montado(((RadioButton)findViewById(radioGroupFiscaPadrao.getCheckedRadioButtonId())).getText().toString());
-        fisca.setFaixa_servidao(((RadioButton)findViewById(radioGroupFiscaServidao.getCheckedRadioButtonId())).getText().toString());
-        fisca.setPre_indicacao(((RadioButton)findViewById(radioGroupFiscaIndicacao.getCheckedRadioButtonId())).getText().toString());
+
+        if(radioGroupFiscaAreaPreserva.getCheckedRadioButtonId() != -1) {fisca.setPreservacao_ambiental(((RadioButton) findViewById(radioGroupFiscaAreaPreserva.getCheckedRadioButtonId())).getText().toString());
+        }else{fisca.setPreservacao_ambiental("");}
+        if(radioGroupFiscaInvadida.getCheckedRadioButtonId() != -1) {fisca.setArea_invadida(((RadioButton)findViewById(radioGroupFiscaInvadida.getCheckedRadioButtonId())).getText().toString());
+        }else{fisca.setArea_invadida("");}
+        if(radioGroupFiscaLigacao.getCheckedRadioButtonId() != -1) {fisca.setTipo_ligacao(((RadioButton)findViewById(radioGroupFiscaLigacao.getCheckedRadioButtonId())).getText().toString());
+        }else{fisca.setTipo_ligacao("");}
+        if(radioGroupFiscaRede.getCheckedRadioButtonId() != -1) {fisca.setRede_local(((RadioButton)findViewById(radioGroupFiscaRede.getCheckedRadioButtonId())).getText().toString());
+        }else{fisca.setRede_local("");}
+        if(radioGroupFiscaPadrao.getCheckedRadioButtonId() != -1) {fisca.setPadrao_montado(((RadioButton)findViewById(radioGroupFiscaPadrao.getCheckedRadioButtonId())).getText().toString());
+        }else{fisca.setPadrao_montado("");}
+        if(radioGroupFiscaServidao.getCheckedRadioButtonId() != -1) {fisca.setFaixa_servidao(((RadioButton)findViewById(radioGroupFiscaServidao.getCheckedRadioButtonId())).getText().toString());
+        }else{fisca.setFaixa_servidao("");}
+        if(radioGroupFiscaIndicacao.getCheckedRadioButtonId() != -1) {fisca.setPre_indicacao(((RadioButton)findViewById(radioGroupFiscaIndicacao.getCheckedRadioButtonId())).getText().toString());
+        }else{fisca.setPre_indicacao("");}
+
         fisca.setCpf_pre_indicacao(textInputLayoutCPFIndicado.getEditText().getText().toString());
-        fisca.setExiste_ordem(((RadioButton)findViewById(radioGroupFiscaOrdemServico.getCheckedRadioButtonId())).getText().toString());
+
+        if(radioGroupFiscaOrdemServico.getCheckedRadioButtonId() != -1) {fisca.setExiste_ordem(((RadioButton)findViewById(radioGroupFiscaOrdemServico.getCheckedRadioButtonId())).getText().toString());
+        }else{fisca.setExiste_ordem("");}
+
         fisca.setNumero_ordem(textInputLayoutFiscaOrdem.getEditText().getText().toString());
-        if(radioGroupFiscaOrdemServico.getCheckedRadioButtonId() == R.id.radioButtonFiscaOrdemServico1){
-            fisca.setEstado_ordem(((RadioButton)findViewById(radioGroupFiscaEstadoOrdem.getCheckedRadioButtonId())).getText().toString());
+
+        if(radioGroupFiscaOrdemServico.getCheckedRadioButtonId() == R.id.radioButtonFiscaOrdemServico1){fisca.setEstado_ordem(((RadioButton)findViewById(radioGroupFiscaEstadoOrdem.getCheckedRadioButtonId())).getText().toString());
         }else{
             fisca.setNumero_ordem("");
             fisca.setEstado_ordem("");
         }
+
+        return fisca;
     }
 
     private void setFields() {
@@ -481,7 +496,7 @@ public class fiscalizacaoClandestinoFormActivity extends AppCompatActivity {
         return text.isEmpty();
     }
 
-    private void fillForm() {
+    private void fillForm(fiscaModel fisca) {
         spinnerFiscaFuncionario.setSelection(spinnerFiscaFuncionarioAdapter.getPosition(fisca.getFuncionario()));
         textInputLayoutFiscaNome.getEditText().setText(fisca.getNome());
         textInputLayoutFiscaEndereco.getEditText().setText(fisca.getEndereco());
@@ -582,6 +597,20 @@ public class fiscalizacaoClandestinoFormActivity extends AppCompatActivity {
         }
 
         return super.onCreateOptionsMenu(menu);
+    }
+
+    @Override
+    protected void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+        fiscaModel fiscaSaved = getFiscaFromFields(fisca);
+        outState.putSerializable("fisca", fiscaSaved);
+    }
+
+    @Override
+    protected void onRestoreInstanceState(Bundle savedInstanceState) {
+        super.onRestoreInstanceState(savedInstanceState);
+        fiscaModel fiscaSaved = (fiscaModel) savedInstanceState.getSerializable("fisca");
+        fillForm(fiscaSaved);
     }
 
 }

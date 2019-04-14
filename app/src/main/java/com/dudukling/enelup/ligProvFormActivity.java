@@ -11,6 +11,7 @@ import android.location.LocationListener;
 import android.location.LocationManager;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.PersistableBundle;
 import android.provider.Settings;
 import android.support.annotation.RequiresApi;
 import android.support.constraint.ConstraintLayout;
@@ -45,7 +46,6 @@ public class ligProvFormActivity extends AppCompatActivity {
     private String formType;
 
     private lpModel lp;
-    public List<String> imagesList = new ArrayList<>();
 
     private mapsController mapsControl;
 
@@ -320,4 +320,17 @@ public class ligProvFormActivity extends AppCompatActivity {
         }
     }
 
+    @Override
+    protected void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+        lpModel lpsaved = formHelper.getLPFromForm(lp);
+        outState.putSerializable("lp", lpsaved);
+    }
+
+    @Override
+    protected void onRestoreInstanceState(Bundle savedInstanceState) {
+        super.onRestoreInstanceState(savedInstanceState);
+        lpModel lpSaved = (lpModel) savedInstanceState.getSerializable("lp");
+        formHelper.fillForm(lpSaved);
+    }
 }

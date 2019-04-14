@@ -125,7 +125,7 @@ public class lpFormHelper {
     }
 
     private void checkTypeOfForm(String formType) {
-        fillForm();
+        fillForm(lp);
 
         if (formType.equals("readOnly")) {
             disableEditText(fieldObs);
@@ -158,7 +158,7 @@ public class lpFormHelper {
         }
     }
 
-    private void fillForm() {
+    public void fillForm(lpModel lp) {
         TextViewOrdem.setText(lp.getOrdem());
         TextViewCliente.setText(lp.getCliente());
         TextViewEndereco.setText(lp.getEndereco());
@@ -1275,17 +1275,17 @@ public class lpFormHelper {
         return tempoTotal;
     }
     private String formatNumberToTime(String calcDecTempo) {
-        if(!calcDecTempo.equals("")){
-            String tempoTotal = calcDecTempo;
-            String  minutosReal = String.valueOf(Float.valueOf(tempoTotal.substring(2)) * 6);
-            if(minutosReal.length()==1){minutosReal = "0"+minutosReal;}
-            String horasReal = tempoTotal.substring(0, tempoTotal.indexOf('.'));
-            if(horasReal.length()==1){horasReal = "0"+horasReal;}
-            String tempoFormatado = horasReal+":"+ minutosReal;
-
-            return tempoFormatado;
+        if(calcDecTempo!=null){
+            if(!calcDecTempo.equals("")){
+                String tempoTotal = calcDecTempo;
+                String  minutosReal = String.valueOf(Float.valueOf(tempoTotal.substring(2)) * 6);
+                if(minutosReal.length()==1){minutosReal = "0"+minutosReal;}
+                String horasReal = tempoTotal.substring(0, tempoTotal.indexOf('.'));
+                if(horasReal.length()==1){horasReal = "0"+horasReal;}
+                String tempoFormatado = horasReal+":"+ minutosReal;
+                return tempoFormatado;
+            }
         }
         return "";
     }
-
 }

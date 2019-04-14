@@ -80,10 +80,10 @@ public class clandestinoFormActivity extends AppCompatActivity {
         textViewClandestNumero = this.findViewById(R.id.textViewClandestNumero);
         setFields();
         if(tipoForm.equals("readOnly")){
-            fillForm();
+            fillForm(lpClandest);
             disableFields();
         }else if(tipoForm.equals("edit")){
-            fillForm();
+            fillForm(lpClandest);
             setValidation();
             setCalculus();
         }else if(tipoForm.equals("new")){
@@ -199,7 +199,7 @@ public class clandestinoFormActivity extends AppCompatActivity {
         editText.setTextColor(Color.parseColor("#616161"));
     }
 
-    private void fillForm() {
+    private void fillForm(lpClandestino lpClandest) {
         textInputLayoutClandestEndereco.getEditText().setText(lpClandest.getEndereco());
         textInputLayoutClandestTransformador.getEditText().setText(lpClandest.getTransformador());
         textInputLayoutClandestTensao.getEditText().setText(lpClandest.getTensao());
@@ -401,7 +401,7 @@ public class clandestinoFormActivity extends AppCompatActivity {
     private void salvaClandest() {
         lpDAO dao = new lpDAO(this);
 
-        lpClandestino clandestSave = getLPFromForm();
+        lpClandestino clandestSave = getClandestFromForm(lpClandest);
         if(tipoForm.equals("new")){
             dao.insertClandestino(clandestSave, LPOrdem);
         }else{
@@ -526,7 +526,7 @@ public class clandestinoFormActivity extends AppCompatActivity {
         return text.isEmpty();
     }
 
-    public lpClandestino getLPFromForm() {
+    public lpClandestino getClandestFromForm(lpClandestino lpClandest) {
 
         lpClandest.setEndereco(textInputLayoutClandestEndereco.getEditText().getText().toString());
         lpClandest.setTransformador(textInputLayoutClandestTransformador.getEditText().getText().toString());
@@ -549,5 +549,19 @@ public class clandestinoFormActivity extends AppCompatActivity {
         if(locationListener!=null){
             locationManager.removeUpdates(locationListener);
         }
+    }
+
+    @Override
+    protected void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+        lpClandestino clandestSaved = getClandestFromForm(lpClandest);
+        outState.putSerializable("clandest", clandestSaved);
+    }
+
+    @Override
+    protected void onRestoreInstanceState(Bundle savedInstanceState) {
+        super.onRestoreInstanceState(savedInstanceState);
+        lpClandestino clandestSaved = (lpClandestino) savedInstanceState.getSerializable("clandest");
+        fillForm(clandestSaved);
     }
 }
