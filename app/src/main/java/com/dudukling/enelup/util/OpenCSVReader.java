@@ -1,8 +1,10 @@
 package com.dudukling.enelup.util;
 
 import android.content.Context;
+import android.content.Intent;
 import android.os.Build;
 import android.support.annotation.RequiresApi;
+import android.widget.Toast;
 
 import com.dudukling.enelup.dao.lpDAO;
 import com.dudukling.enelup.model.lpModel;
@@ -53,25 +55,29 @@ public class OpenCSVReader {
             while ((nextRecord = csvReader.readNext()) != null) {
                 lpModel lp = new lpModel();
 
+                try {
+                    lp.setOrdem(stripAccents(nextRecord[1]));
+                    lp.setCliente(stripAccents(nextRecord[2]));
+                    lp.setEndereco(stripAccents(nextRecord[3]));
 
-                lp.setOrdem(stripAccents(nextRecord[1]));
-                lp.setCliente(stripAccents(nextRecord[2]));
-                lp.setEndereco(stripAccents(nextRecord[3]));
+                    lp.setNumero_cliente(stripAccents(nextRecord[0]));
+                    lp.setBairro(stripAccents(nextRecord[4]));
+                    lp.setDescricao_etapa(stripAccents(nextRecord[12]));
+                    lp.setObservacoes(stripAccents(nextRecord[14]));
 
-                lp.setNumero_cliente(stripAccents(nextRecord[0]));
-                lp.setBairro(stripAccents(nextRecord[4]));
-                lp.setDescricao_etapa(stripAccents(nextRecord[12]));
-                lp.setObservacoes(stripAccents(nextRecord[14]));
+                    lp.setTipoOrdem(stripAccents(nextRecord[6]));
+                    lp.setEtapa(stripAccents(nextRecord[11]));
+                    lp.setLocalidade(stripAccents(nextRecord[36]));
 
-                lp.setTipoOrdem(stripAccents(nextRecord[6]));
-                lp.setEtapa(stripAccents(nextRecord[11]));
-                lp.setLocalidade(stripAccents(nextRecord[36]));
+                    lp.setLatitude(stripAccents(nextRecord[37]));
+                    lp.setLongitude(stripAccents(nextRecord[38]));
 
-                lp.setLatitude(stripAccents(nextRecord[37]));
-                lp.setLongitude(stripAccents(nextRecord[38]));
-
-
-                dao.insert(lp);
+                    dao.insert(lp);
+                }
+                catch (IndexOutOfBoundsException e) {
+                    e.printStackTrace();
+                    throw new IOException("O arquivo selecionado não tem o formato necessário!");
+                }
             }
             dao.close();
         }

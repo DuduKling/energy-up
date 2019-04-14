@@ -109,13 +109,13 @@ public class importActivity extends AppCompatActivity {
     }
 
     private void callFileChooser(){
-        Intent intent = new Intent(Intent.ACTION_GET_CONTENT);
-        intent.setType("text/*");
-        intent.addCategory(Intent.CATEGORY_OPENABLE);
+        Intent intentFileChooser = new Intent(Intent.ACTION_GET_CONTENT);
+        intentFileChooser.setType("text/*");
+        intentFileChooser.addCategory(Intent.CATEGORY_OPENABLE);
 
         try {
             startActivityForResult(
-                    Intent.createChooser(intent, "Selecione um arquivo para carregar"),
+                    Intent.createChooser(intentFileChooser, "Selecione um arquivo para carregar"),
                     FILE_LP_SELECT_CODE);
         } catch (android.content.ActivityNotFoundException ex) {
             Toast.makeText(this, "Favor instalar um Gerenciador de Arquivos!", Toast.LENGTH_SHORT).show();
@@ -130,16 +130,19 @@ public class importActivity extends AppCompatActivity {
                     Uri selectedURI = data.getData();
                     String path = getPathFromUri(this, selectedURI);
 
+                    boolean success = true;
                     try {
                         OpenCSVReader.readCSVFile(this, path);
+                        success = true;
                     }catch(IOException e) {
                         e.printStackTrace();
-                        Toast.makeText(this, "Não foi possível carregar este arquivo!", Toast.LENGTH_LONG).show();
+                        Toast.makeText(this, e.getMessage(), Toast.LENGTH_LONG).show();
+                        success = false;
                     }
-
-                    buttonImportFileLP.setVisibility(View.GONE);
-                    textViewImportFileLP2.setText("Arquivo importado!!");
-
+                    if(success){
+                        buttonImportFileLP.setVisibility(View.GONE);
+                        textViewImportFileLP2.setText("Arquivo importado!!");
+                    }
                 }
                 break;
         }
