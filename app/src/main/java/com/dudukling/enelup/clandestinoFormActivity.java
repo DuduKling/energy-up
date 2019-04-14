@@ -51,6 +51,7 @@ public class clandestinoFormActivity extends AppCompatActivity {
     private TextInputLayout textInputLayoutClandestProtecao;
     private TextInputLayout textInputLayoutClandestCarga;
     private TextInputLayout textInputLayoutClandestDescricao;
+    private TextInputLayout textInputLayoutClandestObs;
     private TextView textViewClandestNumero;
     private TextView textViewClandestLatLong;
     private TextView textViewPotCalculada;
@@ -60,7 +61,6 @@ public class clandestinoFormActivity extends AppCompatActivity {
 
     private LocationManager locationManager;
     private LocationListener locationListener;
-
 
 
     @RequiresApi(api = Build.VERSION_CODES.KITKAT)
@@ -179,6 +179,7 @@ public class clandestinoFormActivity extends AppCompatActivity {
         disable(textInputLayoutClandestProtecao);
         disable(textInputLayoutClandestCarga);
         disable(textInputLayoutClandestDescricao);
+        disable(textInputLayoutClandestObs);
 
         disableSpinner(spinnerFatPot);
     }
@@ -207,6 +208,8 @@ public class clandestinoFormActivity extends AppCompatActivity {
 
         textInputLayoutClandestCarga.getEditText().setText(lpClandest.getCarga());
         textInputLayoutClandestDescricao.getEditText().setText(lpClandest.getDescricao());
+
+        textInputLayoutClandestObs.getEditText().setText(lpClandest.getObs());
 
         textViewClandestLatLong.setText("Lat: "+lpClandest.getAutoLat()+" | Long: "+lpClandest.getAutoLong());
 
@@ -315,7 +318,8 @@ public class clandestinoFormActivity extends AppCompatActivity {
         textInputLayoutClandestCorrente = this.findViewById(R.id.textInputLayoutClandestCorrente);
         textInputLayoutClandestProtecao = this.findViewById(R.id.textInputLayoutClandestProtecao);
         textInputLayoutClandestCarga = this.findViewById(R.id.textInputLayoutClandestCarga);
-        textInputLayoutClandestDescricao = this.findViewById(R.id.textInputLayoutClandesDescricao);
+        textInputLayoutClandestDescricao = this.findViewById(R.id.textInputLayoutClandestDescricao);
+        textInputLayoutClandestObs = this.findViewById(R.id.textInputLayoutClandestObs);
 
         textViewClandestLatLong = this.findViewById(R.id.textViewClandestLatLong);
         textViewPotCalculada = this.findViewById(R.id.textViewPotCalculada);
@@ -417,6 +421,7 @@ public class clandestinoFormActivity extends AppCompatActivity {
 //        setValidateEmpty(textInputLayoutClandestFatorPotencia);
         setValidateEmpty(textInputLayoutClandestCarga);
         setValidateEmpty(textInputLayoutClandestDescricao);
+//        setValidateEmpty(textInputLayoutClandestObs);
 
 //        setValidateFatPotencia(textInputLayoutClandestFatorPotencia);
         spinnerFatPot.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
@@ -499,6 +504,7 @@ public class clandestinoFormActivity extends AppCompatActivity {
 //        if(fieldIsEmpty(textInputLayoutClandestFatorPotencia)){return "false";}
         if(fieldIsEmpty(textInputLayoutClandestCarga)){return "false";}
         if(fieldIsEmpty(textInputLayoutClandestDescricao)){return "false";}
+//        if(fieldIsEmpty(textInputLayoutClandestObs)){return "false";}
 
         if(setValidateFatPotencia(spinnerFatPot)){return "false";}
 
@@ -529,6 +535,7 @@ public class clandestinoFormActivity extends AppCompatActivity {
         lpClandest.setProtecao(textInputLayoutClandestProtecao.getEditText().getText().toString());
         lpClandest.setCarga(textInputLayoutClandestCarga.getEditText().getText().toString());
         lpClandest.setDescricao(textInputLayoutClandestDescricao.getEditText().getText().toString());
+        lpClandest.setObs(textInputLayoutClandestObs.getEditText().getText().toString());
 
         lpClandest.setFatorPotencia(spinnerFatPot.getSelectedItem().toString());
 

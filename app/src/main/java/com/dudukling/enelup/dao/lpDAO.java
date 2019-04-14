@@ -73,6 +73,7 @@ public class lpDAO extends SQLiteOpenHelper {
                 "fatorPotencia TEXT NOT NULL," +
                 "carga TEXT NOT NULL," +
                 "descricao TEXT NOT NULL," +
+                "obs TEXT NOT NULL," +
                 "autoLat TEXT NOT NULL," +
                 "autoLong TEXT NOT NULL," +
                 "NumeroOrdemLP INTEGER NOT NULL" +
@@ -377,6 +378,7 @@ public class lpDAO extends SQLiteOpenHelper {
         queryData.put("fatorPotencia", clandest.getFatorPotencia());
         queryData.put("carga", clandest.getCarga());
         queryData.put("descricao", clandest.getDescricao());
+        queryData.put("obs", clandest.getObs());
         queryData.put("autoLat", clandest.getAutoLat());
         queryData.put("autoLong", clandest.getAutoLong());
 
@@ -398,6 +400,7 @@ public class lpDAO extends SQLiteOpenHelper {
                 "fatorPotencia as fpClandest, " +
                 "carga as cargaClandest, " +
                 "descricao as descricaoClandest, " +
+                "obs as obsClandest, " +
                 "NumeroOrdemLP as ordemLP, " +
                 "autoLat as latitude, " +
                 "autoLong as longitude " +
@@ -421,6 +424,7 @@ public class lpDAO extends SQLiteOpenHelper {
             clandest.setFatorPotencia(c.getString(c.getColumnIndex("fpClandest")));
             clandest.setCarga(c.getString(c.getColumnIndex("cargaClandest")));
             clandest.setDescricao(c.getString(c.getColumnIndex("descricaoClandest")));
+            clandest.setDescricao(c.getString(c.getColumnIndex("obsClandest")));
 
             clandest.setOrdem(c.getString(c.getColumnIndex("ordemLP")));
 
@@ -455,6 +459,7 @@ public class lpDAO extends SQLiteOpenHelper {
         queryData.put("fatorPotencia", clandest.getFatorPotencia());
         queryData.put("carga", clandest.getCarga());
         queryData.put("descricao", clandest.getDescricao());
+        queryData.put("obs", clandest.getObs());
 
         queryData.put("autoLat", clandest.getAutoLat());
         queryData.put("autoLong", clandest.getAutoLong());

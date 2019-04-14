@@ -14,6 +14,7 @@ public class lpClandestino  implements Serializable {
     private String fatorPotencia;
     private String carga;
     private String descricao;
+    private String obs;
 
     private String Ordem;
 
@@ -83,6 +84,14 @@ public class lpClandestino  implements Serializable {
     public void setDescricao(String descricao) {
         this.descricao = descricao;
     }
+
+    public String getObs() {
+        return obs;
+    }
+    public void setObs(String obs) {
+        this.obs = obs;
+    }
+
 
 
 
