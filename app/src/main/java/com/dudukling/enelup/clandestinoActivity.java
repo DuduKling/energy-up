@@ -166,9 +166,9 @@ public class clandestinoActivity extends AppCompatActivity {
             Log.d("TAG2", "createNewFile() called: " + fileCreated);
             CSVWriter csvWrite = new CSVWriter(new FileWriter(file));
 
-            Cursor curCSV = db.rawQuery("SELECT id, NumeroOrdemLP, lpClandestino.endereco, transformador, tensao, corrente, protecao, fatorPotencia, carga, descricao, lpClandestino.autoLat, lpClandestino.autoLong FROM lpClandestino ", null);
+            Cursor curCSV = db.rawQuery("SELECT id, NumeroOrdemLP, lpClandestino.endereco, transformador, tensao, corrente, protecao, fatorPotencia, carga, descricao, obs, lpClandestino.autoLat, lpClandestino.autoLong FROM lpClandestino ", null);
 
-            String[] str = {"ID", "ordem", "endereco", "transformador", "tensao", "corrente", "protecao", "fator de potencia", "carga", "descricao", "latitude", "longitude"};
+            String[] str = {"ID", "ordem", "endereco", "transformador", "tensao", "corrente", "protecao", "fator de potencia", "carga", "descricao", "obs", "latitude", "longitude"};
 
             csvWrite.writeNext(str);
             while (curCSV.moveToNext()) {
@@ -182,10 +182,11 @@ public class clandestinoActivity extends AppCompatActivity {
                 String fatorPotencia = stripAccents(curCSV.getString(7));
                 String carga = stripAccents(curCSV.getString(8));
                 String descricao = stripAccents(curCSV.getString(9));
-                String latitude = stripAccents(curCSV.getString(10));
-                String longitude = stripAccents(curCSV.getString(11));
+                String obs = stripAccents(curCSV.getString(10));
+                String latitude = stripAccents(curCSV.getString(11));
+                String longitude = stripAccents(curCSV.getString(12));
 
-                String arrStr[] = {id, ordem, endereco, transformador, tensao, corrente, protecao, fatorPotencia, carga, descricao, latitude, longitude};
+                String arrStr[] = {id, ordem, endereco, transformador, tensao, corrente, protecao, fatorPotencia, carga, descricao, obs, latitude, longitude};
 
                 csvWrite.writeNext(arrStr);
             }
