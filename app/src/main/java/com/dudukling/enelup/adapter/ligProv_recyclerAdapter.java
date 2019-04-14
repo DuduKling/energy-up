@@ -3,6 +3,7 @@ package com.dudukling.enelup.adapter;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
+import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
 import android.view.ContextMenu;
@@ -407,5 +408,4 @@ public class ligProv_recyclerAdapter extends RecyclerView.Adapter {
         notifyDataSetChanged();
         makeFilter();
     }
-
 }

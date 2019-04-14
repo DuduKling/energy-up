@@ -181,8 +181,8 @@ public class ligProvActivity extends AppCompatActivity {
 
 
     @Override
-    public void onSaveInstanceState(Bundle outState, PersistableBundle outPersistentState) {
-        super.onSaveInstanceState(outState, outPersistentState);
+    protected void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
 
         String[] filtros = RecyclerAdapter.getListaFiltros();
         outState.putSerializable("filtros", filtros);
@@ -421,9 +421,6 @@ public class ligProvActivity extends AppCompatActivity {
 
 
 
-
-
-
     private void exportImages() {
         /* Example: zipFileAtPath("downloads/myfolder", "downloads/myFolder.zip"); */
 
@@ -505,6 +502,8 @@ public class ligProvActivity extends AppCompatActivity {
         String lastPathComponent = segments[segments.length - 1];
         return lastPathComponent;
     }
+
+
 
 
 }
