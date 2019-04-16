@@ -29,18 +29,24 @@ public class OpenCSVReader {
     public static void readCSVFile(Context context, String arquivoPath) throws IOException {
 //        Path myPath = Paths.get(arquivoPath);
         File fileDir = new File(String.valueOf(arquivoPath));
-        String arquivoExtensao = fileDir.getAbsolutePath().substring(fileDir.getAbsolutePath().lastIndexOf("."));
-
         CSVParser parser;
-        switch (arquivoExtensao) {
-            case ".csv":
-                parser = new CSVParserBuilder().withSeparator(';').build();
-                break;
-            case ".txt":
-                parser = new CSVParserBuilder().withSeparator('\t').build();
-                break;
-            default:
-                return;
+
+        if(arquivoPath!=null){
+            String arquivoExtensao = fileDir.getAbsolutePath().substring(fileDir.getAbsolutePath().lastIndexOf("."));
+
+
+            switch (arquivoExtensao) {
+                case ".csv":
+                    parser = new CSVParserBuilder().withSeparator(';').build();
+                    break;
+                case ".txt":
+                    parser = new CSVParserBuilder().withSeparator('\t').build();
+                    break;
+                default:
+                    return;
+            }
+        }else{
+            throw new IOException("Não foi possível abrir este arquivo.\nVerifique se ele se encontra na memória interna do aparelho!");
         }
 
         try (
