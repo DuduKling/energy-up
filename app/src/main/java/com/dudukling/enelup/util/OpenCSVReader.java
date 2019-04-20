@@ -52,7 +52,7 @@ public class OpenCSVReader {
         try (
                 BufferedReader br = new BufferedReader(
                         new InputStreamReader(
-                                new FileInputStream(fileDir), "UTF8"));
+                                new FileInputStream(fileDir), "ISO-8859-2"));
                 CSVReader csvReader = new CSVReaderBuilder(br).withSkipLines(1).withCSVParser(parser).build()
         ){
             String[] nextRecord;
@@ -62,23 +62,41 @@ public class OpenCSVReader {
                 lpModel lp = new lpModel();
 
                 try {
-                    lp.setOrdem(stripAccents(nextRecord[1]));
-                    lp.setCliente(stripAccents(nextRecord[2]));
-                    lp.setEndereco(stripAccents(nextRecord[3]));
+//                    lp.setOrdem(stripAccents(nextRecord[1]));
+//                    lp.setCliente(stripAccents(nextRecord[2]));
+//                    lp.setEndereco(stripAccents(nextRecord[3]));
+//
+//                    lp.setNumero_cliente(stripAccents(nextRecord[0]));
+//                    lp.setBairro(stripAccents(nextRecord[4]));
+//                    lp.setDescricao_etapa(stripAccents(nextRecord[12]));
+//                    lp.setObservacoes(stripAccents(nextRecord[14]));
+//
+//                    lp.setTipoOrdem(stripAccents(nextRecord[6]));
+//                    lp.setEtapa(stripAccents(nextRecord[11]));
+//                    lp.setLocalidade(stripAccents(nextRecord[36]));
+//
+//                    lp.setLatitude(stripAccents(nextRecord[37]));
+//                    lp.setLongitude(stripAccents(nextRecord[38]));
 
-                    lp.setNumero_cliente(stripAccents(nextRecord[0]));
-                    lp.setBairro(stripAccents(nextRecord[4]));
-                    lp.setDescricao_etapa(stripAccents(nextRecord[12]));
-                    lp.setObservacoes(stripAccents(nextRecord[14]));
+                    lp.setOrdem(nextRecord[1]);
+                    lp.setCliente(nextRecord[2]);
+                    lp.setEndereco(nextRecord[3]);
 
-                    lp.setTipoOrdem(stripAccents(nextRecord[6]));
-                    lp.setEtapa(stripAccents(nextRecord[11]));
-                    lp.setLocalidade(stripAccents(nextRecord[36]));
+                    lp.setNumero_cliente(nextRecord[0]);
+                    lp.setBairro(nextRecord[4]);
+                    lp.setDescricao_etapa(nextRecord[12]);
+                    lp.setObservacoes(nextRecord[14]);
 
-                    lp.setLatitude(stripAccents(nextRecord[37]));
-                    lp.setLongitude(stripAccents(nextRecord[38]));
+                    lp.setTipoOrdem(nextRecord[6]);
+                    lp.setEtapa(nextRecord[11]);
+                    lp.setLocalidade(nextRecord[36]);
 
-                    dao.insert(lp);
+                    lp.setLatitude(nextRecord[37]);
+                    lp.setLongitude(nextRecord[38]);
+
+                    if(!lp.getOrdem().equals("")){
+                        dao.insert(lp);
+                    }
                 }
                 catch (IndexOutOfBoundsException e) {
                     e.printStackTrace();

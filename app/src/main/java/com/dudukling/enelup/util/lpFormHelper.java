@@ -170,7 +170,7 @@ public class lpFormHelper {
 
 
         String text = lp.getObservacoes();
-        String charr = "**";
+        String charr = "*";
         if(text.contains(charr)){
             String endereco1 = text.substring(text.indexOf(charr)+charr.length());
             if(endereco1.contains(charr)) {
