@@ -50,11 +50,15 @@ public class mapFragment extends SupportMapFragment implements OnMapReadyCallbac
         lp = mapsController.lp;
         String lat = lp.getLatitude();
         String lng = lp.getLongitude();
-        latitude[0] = Double.parseDouble(lat);
-        longitude[0] = Double.parseDouble(lng);
+        if(!lat.equals("") && !lng.equals("")){
+            latitude[0] = Double.parseDouble(lat);
+            longitude[0] = Double.parseDouble(lng);
+        }else{
+            latitude[0] = 0.0;
+            longitude[0] = 0.0;
+        }
 
-
-        if(latitude[0] !=0 && longitude[0] !=0){
+        if(latitude[0] !=0.0 && longitude[0] !=0.0){
             LatLng posicao = new LatLng(latitude[0], longitude[0]);
 
             CameraUpdate update = CameraUpdateFactory.newLatLngZoom(posicao, 14);
@@ -72,17 +76,16 @@ public class mapFragment extends SupportMapFragment implements OnMapReadyCallbac
             longitude[0] = -43.171077;
 
             LatLng posicao = new LatLng(latitude[0], longitude[0]);
-            CameraUpdate update = CameraUpdateFactory.newLatLngZoom(posicao, 11);
+            CameraUpdate update = CameraUpdateFactory.newLatLngZoom(posicao, 19);
             googleMap.moveCamera(update);
 
-//            MarkerOptions marker = new MarkerOptions();
-//            marker.position(posicao);
-//            marker.title(lp.getCliente());
-//            marker.icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_AZURE));
-//            marker.snippet("Sem informações de GPS");
-//            googleMap.addMarker(marker);
+            MarkerOptions marker = new MarkerOptions();
+            marker.position(posicao);
+            marker.title("ENEL");
+            marker.icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_AZURE));
+            marker.snippet("Sem informações de GPS");
+            googleMap.addMarker(marker);
         }
-
 
         showAllOtherMarkers(googleMap);
     }
@@ -95,15 +98,20 @@ public class mapFragment extends SupportMapFragment implements OnMapReadyCallbac
         for(int i=0; i<lpList.size(); i++) {
             String lat2 = lpList.get(i).getLatitude();
             String lng2 = lpList.get(i).getLongitude();
-            String ordem = lpList.get(i).getOrdem();
+//            String ordem = lpList.get(i).getOrdem();
             String etapa = lpList.get(i).getEtapa();
 
-            double[] latitude2 = {0};
-            double[] longitude2 = {0};
-            latitude2[0] = Double.parseDouble(lat2);
-            longitude2[0] = Double.parseDouble(lng2);
+            double[] latitude2 = {0.0};
+            double[] longitude2 = {0.0};
+            if(!lat2.equals("") && !lng2.equals("")){
+                latitude2[0] = Double.parseDouble(lat2);
+                longitude2[0] = Double.parseDouble(lng2);
+            }else{
+                latitude2[0] = 0.0;
+                longitude2[0] = 0.0;
+            }
 
-            if(latitude2[0]!=0 && longitude2[0]!=0){
+            if(latitude2[0]!=0.0 && longitude2[0]!=0.0){
                 LatLng posicao2 = new LatLng(latitude2[0], longitude2[0]);
 
                 MarkerOptions marker2 = new MarkerOptions();
