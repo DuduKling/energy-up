@@ -26,6 +26,8 @@ import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.dudukling.enelup.adapter.fiscalizacao_recyclerAdapter;
+import com.dudukling.enelup.dao.externalDAO;
 import com.dudukling.enelup.dao.fiscalizaDAO;
 import com.dudukling.enelup.model.fiscaModel;
 
@@ -196,8 +198,15 @@ public class fiscalizacaoClandestinoFormActivity extends AppCompatActivity {
                     fiscaModel fiscaToSave = getFiscaFromFields(fisca);
                     if(formType.equals("new")){
                         dao.insert(fiscaToSave);
+
+                        externalDAO extDao = new externalDAO(this);
+                        extDao.sendFiscalizacaoClandestinoExternal("insert", dao.getLastInsertedFisca());
+
                     }else{
                         dao.update(fiscaToSave);
+
+                        externalDAO extDao = new externalDAO(this);
+                        extDao.sendFiscalizacaoClandestinoExternal("update", fiscaToSave);
                     }
                     finish();
                 }
@@ -363,7 +372,6 @@ public class fiscalizacaoClandestinoFormActivity extends AppCompatActivity {
         setValidateEmpty(textInputLayoutFiscaLatitude);
         setValidateEmpty(textInputLayoutFiscaLongitude);
     }
-
 
 
     private void fillForm(fiscaModel fisca) {

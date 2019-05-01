@@ -19,15 +19,15 @@ import com.dudukling.enelup.fiscalizacaoClandestinoFormActivity;
 import com.dudukling.enelup.model.fiscaModel;
 
 import java.io.File;
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
 
 public class fiscalizacao_recyclerAdapter extends RecyclerView.Adapter {
     private Context context;
-    private List<fiscaModel> fiscaList;
-
-    private String[] listaFiltros = new String[4];
+    public static fiscalizacao_recyclerAdapter context2;
+    public static List<fiscaModel> fiscaList;
 
     public fiscalizacao_recyclerAdapter(Context context) {
         fiscalizaDAO dao = new fiscalizaDAO(context);
@@ -35,6 +35,7 @@ public class fiscalizacao_recyclerAdapter extends RecyclerView.Adapter {
         dao.close();
 
         this.context = context;
+        this.context2 = this;
     }
 
     @NonNull
@@ -52,6 +53,7 @@ public class fiscalizacao_recyclerAdapter extends RecyclerView.Adapter {
 
         holder.textViewFiscalizaClandestinoNome.setText(fisca.getNome());
         holder.textViewFiscalizaClandestinoEndereco.setText(fisca.getEndereco());
+//        holder.textViewFiscalizaClandestinoEndereco.setText(fisca.getData_google_sheets());
     }
 
     class aViewHolder extends RecyclerView.ViewHolder implements View.OnCreateContextMenuListener {
@@ -134,7 +136,7 @@ public class fiscalizacao_recyclerAdapter extends RecyclerView.Adapter {
         return fiscaList.size();
     }
 
-    public void deleteImagesFromPhoneMemory(fiscaModel fisca) {
+    private void deleteImagesFromPhoneMemory(fiscaModel fisca) {
         List<String> imagesListToDelete = fisca.getImagesList();
         for (int i = 0; i < imagesListToDelete.size(); i++) {
             File file = new File(imagesListToDelete.get(i));

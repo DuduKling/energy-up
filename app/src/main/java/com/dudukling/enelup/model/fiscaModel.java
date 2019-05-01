@@ -35,6 +35,8 @@ public class fiscaModel implements Serializable {
     private String numero_ordem;
     private String estado_ordem;
 
+    private String data_google_sheets;
+
     private List<String> imagesList  = new ArrayList<>();
 
 
@@ -246,5 +248,12 @@ public class fiscaModel implements Serializable {
     }
     public void setExiste_ordem(String existe_ordem) {
         this.existe_ordem = existe_ordem;
+    }
+
+    public String getData_google_sheets() {
+        return data_google_sheets;
+    }
+    public void setData_google_sheets(String data_google_sheets) {
+        this.data_google_sheets = data_google_sheets;
     }
 }
