@@ -184,7 +184,7 @@ public class ligProvLevCargaFormActivity extends AppCompatActivity {
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         MenuInflater inflater = getMenuInflater();
-        inflater.inflate(R.menu.menu_form_save, menu);
+        inflater.inflate(R.menu.menu_save_form, menu);
 
         return super.onCreateOptionsMenu(menu);
     }

@@ -109,7 +109,7 @@ public class fiscalizacaoClandestinoAlbumActivity extends AppCompatActivity {
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         MenuInflater inflater = getMenuInflater();
-        inflater.inflate(R.menu.menu_album_lig_prov, menu);
+        inflater.inflate(R.menu.menu_camera_album, menu);
 
         return super.onCreateOptionsMenu(menu);
     }

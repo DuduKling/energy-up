@@ -19,7 +19,6 @@ import android.support.v4.app.ActivityCompat;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.support.v7.widget.CardView;
 import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -32,7 +31,6 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.dudukling.enelup.adapter.fiscalizacao_recyclerAdapter;
-import com.dudukling.enelup.adapter.ligProv_recyclerAdapter;
 import com.dudukling.enelup.dao.fiscalizaDAO;
 import com.dudukling.enelup.model.fiscaModel;
 import com.opencsv.CSVWriter;
@@ -89,7 +87,7 @@ public class fiscalizacaoClandestinoActivity extends AppCompatActivity {
             case android.R.id.home:
                 this.finish();
                 break;
-            case R.id.menu_delete_lp:
+            case R.id.menu_delete:
                 if (fiscaList != null) {
                     if (!fiscaList.isEmpty()) {
                         deleteAll();
@@ -97,7 +95,7 @@ public class fiscalizacaoClandestinoActivity extends AppCompatActivity {
                 }
                 break;
 
-            case R.id.menu_export_lp:
+            case R.id.menu_export:
                 checkPermissionBeforeExport();
                 break;
         }

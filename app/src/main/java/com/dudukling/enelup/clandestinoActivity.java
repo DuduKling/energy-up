@@ -65,7 +65,7 @@ public class clandestinoActivity extends AppCompatActivity {
                 this.finish();
                 break;
 
-            case R.id.menu_delete_clandestinos:
+            case R.id.menu_delete:
                 lpDAO dao = new lpDAO(this);
                 SQLiteDatabase db = dao.getReadableDatabase();
                 long qtdCSVClandest = DatabaseUtils.queryNumEntries(db, "lpClandestino");
@@ -76,7 +76,7 @@ public class clandestinoActivity extends AppCompatActivity {
                 dao.close();
                 break;
 
-            case R.id.menu_export_clandestinos:
+            case R.id.menu_export:
                 checkPermissionBeforeExport();
                 break;
         }
@@ -86,7 +86,7 @@ public class clandestinoActivity extends AppCompatActivity {
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         MenuInflater inflater = getMenuInflater();
-        inflater.inflate(R.menu.menu_clandestino, menu);
+        inflater.inflate(R.menu.menu_delete_export, menu);
 
         return super.onCreateOptionsMenu(menu);
     }

@@ -12,7 +12,6 @@ import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Environment;
-import android.os.PersistableBundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.RequiresApi;
 import android.support.v4.app.ActivityCompat;
@@ -200,7 +199,7 @@ public class ligProvActivity extends AppCompatActivity {
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         MenuInflater inflater = getMenuInflater();
-        inflater.inflate(R.menu.menu_lig_prov, menu);
+        inflater.inflate(R.menu.menu_delete_export_search, menu);
 
         MenuItem search = menu.findItem(R.id.action_search);
         SearchView searchView = (SearchView) search.getActionView();
@@ -231,7 +230,7 @@ public class ligProvActivity extends AppCompatActivity {
                 this.finish();
                 break;
 
-            case R.id.menu_delete_lp:
+            case R.id.menu_delete:
                 if (lpList != null) {
                     if (!lpList.isEmpty()) {
                         deleteAll();
@@ -239,7 +238,7 @@ public class ligProvActivity extends AppCompatActivity {
                 }
                 break;
 
-            case R.id.menu_export_lp:
+            case R.id.menu_export:
                 checkPermissionBeforeExport();
                 break;
         }

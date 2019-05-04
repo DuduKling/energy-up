@@ -338,9 +338,9 @@ public class clandestinoFormActivity extends AppCompatActivity {
     public boolean onCreateOptionsMenu(Menu menu) {
         MenuInflater inflater = getMenuInflater();
         if(tipoForm.equals("readOnly")){
-            inflater.inflate(R.menu.menu_form_edit, menu);
+            inflater.inflate(R.menu.menu_edit_form, menu);
         }else{
-            inflater.inflate(R.menu.menu_form_save, menu);
+            inflater.inflate(R.menu.menu_save_form, menu);
         }
         return super.onCreateOptionsMenu(menu);
     }

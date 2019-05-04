@@ -8,11 +8,11 @@
         app:showAsAction="always"/>
 
     <item
-        android:id="@+id/menu_delete_lp"
+        android:id="@+id/menu_delete"
         android:title="@string/menu_limpar_aplicativo"/>
 
     <item
-        android:id="@+id/menu_export_lp"
+        android:id="@+id/menu_export"
         android:title="@string/menu_exportar_modificacoes"/>
 
 </menu>

@@ -26,7 +26,6 @@ import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.dudukling.enelup.adapter.fiscalizacao_recyclerAdapter;
 import com.dudukling.enelup.dao.externalDAO;
 import com.dudukling.enelup.dao.fiscalizaDAO;
 import com.dudukling.enelup.model.fiscaModel;
@@ -469,9 +468,9 @@ public class fiscalizacaoClandestinoFormActivity extends AppCompatActivity {
     public boolean onCreateOptionsMenu(Menu menu) {
         MenuInflater inflater = getMenuInflater();
         if(formType.equals("readOnly")){
-            inflater.inflate(R.menu.menu_form_edit, menu);
+            inflater.inflate(R.menu.menu_edit_form, menu);
         }else{
-            inflater.inflate(R.menu.menu_form_save, menu);
+            inflater.inflate(R.menu.menu_save_form, menu);
         }
 
         return super.onCreateOptionsMenu(menu);

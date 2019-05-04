@@ -11,7 +11,6 @@ import android.location.LocationListener;
 import android.location.LocationManager;
 import android.os.Build;
 import android.os.Bundle;
-import android.os.PersistableBundle;
 import android.provider.Settings;
 import android.support.annotation.RequiresApi;
 import android.support.constraint.ConstraintLayout;
@@ -36,8 +35,6 @@ import com.dudukling.enelup.model.lpModel;
 import com.dudukling.enelup.util.lpFormHelper;
 import com.dudukling.enelup.util.mapsController;
 
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Objects;
 
 public class ligProvFormActivity extends AppCompatActivity {
@@ -286,9 +283,9 @@ public class ligProvFormActivity extends AppCompatActivity {
     public boolean onCreateOptionsMenu(Menu menu) {
         MenuInflater inflater = getMenuInflater();
         if(formType.equals("readOnly")){
-            inflater.inflate(R.menu.menu_form_edit, menu);
+            inflater.inflate(R.menu.menu_edit_form, menu);
         }else{
-            inflater.inflate(R.menu.menu_form_save, menu);
+            inflater.inflate(R.menu.menu_save_form, menu);
         }
 
         return super.onCreateOptionsMenu(menu);
