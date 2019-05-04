@@ -79,23 +79,27 @@ public class clandestinoFormActivity extends AppCompatActivity {
 
         textViewClandestNumero = this.findViewById(R.id.textViewClandestNumero);
         setFields();
-        if(tipoForm.equals("readOnly")){
-            fillForm(lpClandest);
-            disableFields();
-        }else if(tipoForm.equals("edit")){
-            fillForm(lpClandest);
-            setValidation();
-            setCalculus();
-        }else if(tipoForm.equals("new")){
-            setValidation();
+        switch (tipoForm) {
+            case "readOnly":
+                fillForm(lpClandest);
+                disableFields();
+                break;
+            case "edit":
+                fillForm(lpClandest);
+                setValidation();
+                setCalculus();
+                break;
+            case "new":
+                setValidation();
 
-            lpDAO dao = new lpDAO(this);
-            int nextID = dao.getClandestinoLastID() + 1;
-            dao.close();
+                lpDAO dao = new lpDAO(this);
+                int nextID = dao.getClandestinoLastID() + 1;
+                dao.close();
 
-            textViewClandestNumero.setText("Clandestino #"+nextID);
-            getGPSLocation();
-            setCalculus();
+                textViewClandestNumero.setText("Clandestino #" + nextID);
+                getGPSLocation();
+                setCalculus();
+                break;
         }
     }
 
@@ -357,23 +361,27 @@ public class clandestinoFormActivity extends AppCompatActivity {
                         Toast.makeText(clandestinoFormActivity.this, "Favor preencher todos os campos obrigatórios!", Toast.LENGTH_LONG).show();
                         break;
                     case "gps":
-                        DialogInterface.OnClickListener dialogClickListener = new DialogInterface.OnClickListener() {
-                            @Override
-                            public void onClick(DialogInterface dialog, int which) {
-                                switch (which) {
-                                    case DialogInterface.BUTTON_POSITIVE:
-                                        salvaClandest();
-                                        break;
-                                    case DialogInterface.BUTTON_NEGATIVE:
-                                        //No button clicked
-                                        break;
+                        if(tipoForm.equals("new")){
+                            DialogInterface.OnClickListener dialogClickListener = new DialogInterface.OnClickListener() {
+                                @Override
+                                public void onClick(DialogInterface dialog, int which) {
+                                    switch (which) {
+                                        case DialogInterface.BUTTON_POSITIVE:
+                                            salvaClandest();
+                                            break;
+                                        case DialogInterface.BUTTON_NEGATIVE:
+                                            //No button clicked
+                                            break;
+                                    }
                                 }
-                            }
-                        };
-                        AlertDialog.Builder builder = new AlertDialog.Builder(this);
-                        builder.setMessage("Não foi possível detectar sua localização pelo GPS, deseja salvar mesmo assim?")
-                                .setPositiveButton("Salvar mesmo assim", dialogClickListener)
-                                .setNegativeButton("Aguardar um pouco", dialogClickListener).show();
+                            };
+                            AlertDialog.Builder builder = new AlertDialog.Builder(this);
+                            builder.setMessage("Não foi possível detectar sua localização pelo GPS, deseja salvar mesmo assim?")
+                                    .setPositiveButton("Salvar mesmo assim", dialogClickListener)
+                                    .setNegativeButton("Aguardar um pouco", dialogClickListener).show();
+                        }else{
+                            salvaClandest();
+                        }
                         break;
                 }
                 break;
@@ -508,7 +516,8 @@ public class clandestinoFormActivity extends AppCompatActivity {
 
         if(setValidateFatPotencia(spinnerFatPot)){return "false";}
 
-        if(lpClandest.getAutoLat().isEmpty() || lpClandest.getAutoLong().isEmpty()){return "gps";}
+        if(lpClandest.getAutoLat()==null || lpClandest.getAutoLong()==null) {return "gps";}
+        if (lpClandest.getAutoLat().isEmpty() || lpClandest.getAutoLong().isEmpty()) {return "gps";}
 
         return "true";
     }

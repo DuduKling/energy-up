@@ -379,8 +379,12 @@ public class lpDAO extends SQLiteOpenHelper {
         queryData.put("carga", clandest.getCarga());
         queryData.put("descricao", clandest.getDescricao());
         queryData.put("obs", clandest.getObs());
-        queryData.put("autoLat", clandest.getAutoLat());
-        queryData.put("autoLong", clandest.getAutoLong());
+
+        if(clandest.getAutoLat()==null){queryData.put("autoLat", "");}
+        else{queryData.put("autoLat", clandest.getAutoLat());}
+
+        if(clandest.getAutoLong()==null){queryData.put("autoLong", "");}
+        else{queryData.put("autoLong", clandest.getAutoLong());}
 
         queryData.put("NumeroOrdemLP", LPOrdem);
 
@@ -424,7 +428,7 @@ public class lpDAO extends SQLiteOpenHelper {
             clandest.setFatorPotencia(c.getString(c.getColumnIndex("fpClandest")));
             clandest.setCarga(c.getString(c.getColumnIndex("cargaClandest")));
             clandest.setDescricao(c.getString(c.getColumnIndex("descricaoClandest")));
-            clandest.setDescricao(c.getString(c.getColumnIndex("obsClandest")));
+            clandest.setObs(c.getString(c.getColumnIndex("obsClandest")));
 
             clandest.setOrdem(c.getString(c.getColumnIndex("ordemLP")));
 
@@ -461,8 +465,11 @@ public class lpDAO extends SQLiteOpenHelper {
         queryData.put("descricao", clandest.getDescricao());
         queryData.put("obs", clandest.getObs());
 
-        queryData.put("autoLat", clandest.getAutoLat());
-        queryData.put("autoLong", clandest.getAutoLong());
+        if(clandest.getAutoLat()==null){queryData.put("autoLat", "");}
+        else{queryData.put("autoLat", clandest.getAutoLat());}
+
+        if(clandest.getAutoLong()==null){queryData.put("autoLong", "");}
+        else{queryData.put("autoLong", clandest.getAutoLong());}
 
         String[] params = {String.valueOf(clandest.getId())};
         db.update("lpClandestino", queryData, "id=?", params);
