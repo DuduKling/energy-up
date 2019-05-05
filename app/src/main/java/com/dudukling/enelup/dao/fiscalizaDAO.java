@@ -44,6 +44,7 @@ public class fiscalizaDAO extends SQLiteOpenHelper {
     private String FIELD_ORDEM = "numero_ordem";
     private String FIELD_ESTADO_ORDEM = "estado_ordem";
     private String FIELD_DATA_ENVIO_GOOGLE_SHEETS = "data_google_sheets";
+    private String FIELD_FLAG_GOOGLE_SHEETS = "flag_google_sheets";     // '' - new, 0 - editado, 1 - enviado
 
     public fiscalizaDAO(Context context) {
         super(context, "fiscaTable", null, 1);
@@ -81,7 +82,8 @@ public class fiscalizaDAO extends SQLiteOpenHelper {
                 FIELD_EXISTE_ORDEM + " TEXT NOT NULL," +
                 FIELD_ORDEM + " TEXT NOT NULL," +
                 FIELD_ESTADO_ORDEM + " TEXT NOT NULL," +
-                FIELD_DATA_ENVIO_GOOGLE_SHEETS + " TEXT NOT NULL" +
+                FIELD_DATA_ENVIO_GOOGLE_SHEETS + " TEXT NOT NULL," +
+                FIELD_FLAG_GOOGLE_SHEETS + " TEXT NOT NULL" +
                 ");";
         db.execSQL(sql);
 
@@ -144,6 +146,8 @@ public class fiscalizaDAO extends SQLiteOpenHelper {
         ContentValues queryData = getContentValues(fisca);
         String[] params = {String.valueOf(fisca.getId())};
         db.update(TABLE_NAME, queryData, "id=?", params);
+
+        updateToEditFiscaFlag(fisca.getId());
     }
 
     public void truncateFiscalizacoes() {
@@ -152,16 +156,23 @@ public class fiscalizaDAO extends SQLiteOpenHelper {
         db.delete("fiscaImages", null,null);
     }
 
-    public void updateFiscaDate(int id, String date) {
+    public void updateToEnviadoFiscasFlag() {
+        SQLiteDatabase db = getWritableDatabase();
+
+        ContentValues queryData = new ContentValues();queryData.put(FIELD_FLAG_GOOGLE_SHEETS, "1");
+
+        db.update(TABLE_NAME, queryData, FIELD_FLAG_GOOGLE_SHEETS+"<>'1'", null);
+    }
+
+    private void updateToEditFiscaFlag(int id) {
         SQLiteDatabase db = getWritableDatabase();
 
         ContentValues queryData = new ContentValues();
-        queryData.put(FIELD_DATA_ENVIO_GOOGLE_SHEETS, date);
+        queryData.put(FIELD_FLAG_GOOGLE_SHEETS, "0");
 
         String[] params = {String.valueOf(id)};
         db.update(TABLE_NAME, queryData, FIELD_ID+"=?", params);
     }
-
 
     // GETS
     public List<fiscaModel> getFiscaList() {
@@ -207,6 +218,7 @@ public class fiscalizaDAO extends SQLiteOpenHelper {
             fisca.setNumero_ordem(c.getString(c.getColumnIndex(FIELD_ORDEM)));
             fisca.setEstado_ordem(c.getString(c.getColumnIndex(FIELD_ESTADO_ORDEM)));
             fisca.setData_google_sheets(c.getString(c.getColumnIndex(FIELD_DATA_ENVIO_GOOGLE_SHEETS)));
+            fisca.setFlag_google_sheets(c.getString(c.getColumnIndex(FIELD_FLAG_GOOGLE_SHEETS)));
 
             // Imagens:
             List<String> imagesList = getImagesDB(dbFiscaList);
@@ -218,52 +230,6 @@ public class fiscalizaDAO extends SQLiteOpenHelper {
         c.close();
 
         return fiscaList;
-    }
-
-    public fiscaModel getLastInsertedFisca() {
-        SQLiteDatabase db = getReadableDatabase();
-
-        String sql = "SELECT * FROM "+ TABLE_NAME +" ORDER BY "+ FIELD_ID +" DESC LIMIT 1";
-
-        Cursor c = db.rawQuery(sql, null);
-        fiscaModel fiscaLast = new fiscaModel();
-
-        while (c.moveToNext()) {
-            fiscaLast.setId(c.getInt(c.getColumnIndex(FIELD_ID)));
-            fiscaLast.setFuncionario(c.getString(c.getColumnIndex(FIELD_FUNCIONARIO)));
-            fiscaLast.setNome(c.getString(c.getColumnIndex(FIELD_NOME)));
-            fiscaLast.setEndereco(c.getString(c.getColumnIndex(FIELD_ENDERECO)));
-            fiscaLast.setBairro(c.getString(c.getColumnIndex(FIELD_BAIRRO)));
-            fiscaLast.setMunicipio(c.getString(c.getColumnIndex(FIELD_MUNICIPIO)));
-            fiscaLast.setCpf(c.getString(c.getColumnIndex(FIELD_CPF)));
-            fiscaLast.setCpf_status(c.getString(c.getColumnIndex(FIELD_CPF_STATUS)));
-            fiscaLast.setNis(c.getString(c.getColumnIndex(FIELD_NIS)));
-            fiscaLast.setRg(c.getString(c.getColumnIndex(FIELD_RG)));
-            fiscaLast.setData_nascimento(c.getString(c.getColumnIndex(FIELD_DATA_NASCIMENTO)));
-            fiscaLast.setMedidor_vizinho_1(c.getString(c.getColumnIndex(FIELD_MEDIDOR_1)));
-            fiscaLast.setMedidor_vizinho_2(c.getString(c.getColumnIndex(FIELD_MEDIDOR_2)));
-            fiscaLast.setTelefone(c.getString(c.getColumnIndex(FIELD_TELEFONE)));
-            fiscaLast.setCelular(c.getString(c.getColumnIndex(FIELD_CELULAR)));
-            fiscaLast.setEmail(c.getString(c.getColumnIndex(FIELD_EMAIL)));
-            fiscaLast.setLatitude(c.getString(c.getColumnIndex(FIELD_LATITUDE)));
-            fiscaLast.setLongitude(c.getString(c.getColumnIndex(FIELD_LONGITUDE)));
-            fiscaLast.setPreservacao_ambiental(c.getString(c.getColumnIndex(FIELD_PRESERVACAO_AMBIENTAL)));
-            fiscaLast.setArea_invadida(c.getString(c.getColumnIndex(FIELD_AREA_INVADIDA)));
-            fiscaLast.setTipo_ligacao(c.getString(c.getColumnIndex(FIELD_TIPO_LIGACAO)));
-            fiscaLast.setRede_local(c.getString(c.getColumnIndex(FIELD_REDE_LOCAL)));
-            fiscaLast.setPadrao_montado(c.getString(c.getColumnIndex(FIELD_AREA_MONTADO)));
-            fiscaLast.setFaixa_servidao(c.getString(c.getColumnIndex(FIELD_FAIXA_SERVIDAO)));
-            fiscaLast.setPre_indicacao(c.getString(c.getColumnIndex(FIELD_PRE_INDICADO)));
-            fiscaLast.setCpf_pre_indicacao(c.getString(c.getColumnIndex(FIELD_CPF_PRE_INDICADO)));
-            fiscaLast.setExiste_ordem(c.getString(c.getColumnIndex(FIELD_EXISTE_ORDEM)));
-            fiscaLast.setNumero_ordem(c.getString(c.getColumnIndex(FIELD_ORDEM)));
-            fiscaLast.setEstado_ordem(c.getString(c.getColumnIndex(FIELD_ESTADO_ORDEM)));
-            fiscaLast.setData_google_sheets(c.getString(c.getColumnIndex(FIELD_DATA_ENVIO_GOOGLE_SHEETS)));
-        }
-
-        c.close();
-
-        return fiscaLast;
     }
 
     public List<String> getImagesDB(int dbSampleID) {
@@ -278,6 +244,59 @@ public class fiscalizaDAO extends SQLiteOpenHelper {
         c2.close();
 
         return imagesList;
+    }
+
+    public List<fiscaModel> getFiscaListNotUploadedYet() {
+        SQLiteDatabase db = getReadableDatabase();
+
+        String sql = "SELECT * FROM "+ TABLE_NAME +" WHERE "+ FIELD_FLAG_GOOGLE_SHEETS +"<>'1' ORDER BY "+ FIELD_ID +" DESC";
+
+        Cursor c = db.rawQuery(sql, null);
+        List<fiscaModel> fiscaList = new ArrayList<>();
+
+        while (c.moveToNext()) {
+            fiscaModel fisca = new fiscaModel();
+
+            int dbFiscaList = c.getInt(c.getColumnIndex(FIELD_ID));
+            fisca.setId(dbFiscaList);
+
+            fisca.setFuncionario(c.getString(c.getColumnIndex(FIELD_FUNCIONARIO)));
+            fisca.setNome(c.getString(c.getColumnIndex(FIELD_NOME)));
+            fisca.setEndereco(c.getString(c.getColumnIndex(FIELD_ENDERECO)));
+            fisca.setBairro(c.getString(c.getColumnIndex(FIELD_BAIRRO)));
+            fisca.setMunicipio(c.getString(c.getColumnIndex(FIELD_MUNICIPIO)));
+            fisca.setCpf(c.getString(c.getColumnIndex(FIELD_CPF)));
+            fisca.setCpf_status(c.getString(c.getColumnIndex(FIELD_CPF_STATUS)));
+            fisca.setNis(c.getString(c.getColumnIndex(FIELD_NIS)));
+            fisca.setRg(c.getString(c.getColumnIndex(FIELD_RG)));
+            fisca.setData_nascimento(c.getString(c.getColumnIndex(FIELD_DATA_NASCIMENTO)));
+            fisca.setMedidor_vizinho_1(c.getString(c.getColumnIndex(FIELD_MEDIDOR_1)));
+            fisca.setMedidor_vizinho_2(c.getString(c.getColumnIndex(FIELD_MEDIDOR_2)));
+            fisca.setTelefone(c.getString(c.getColumnIndex(FIELD_TELEFONE)));
+            fisca.setCelular(c.getString(c.getColumnIndex(FIELD_CELULAR)));
+            fisca.setEmail(c.getString(c.getColumnIndex(FIELD_EMAIL)));
+            fisca.setLatitude(c.getString(c.getColumnIndex(FIELD_LATITUDE)));
+            fisca.setLongitude(c.getString(c.getColumnIndex(FIELD_LONGITUDE)));
+            fisca.setPreservacao_ambiental(c.getString(c.getColumnIndex(FIELD_PRESERVACAO_AMBIENTAL)));
+            fisca.setArea_invadida(c.getString(c.getColumnIndex(FIELD_AREA_INVADIDA)));
+            fisca.setTipo_ligacao(c.getString(c.getColumnIndex(FIELD_TIPO_LIGACAO)));
+            fisca.setRede_local(c.getString(c.getColumnIndex(FIELD_REDE_LOCAL)));
+            fisca.setPadrao_montado(c.getString(c.getColumnIndex(FIELD_AREA_MONTADO)));
+            fisca.setFaixa_servidao(c.getString(c.getColumnIndex(FIELD_FAIXA_SERVIDAO)));
+            fisca.setPre_indicacao(c.getString(c.getColumnIndex(FIELD_PRE_INDICADO)));
+            fisca.setCpf_pre_indicacao(c.getString(c.getColumnIndex(FIELD_CPF_PRE_INDICADO)));
+            fisca.setExiste_ordem(c.getString(c.getColumnIndex(FIELD_EXISTE_ORDEM)));
+            fisca.setNumero_ordem(c.getString(c.getColumnIndex(FIELD_ORDEM)));
+            fisca.setEstado_ordem(c.getString(c.getColumnIndex(FIELD_ESTADO_ORDEM)));
+            fisca.setData_google_sheets(c.getString(c.getColumnIndex(FIELD_DATA_ENVIO_GOOGLE_SHEETS)));
+            fisca.setFlag_google_sheets(c.getString(c.getColumnIndex(FIELD_FLAG_GOOGLE_SHEETS)));
+
+            fiscaList.add(fisca);
+        }
+
+        c.close();
+
+        return fiscaList;
     }
 
 
@@ -336,6 +355,9 @@ public class fiscalizaDAO extends SQLiteOpenHelper {
         else if(fisca.getData_google_sheets().isEmpty()){queryData.put(FIELD_DATA_ENVIO_GOOGLE_SHEETS, "");}
         else{queryData.put(FIELD_DATA_ENVIO_GOOGLE_SHEETS, fisca.getData_google_sheets());}
 
+        if(fisca.getFlag_google_sheets()==null){queryData.put(FIELD_FLAG_GOOGLE_SHEETS, "");}
+        else if(fisca.getFlag_google_sheets().isEmpty()){queryData.put(FIELD_FLAG_GOOGLE_SHEETS, "");}
+        else{queryData.put(FIELD_FLAG_GOOGLE_SHEETS, fisca.getFlag_google_sheets());}
 
         return queryData;
     }

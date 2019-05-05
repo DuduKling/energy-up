@@ -197,15 +197,8 @@ public class fiscalizacaoClandestinoFormActivity extends AppCompatActivity {
                     fiscaModel fiscaToSave = getFiscaFromFields(fisca);
                     if(formType.equals("new")){
                         dao.insert(fiscaToSave);
-
-                        externalDAO extDao = new externalDAO(this);
-                        extDao.sendFiscalizacaoClandestinoExternal("insert", dao.getLastInsertedFisca());
-
                     }else{
                         dao.update(fiscaToSave);
-
-                        externalDAO extDao = new externalDAO(this);
-                        extDao.sendFiscalizacaoClandestinoExternal("update", fiscaToSave);
                     }
                     finish();
                 }

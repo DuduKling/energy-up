@@ -1,20 +1,33 @@
 package com.dudukling.enelup.dao;
 
+import android.app.ProgressDialog;
 import android.content.Context;
+import android.util.Log;
 import android.widget.Toast;
 
+import com.android.volley.AuthFailureError;
 import com.android.volley.DefaultRetryPolicy;
+import com.android.volley.NetworkError;
+import com.android.volley.NoConnectionError;
+import com.android.volley.ParseError;
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
 import com.android.volley.Response;
 import com.android.volley.RetryPolicy;
+import com.android.volley.ServerError;
+import com.android.volley.TimeoutError;
 import com.android.volley.VolleyError;
-import com.android.volley.toolbox.StringRequest;
+import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.Volley;
 import com.dudukling.enelup.adapter.fiscalizacao_recyclerAdapter;
 import com.dudukling.enelup.model.fiscaModel;
 
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 public class externalDAO {
@@ -25,72 +38,100 @@ public class externalDAO {
         this.context = context;
     }
 
-    public void sendFiscalizacaoClandestinoExternal(final String type, final fiscaModel fisca) {
-        StringRequest stringRequest = new StringRequest(Request.Method.POST, WEB_APP_URL,
-                new Response.Listener<String>() {
-                    @Override
-                    public void onResponse(String response) {
-                        if(response.equals("naum")){
-                            Toast.makeText(context, "Registro não encontrado. Não é possível atualizar os dados..", Toast.LENGTH_LONG).show();
-                        }else {
-                            fiscalizaDAO dao = new fiscalizaDAO(context);
-                            dao.updateFiscaDate(fisca.getId(), response);
-                            fiscalizacao_recyclerAdapter.fiscaList = dao.getFiscaList();
-                            fiscalizacao_recyclerAdapter.context2.notifyDataSetChanged();
-                            dao.close();
+    public void sendFiscalizacaoClandestinoExternal(final String type, List<fiscaModel> fiscaList, final ProgressDialog dialog) {
 
-//                            Toast.makeText(context, response, Toast.LENGTH_LONG).show();
-                        }
+        // Preparar JSON com o fiscaList
+        JSONObject finalJSON = new JSONObject();
+        JSONArray jsonArr = new JSONArray();
+        try {
+            for (fiscaModel list : fiscaList) {
+                JSONObject fiscaJSON = new JSONObject();
+
+                fiscaJSON.put("id", list.getId());
+                fiscaJSON.put("funcionario", list.getFuncionario());
+                fiscaJSON.put("nome", list.getNome());
+                fiscaJSON.put("endereco", list.getEndereco());
+                fiscaJSON.put("bairro", list.getBairro());
+                fiscaJSON.put("municipio", list.getMunicipio());
+                fiscaJSON.put("cpf", list.getCpf());
+                fiscaJSON.put("cpf_status", list.getCpf_status());
+                fiscaJSON.put("nis", list.getNis());
+                fiscaJSON.put("rg", list.getRg());
+                fiscaJSON.put("data_nascimento", list.getData_nascimento());
+                fiscaJSON.put("medidor_vizinho_1", list.getMedidor_vizinho_1());
+                fiscaJSON.put("medidor_vizinho_2", list.getMedidor_vizinho_2());
+                fiscaJSON.put("telefone", list.getTelefone());
+                fiscaJSON.put("celular", list.getCelular());
+                fiscaJSON.put("email", list.getEmail());
+                fiscaJSON.put("latitude", list.getLatitude());
+                fiscaJSON.put("longitude", list.getLongitude());
+                fiscaJSON.put("preservacao_ambiental", list.getPreservacao_ambiental());
+                fiscaJSON.put("area_invadida", list.getArea_invadida());
+                fiscaJSON.put("tipo_ligacao", list.getTipo_ligacao());
+                fiscaJSON.put("rede_local", list.getRede_local());
+                fiscaJSON.put("padrao_montado", list.getPadrao_montado());
+                fiscaJSON.put("faixa_servidao", list.getFaixa_servidao());
+                fiscaJSON.put("pre_indicacao", list.getPre_indicacao());
+                fiscaJSON.put("cpf_pre_indicacao", list.getCpf_pre_indicacao());
+                fiscaJSON.put("existe_ordem", list.getExiste_ordem());
+                fiscaJSON.put("numero_ordem", list.getNumero_ordem());
+                fiscaJSON.put("estado_ordem", list.getEstado_ordem());
+
+                jsonArr.put(fiscaJSON);
+            }
+            finalJSON.put("valores", jsonArr);
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+
+        Log.d("PORRA", String.valueOf(finalJSON));
+
+        JsonObjectRequest jsonObjReq = new JsonObjectRequest(Request.Method.POST, WEB_APP_URL, finalJSON,
+            new Response.Listener<JSONObject>() {
+                @Override
+                public void onResponse(JSONObject response) {
+                    String resp = "";
+                    try {
+                        resp = response.getString("result");
+                    } catch (JSONException e) {
+                        e.printStackTrace();
                     }
-                },
-                new Response.ErrorListener() {
-                    @Override
-                    public void onErrorResponse(VolleyError error) {
-                        Toast.makeText(context, "Ocorreu um erro no envio para a base do Google.", Toast.LENGTH_LONG).show();
+                    if(resp.equals("foi")){
+                        fiscalizaDAO dao = new fiscalizaDAO(context);
+                        dao.updateToEnviadoFiscasFlag();
+                        fiscalizacao_recyclerAdapter.fiscaList = dao.getFiscaList();
+                        fiscalizacao_recyclerAdapter.context2.notifyDataSetChanged();
+                        dao.close();
+
+                        dialog.dismiss();
+                        Toast.makeText(context, "Enviado com sucesso!!", Toast.LENGTH_LONG).show();
                     }
                 }
-        ) {
+            },
+            new Response.ErrorListener() {
+                @Override
+                public void onErrorResponse(VolleyError error) {
+                    if (error instanceof TimeoutError || error instanceof NoConnectionError) {
+                        Toast.makeText(context, "Ocorreu um erro: TimeoutError ou NoConnectionError", Toast.LENGTH_LONG).show();
+                    }else if(error instanceof AuthFailureError) {
+                        Toast.makeText(context, "Ocorreu um erro: AuthFailureError", Toast.LENGTH_LONG).show();
+                    }else if(error instanceof ServerError) {
+                        Toast.makeText(context, "Ocorreu um erro: ServerError", Toast.LENGTH_LONG).show();
+                    }else if(error instanceof NetworkError) {
+                        Toast.makeText(context, "Ocorreu um erro: NetworkError", Toast.LENGTH_LONG).show();
+                    }else if(error instanceof ParseError) {
+                        Toast.makeText(context, "Ocorreu um erro: ParseError", Toast.LENGTH_LONG).show();
+                    }
+
+                    dialog.dismiss();
+                }
+            }
+        ){
             @Override
             protected Map<String, String> getParams() {
                 Map<String, String> params = new HashMap<>();
 
-                if(type.equals("insert")){
-                    params.put("action", "insert");
-                }else if(type.equals("update")){
-                    params.put("action", "update");
-                }
-
-                params.put("id", String.valueOf(fisca.getId()));
-                params.put("funcionario", fisca.getFuncionario()==null?"":fisca.getFuncionario());
-                params.put("nome", fisca.getNome()==null?"":fisca.getNome());
-                params.put("endereco", fisca.getEndereco()==null?"":fisca.getEndereco());
-                params.put("bairro", fisca.getBairro()==null?"":fisca.getBairro());
-                params.put("municipio", fisca.getMunicipio()==null?"":fisca.getMunicipio());
-                params.put("cpf", fisca.getCpf()==null?"":fisca.getCpf());
-                params.put("cpf_status", fisca.getCpf_status()==null?"":fisca.getCpf_status());
-                params.put("nis", fisca.getNis()==null?"":fisca.getNis());
-                params.put("rg", fisca.getRg()==null?"":fisca.getRg());
-                params.put("data_nascimento", fisca.getData_nascimento()==null?"":fisca.getData_nascimento());
-                params.put("medidor_visinho_1", fisca.getMedidor_vizinho_1()==null?"":fisca.getMedidor_vizinho_1());
-                params.put("medidor_visinho_2", fisca.getMedidor_vizinho_2()==null?"":fisca.getMedidor_vizinho_2());
-                params.put("telefone", fisca.getTelefone()==null?"":fisca.getTelefone());
-                params.put("celular", fisca.getCelular()==null?"":fisca.getCelular());
-                params.put("email", fisca.getEmail()==null?"":fisca.getEmail());
-                params.put("latitude", fisca.getLatitude()==null?"":fisca.getLatitude());
-                params.put("longitude", fisca.getLongitude()==null?"":fisca.getLongitude());
-                params.put("preservacao_ambiental", fisca.getPreservacao_ambiental()==null?"":fisca.getPre_indicacao());
-                params.put("area_invadida", fisca.getArea_invadida()==null?"":fisca.getArea_invadida());
-                params.put("tipo_ligacao", fisca.getTipo_ligacao()==null?"":fisca.getTipo_ligacao());
-                params.put("rede_local", fisca.getRede_local()==null?"":fisca.getRede_local());
-                params.put("padrao_montado", fisca.getPadrao_montado()==null?"":fisca.getPadrao_montado());
-                params.put("faixa_servidao", fisca.getFaixa_servidao()==null?"":fisca.getFaixa_servidao());
-                params.put("pre_indicacao", fisca.getPre_indicacao()==null?"":fisca.getPre_indicacao());
-                params.put("cpf_pre_indicacao", fisca.getCpf_pre_indicacao()==null?"":fisca.getCpf_pre_indicacao());
-                params.put("existe_ordem", fisca.getExiste_ordem()==null?"":fisca.getExiste_ordem());
-                params.put("numero_ordem", fisca.getNumero_ordem()==null?"":fisca.getNumero_ordem());
-                params.put("estado_ordem", fisca.getEstado_ordem()==null?"":fisca.getEstado_ordem());
-
-                params.put("date", fisca.getData_google_sheets()==null?"":fisca.getData_google_sheets());
+                params.put("action", "insert");
 
                 return params;
             }
@@ -99,10 +140,10 @@ public class externalDAO {
         int socketTimeOut = 5000;
 
         RetryPolicy retryPolicy = new DefaultRetryPolicy(socketTimeOut, 0, DefaultRetryPolicy.DEFAULT_BACKOFF_MULT);
-        stringRequest.setRetryPolicy(retryPolicy);
+        jsonObjReq.setRetryPolicy(retryPolicy);
 
         RequestQueue queue = Volley.newRequestQueue(context);
 
-        queue.add(stringRequest);
+        queue.add(jsonObjReq);
     }
 }

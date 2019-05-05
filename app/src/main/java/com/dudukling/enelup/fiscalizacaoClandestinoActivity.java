@@ -3,6 +3,7 @@ package com.dudukling.enelup;
 import android.Manifest;
 import android.annotation.SuppressLint;
 import android.annotation.TargetApi;
+import android.app.ProgressDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
@@ -31,12 +32,14 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.dudukling.enelup.adapter.fiscalizacao_recyclerAdapter;
+import com.dudukling.enelup.dao.externalDAO;
 import com.dudukling.enelup.dao.fiscalizaDAO;
 import com.dudukling.enelup.model.fiscaModel;
 import com.opencsv.CSVWriter;
 
 import java.io.File;
 import java.io.FileWriter;
+import java.io.IOException;
 import java.text.Normalizer;
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -98,6 +101,10 @@ public class fiscalizacaoClandestinoActivity extends AppCompatActivity {
             case R.id.menu_export:
                 checkPermissionBeforeExport();
                 break;
+
+            case R.id.menu_upload:
+                uploadToCloud();
+                break;
         }
         return super.onOptionsItemSelected(item);
     }
@@ -124,7 +131,7 @@ public class fiscalizacaoClandestinoActivity extends AppCompatActivity {
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         MenuInflater inflater = getMenuInflater();
-        inflater.inflate(R.menu.menu_delete_export, menu);
+        inflater.inflate(R.menu.menu_delete_export_upload, menu);
 
         return super.onCreateOptionsMenu(menu);
     }
@@ -395,5 +402,47 @@ public class fiscalizacaoClandestinoActivity extends AppCompatActivity {
             boolean deleted = file.delete();
             Log.d("TAG4", "delete() called: " + deleted);
         }
+    }
+
+
+    public boolean isInternetConnectionOk() {
+        // ICMP
+        Runtime runtime = Runtime.getRuntime();
+        try {
+            Process ipProcess = runtime.exec("/system/bin/ping -c 1 8.8.8.8");
+            int     exitValue = ipProcess.waitFor();
+            return (exitValue == 0);
+        }
+        catch (IOException e)          { e.printStackTrace(); }
+        catch (InterruptedException e) { e.printStackTrace(); }
+
+        return false;
+    }
+
+    private void uploadToCloud() {
+        ProgressDialog dialog = ProgressDialog.show(this, "Enviar dados",
+                "Enviando. Favor aguarde...", true);
+
+        if(isInternetConnectionOk()){
+            // Preparar e enviar os clandestinos..
+
+            fiscalizaDAO dao = new fiscalizaDAO(this);
+            externalDAO extDao = new externalDAO(this);
+
+            List<fiscaModel> list = dao.getFiscaListNotUploadedYet();
+            dao.close();
+
+            if(list.size() > 0){
+                extDao.sendFiscalizacaoClandestinoExternal("insert", list, dialog);
+            }else{
+                dialog.dismiss();
+                Toast.makeText(this, "Não há mudanças para serem enviadas.", Toast.LENGTH_SHORT).show();
+            }
+
+        }else{
+            dialog.dismiss();
+            Toast.makeText(this, "Sem conexão de internet para envio dos dados..", Toast.LENGTH_SHORT).show();
+        }
+
     }
 }

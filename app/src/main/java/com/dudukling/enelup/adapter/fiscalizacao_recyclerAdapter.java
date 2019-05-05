@@ -2,6 +2,7 @@ package com.dudukling.enelup.adapter;
 
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Color;
 import android.os.Environment;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
@@ -11,6 +12,7 @@ import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.dudukling.enelup.R;
@@ -53,17 +55,26 @@ public class fiscalizacao_recyclerAdapter extends RecyclerView.Adapter {
 
         holder.textViewFiscalizaClandestinoNome.setText(fisca.getNome());
         holder.textViewFiscalizaClandestinoEndereco.setText(fisca.getEndereco());
-//        holder.textViewFiscalizaClandestinoEndereco.setText(fisca.getData_google_sheets());
+
+        if(fisca.getFlag_google_sheets().equals("1")){
+//             holder.imageViewFiscalizaClandestinoStatusUpload.setBackgroundColor(Color.parseColor("#8BC34A"));
+            holder.imageViewFiscalizaClandestinoStatusUpload.setVisibility(View.VISIBLE);
+        }else{
+//            holder.imageViewFiscalizaClandestinoStatusUpload.setBackgroundColor(Color.TRANSPARENT);
+            holder.imageViewFiscalizaClandestinoStatusUpload.setVisibility(View.GONE);
+        }
     }
 
     class aViewHolder extends RecyclerView.ViewHolder implements View.OnCreateContextMenuListener {
         final TextView textViewFiscalizaClandestinoNome;
         final TextView textViewFiscalizaClandestinoEndereco;
+        private ImageView imageViewFiscalizaClandestinoStatusUpload;
 
         aViewHolder(View view) {
             super(view);
             textViewFiscalizaClandestinoNome = view.findViewById(R.id.textViewFiscalizaClandestinoNome);
             textViewFiscalizaClandestinoEndereco = view.findViewById(R.id.textViewFiscalizaClandestinoEndereco);
+            imageViewFiscalizaClandestinoStatusUpload = view.findViewById(R.id.imageViewFiscalizaClandestinoStatusUpload);
 
             view.setOnCreateContextMenuListener(this);
             view.setOnClickListener(new View.OnClickListener() {
