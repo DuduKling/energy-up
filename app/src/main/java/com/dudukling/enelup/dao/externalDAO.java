@@ -2,6 +2,10 @@ package com.dudukling.enelup.dao;
 
 import android.app.ProgressDialog;
 import android.content.Context;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.provider.MediaStore;
+import android.util.Base64;
 import android.util.Log;
 import android.widget.Toast;
 
@@ -18,6 +22,7 @@ import com.android.volley.ServerError;
 import com.android.volley.TimeoutError;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
+import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 import com.dudukling.enelup.adapter.fiscalizacao_recyclerAdapter;
 import com.dudukling.enelup.model.fiscaModel;
@@ -26,6 +31,7 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.io.ByteArrayOutputStream;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -38,7 +44,7 @@ public class externalDAO {
         this.context = context;
     }
 
-    public void sendFiscalizacaoClandestinoExternal(final String type, List<fiscaModel> fiscaList, final ProgressDialog dialog) {
+    public void sendFiscalizacaoClandestinoExternal(List<fiscaModel> fiscaList, final ProgressDialog dialog) {
 
         // Preparar JSON com o fiscaList
         JSONObject finalJSON = new JSONObject();
@@ -76,6 +82,17 @@ public class externalDAO {
                 fiscaJSON.put("existe_ordem", list.getExiste_ordem());
                 fiscaJSON.put("numero_ordem", list.getNumero_ordem());
                 fiscaJSON.put("estado_ordem", list.getEstado_ordem());
+
+                if(list.getImagesList().size() > 0){
+                    JSONArray imagesArrJSON = new JSONArray();
+                    for (String imagePath : list.getImagesList()){
+                        Bitmap bitmap = BitmapFactory.decodeFile(imagePath);
+                        Bitmap rbitmap = getResizedBitmap(bitmap, 1500);    // maxSize de 1500 eh aproximadamente 1 MB..
+                        String userImage = getStringImage(rbitmap);
+                        imagesArrJSON.put(userImage);
+                    }
+                    fiscaJSON.put("imagens", imagesArrJSON);
+                }
 
                 jsonArr.put(fiscaJSON);
             }
@@ -131,13 +148,13 @@ public class externalDAO {
             protected Map<String, String> getParams() {
                 Map<String, String> params = new HashMap<>();
 
-                params.put("action", "insert");
+                params.put("action", "insert"); // Nao eh utilizado no momento..
 
                 return params;
             }
         };
 
-        int socketTimeOut = 5000;
+        int socketTimeOut = 300000;
 
         RetryPolicy retryPolicy = new DefaultRetryPolicy(socketTimeOut, 0, DefaultRetryPolicy.DEFAULT_BACKOFF_MULT);
         jsonObjReq.setRetryPolicy(retryPolicy);
@@ -145,5 +162,30 @@ public class externalDAO {
         RequestQueue queue = Volley.newRequestQueue(context);
 
         queue.add(jsonObjReq);
+    }
+
+    private Bitmap getResizedBitmap(Bitmap image, int maxSize) {
+        int width = image.getWidth();
+        int height = image.getHeight();
+
+        float bitmapRatio = (float)width / (float) height;
+        if (bitmapRatio > 1) {
+            width = maxSize;
+            height = (int) (width / bitmapRatio);
+        } else {
+            height = maxSize;
+            width = (int) (height * bitmapRatio);
+        }
+        return Bitmap.createScaledBitmap(image, width, height, true);
+
+    }
+
+    private String getStringImage(Bitmap bmp) {
+        ByteArrayOutputStream baos = new ByteArrayOutputStream();
+        bmp.compress(Bitmap.CompressFormat.JPEG, 100, baos);
+        byte[] imageBytes = baos.toByteArray();
+        String encodedImage = Base64.encodeToString(imageBytes, Base64.DEFAULT);
+
+        return encodedImage;
     }
 }

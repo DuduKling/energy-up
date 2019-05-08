@@ -291,6 +291,10 @@ public class fiscalizaDAO extends SQLiteOpenHelper {
             fisca.setData_google_sheets(c.getString(c.getColumnIndex(FIELD_DATA_ENVIO_GOOGLE_SHEETS)));
             fisca.setFlag_google_sheets(c.getString(c.getColumnIndex(FIELD_FLAG_GOOGLE_SHEETS)));
 
+            // Imagens:
+            List<String> imagesList = getImagesDB(dbFiscaList);
+            fisca.setImagesList(imagesList);
+
             fiscaList.add(fisca);
         }
 

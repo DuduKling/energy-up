@@ -10,6 +10,7 @@ import android.content.pm.PackageManager;
 import android.database.Cursor;
 import android.database.DatabaseUtils;
 import android.database.sqlite.SQLiteDatabase;
+import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Environment;
@@ -23,6 +24,7 @@ import android.os.Bundle;
 import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Base64;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -37,6 +39,7 @@ import com.dudukling.enelup.dao.fiscalizaDAO;
 import com.dudukling.enelup.model.fiscaModel;
 import com.opencsv.CSVWriter;
 
+import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
@@ -104,6 +107,7 @@ public class fiscalizacaoClandestinoActivity extends AppCompatActivity {
 
             case R.id.menu_upload:
                 uploadToCloud();
+//                uploadImagesToCloud();
                 break;
         }
         return super.onOptionsItemSelected(item);
@@ -424,8 +428,6 @@ public class fiscalizacaoClandestinoActivity extends AppCompatActivity {
                 "Enviando. Favor aguarde...", true);
 
         if(isInternetConnectionOk()){
-            // Preparar e enviar os clandestinos..
-
             fiscalizaDAO dao = new fiscalizaDAO(this);
             externalDAO extDao = new externalDAO(this);
 
@@ -433,7 +435,7 @@ public class fiscalizacaoClandestinoActivity extends AppCompatActivity {
             dao.close();
 
             if(list.size() > 0){
-                extDao.sendFiscalizacaoClandestinoExternal("insert", list, dialog);
+                extDao.sendFiscalizacaoClandestinoExternal(list, dialog);
             }else{
                 dialog.dismiss();
                 Toast.makeText(this, "Não há mudanças para serem enviadas.", Toast.LENGTH_SHORT).show();
