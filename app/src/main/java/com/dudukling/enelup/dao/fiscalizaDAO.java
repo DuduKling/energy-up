@@ -6,6 +6,7 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 
+import com.dudukling.enelup.adapter.fiscalizacao_recyclerAdapter;
 import com.dudukling.enelup.model.fiscaModel;
 
 import java.util.ArrayList;
@@ -134,6 +135,12 @@ public class fiscalizaDAO extends SQLiteOpenHelper {
         queryData.put("flag_google_sheets", 0);
 
         db.insert("fiscaImages", null, queryData);
+
+        if(fisca.getFlag_google_sheets().equals("1")) {
+            updateToEditFiscaFlag(fisca.getId());
+            fiscalizacao_recyclerAdapter.fiscaList = getFiscaList();
+            fiscalizacao_recyclerAdapter.context2.notifyDataSetChanged();
+        }
     }
 
     public void delete(fiscaModel fisca) {
