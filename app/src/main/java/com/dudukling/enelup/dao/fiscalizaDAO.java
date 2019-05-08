@@ -91,6 +91,7 @@ public class fiscalizaDAO extends SQLiteOpenHelper {
                 "id INTEGER PRIMARY KEY, " +
                 "path TEXT NOT NULL, " +
                 "fiscaID INTEGER NOT NULL, " +
+                "flag_google_sheets INTEGER NOT NULL, " +
                 "FOREIGN KEY (fiscaID) REFERENCES "+TABLE_NAME+"("+FIELD_ID+")" +
                 ");";
         db.execSQL(sql2);
@@ -130,6 +131,7 @@ public class fiscalizaDAO extends SQLiteOpenHelper {
         ContentValues queryData = new ContentValues();
         queryData.put("path", path);
         queryData.put("fiscaID", fisca.getId());
+        queryData.put("flag_google_sheets", 0);
 
         db.insert("fiscaImages", null, queryData);
     }
@@ -173,6 +175,7 @@ public class fiscalizaDAO extends SQLiteOpenHelper {
         String[] params = {String.valueOf(id)};
         db.update(TABLE_NAME, queryData, FIELD_ID+"=?", params);
     }
+
 
     // GETS
     public List<fiscaModel> getFiscaList() {
@@ -377,4 +380,24 @@ public class fiscalizaDAO extends SQLiteOpenHelper {
         return imageID;
     }
 
+
+
+    public boolean isNotEnviadoYet(String imagePath) {
+        SQLiteDatabase db = getReadableDatabase();
+        String sql = "SELECT flag_google_sheets FROM fiscaImages WHERE path = ?";
+        Cursor c = db.rawQuery(sql, new String[]{imagePath});
+        c.moveToFirst();
+        int flagGoogle = c.getInt(0);
+        c.close();
+
+        return flagGoogle == 0;
+    }
+
+    public void updateToEnviadoImages() {
+        SQLiteDatabase db = getWritableDatabase();
+
+        ContentValues queryData = new ContentValues();queryData.put("flag_google_sheets", 1);
+
+        db.update("fiscaImages", queryData, "flag_google_sheets==0", null);
+    }
 }

@@ -86,10 +86,13 @@ public class externalDAO {
                 if(list.getImagesList().size() > 0){
                     JSONArray imagesArrJSON = new JSONArray();
                     for (String imagePath : list.getImagesList()){
-                        Bitmap bitmap = BitmapFactory.decodeFile(imagePath);
-                        Bitmap rbitmap = getResizedBitmap(bitmap, 1500);    // maxSize de 1500 eh aproximadamente 1 MB..
-                        String userImage = getStringImage(rbitmap);
-                        imagesArrJSON.put(userImage);
+                        fiscalizaDAO dao = new fiscalizaDAO(context);
+                        if(dao.isNotEnviadoYet(imagePath)){
+                            Bitmap bitmap = BitmapFactory.decodeFile(imagePath);
+                            Bitmap rbitmap = getResizedBitmap(bitmap, 1500);    // maxSize de 1500 eh aproximadamente 1 MB..
+                            String userImage = getStringImage(rbitmap);
+                            imagesArrJSON.put(userImage);
+                        }
                     }
                     fiscaJSON.put("imagens", imagesArrJSON);
                 }
@@ -116,6 +119,7 @@ public class externalDAO {
                     if(resp.equals("foi")){
                         fiscalizaDAO dao = new fiscalizaDAO(context);
                         dao.updateToEnviadoFiscasFlag();
+                        dao.updateToEnviadoImages();
                         fiscalizacao_recyclerAdapter.fiscaList = dao.getFiscaList();
                         fiscalizacao_recyclerAdapter.context2.notifyDataSetChanged();
                         dao.close();
