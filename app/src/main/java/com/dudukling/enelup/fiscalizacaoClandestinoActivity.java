@@ -10,7 +10,6 @@ import android.content.pm.PackageManager;
 import android.database.Cursor;
 import android.database.DatabaseUtils;
 import android.database.sqlite.SQLiteDatabase;
-import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Environment;
@@ -24,7 +23,6 @@ import android.os.Bundle;
 import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.Base64;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -39,7 +37,6 @@ import com.dudukling.enelup.dao.fiscalizaDAO;
 import com.dudukling.enelup.model.fiscaModel;
 import com.opencsv.CSVWriter;
 
-import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
@@ -64,7 +61,7 @@ public class fiscalizacaoClandestinoActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         Objects.requireNonNull(getSupportActionBar()).setDisplayHomeAsUpEnabled(true);
         setTitle("Fiscalizações Clandestinos");
-        setContentView(R.layout.activity_clandestino_fiscalizacao);
+        setContentView(R.layout.activity_fiscalizacao_clandestino);
 
         FloatingActionButton floatingActionButtonFiscalizaClandestinoAdd = this.findViewById(R.id.floatingActionButtonFiscalizaClandestinoAdd);
         floatingActionButtonFiscalizaClandestinoAdd.setOnClickListener(new View.OnClickListener() {

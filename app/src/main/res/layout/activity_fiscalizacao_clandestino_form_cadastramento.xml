@@ -4,7 +4,9 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    xmlns:mask="http://schemas.android.com/apk/res-auto"
+    >
 
     <TextView
         android:id="@+id/textView39"
@@ -36,7 +38,8 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:hint="NIS"
-            android:inputType="number"/>
+            android:inputType="number"
+            android:maxLength="30"/>
     </android.support.design.widget.TextInputLayout>
 
     <android.support.design.widget.TextInputLayout
@@ -57,7 +60,8 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:hint="RG"
-            android:inputType="number"/>
+            android:inputType="number"
+            android:maxLength="11"/>
     </android.support.design.widget.TextInputLayout>
 
     <android.support.design.widget.TextInputLayout
@@ -74,11 +78,23 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/textInputLayoutFiscaRG">
 
-        <android.support.design.widget.TextInputEditText
+        <br.com.sapereaude.maskedEditText.MaskedEditText
+            android:id="@+id/maskedEditTextFiscaNascimento"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:hint="Data de nascimento"
-            android:inputType="date"/>
+            android:inputType="date"
+            app:layout_constraintEnd_toEndOf="@+id/textInputLayoutFiscaNascimento"
+            app:layout_constraintStart_toStartOf="@+id/textInputLayoutFiscaNascimento"
+            app:layout_constraintTop_toBottomOf="@+id/textInputLayoutFiscaNascimento"
+            mask:allowed_chars="1234567890"
+            mask:mask="##/##/####" />
+        <!--<android.support.design.widget.TextInputEditText-->
+            <!--android:layout_width="match_parent"-->
+            <!--android:layout_height="wrap_content"-->
+            <!--android:hint="Data de nascimento"-->
+            <!--android:inputType="date"-->
+            <!--android:maxLength="10"/>-->
     </android.support.design.widget.TextInputLayout>
 
     <android.support.design.widget.TextInputLayout
@@ -98,7 +114,8 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:hint="Medidor vizinho 1"
-            android:inputType="text"/>
+            android:inputType="text"
+            android:maxLength="50"/>
     </android.support.design.widget.TextInputLayout>
 
     <android.support.design.widget.TextInputLayout
@@ -118,7 +135,8 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:hint="Medidor vizinho 2"
-            android:inputType="text"/>
+            android:inputType="text"
+            android:maxLength="50"/>
     </android.support.design.widget.TextInputLayout>
 
     <android.support.design.widget.TextInputLayout
@@ -135,12 +153,24 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/textInputLayoutFiscaMedidor2">
 
-        <android.support.design.widget.TextInputEditText
+        <br.com.sapereaude.maskedEditText.MaskedEditText
+            android:id="@+id/maskedEditTextFiscaTelefone"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:hint="Telefone"
-            android:inputType="number"
-            android:maxLength="10"/>
+            android:hint="Telefone       "
+            android:inputType="phone"
+            app:layout_constraintEnd_toEndOf="@+id/textInputLayoutFiscaTelefone"
+            app:layout_constraintStart_toStartOf="@+id/textInputLayoutFiscaTelefone"
+            app:layout_constraintTop_toBottomOf="@+id/textInputLayoutFiscaTelefone"
+            mask:mask="(##)####-####" />
+
+        <!--<android.support.design.widget.TextInputEditText-->
+            <!--android:layout_width="match_parent"-->
+            <!--android:layout_height="wrap_content"-->
+            <!--android:hint="Telefone"-->
+            <!--android:inputType="number"-->
+            <!--android:maxLength="10"-->
+            <!--/>-->
     </android.support.design.widget.TextInputLayout>
 
     <android.support.design.widget.TextInputLayout
@@ -157,12 +187,25 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/textInputLayoutFiscaTelefone">
 
-        <android.support.design.widget.TextInputEditText
+        <br.com.sapereaude.maskedEditText.MaskedEditText
+            android:id="@+id/maskedEditTextFiscaCelular"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:hint="Celular"
+            android:hint="Celular         "
             android:inputType="number"
-            android:maxLength="10"/>
+            app:layout_constraintEnd_toEndOf="@+id/textInputLayoutFiscaCelular"
+            app:layout_constraintStart_toStartOf="@+id/textInputLayoutFiscaCelular"
+            app:layout_constraintTop_toBottomOf="@+id/textInputLayoutFiscaCelular"
+            mask:allowed_chars="1234567890"
+            mask:mask="(##)#####-####"
+            />
+
+        <!--<android.support.design.widget.TextInputEditText-->
+            <!--android:layout_width="match_parent"-->
+            <!--android:layout_height="wrap_content"-->
+            <!--android:hint="Celular"-->
+            <!--android:inputType="number"-->
+            <!--android:maxLength="11"/>-->
     </android.support.design.widget.TextInputLayout>
 
     <android.support.design.widget.TextInputLayout
@@ -216,7 +259,8 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:hint="Latitude"
-            android:inputType="numberSigned|numberDecimal"/>
+            android:inputType="numberSigned|numberDecimal"
+            android:maxLength="20"/>
     </android.support.design.widget.TextInputLayout>
 
     <android.support.design.widget.TextInputLayout
@@ -236,7 +280,8 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:hint="Longitude"
-            android:inputType="numberSigned|numberDecimal"/>
+            android:inputType="numberSigned|numberDecimal"
+            android:maxLength="20"/>
     </android.support.design.widget.TextInputLayout>
 
 </android.support.constraint.ConstraintLayout>

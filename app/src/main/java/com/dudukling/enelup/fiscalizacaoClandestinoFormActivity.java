@@ -32,6 +32,8 @@ import com.dudukling.enelup.model.fiscaModel;
 
 import java.util.Objects;
 
+import br.com.sapereaude.maskedEditText.MaskedEditText;
+
 public class fiscalizacaoClandestinoFormActivity extends AppCompatActivity {
     private static final String REQUIRED_FIELD_ERROR_MSG = "Campo obrigatório!";
 
@@ -48,10 +50,13 @@ public class fiscalizacaoClandestinoFormActivity extends AppCompatActivity {
     private TextInputLayout textInputLayoutFiscaNIS;
     private TextInputLayout textInputLayoutFiscaRG;
     private TextInputLayout textInputLayoutFiscaNascimento;
+    private MaskedEditText maskedEditTextFiscaNascimento;
     private TextInputLayout textInputLayoutFiscaMedidor1;
     private TextInputLayout textInputLayoutFiscaMedidor2;
     private TextInputLayout textInputLayoutFiscaTelefone;
+    private MaskedEditText maskedEditTextFiscaTelefone;
     private TextInputLayout textInputLayoutFiscaCelular;
+    private MaskedEditText maskedEditTextFiscaCelular;
     private TextInputLayout textInputLayoutFiscaEmail;
     private TextInputLayout textInputLayoutFiscaLatitude;
     private TextInputLayout textInputLayoutFiscaLongitude;
@@ -233,11 +238,16 @@ public class fiscalizacaoClandestinoFormActivity extends AppCompatActivity {
 
         fisca.setNis(textInputLayoutFiscaNIS.getEditText().getText().toString());
         fisca.setRg(textInputLayoutFiscaRG.getEditText().getText().toString());
-        fisca.setData_nascimento(textInputLayoutFiscaNascimento.getEditText().getText().toString());
+//        fisca.setData_nascimento(textInputLayoutFiscaNascimento.getEditText().getText().toString());
+        fisca.setData_nascimento(maskedEditTextFiscaNascimento.getRawText());
         fisca.setMedidor_vizinho_1(textInputLayoutFiscaMedidor1.getEditText().getText().toString());
         fisca.setMedidor_vizinho_2(textInputLayoutFiscaMedidor2.getEditText().getText().toString());
-        fisca.setTelefone(textInputLayoutFiscaTelefone.getEditText().getText().toString());
-        fisca.setCelular(textInputLayoutFiscaCelular.getEditText().getText().toString());
+//        fisca.setTelefone(textInputLayoutFiscaTelefone.getEditText().getText().toString());
+        if(maskedEditTextFiscaTelefone.getRawText().equals("(")){fisca.setTelefone("");}
+        else{fisca.setTelefone(maskedEditTextFiscaTelefone.getRawText());}
+//        fisca.setCelular(textInputLayoutFiscaCelular.getEditText().getText().toString());
+        if(maskedEditTextFiscaCelular.getRawText().equals("(")){fisca.setCelular("");}
+        else{fisca.setCelular(maskedEditTextFiscaCelular.getRawText());}
         fisca.setEmail(textInputLayoutFiscaEmail.getEditText().getText().toString());
         fisca.setLatitude(textInputLayoutFiscaLatitude.getEditText().getText().toString());
         fisca.setLongitude(textInputLayoutFiscaLongitude.getEditText().getText().toString());
@@ -292,11 +302,61 @@ public class fiscalizacaoClandestinoFormActivity extends AppCompatActivity {
         radioGroupFiscaCpfConsultado = findViewById(R.id.radioGroupFiscaCpfConsultado);
         textInputLayoutFiscaNIS = findViewById(R.id.textInputLayoutFiscaNIS);
         textInputLayoutFiscaRG = findViewById(R.id.textInputLayoutFiscaRG);
+
         textInputLayoutFiscaNascimento = findViewById(R.id.textInputLayoutFiscaNascimento);
+        maskedEditTextFiscaNascimento = this.findViewById(R.id.maskedEditTextFiscaNascimento);
+        maskedEditTextFiscaNascimento.setKeepHint(false);
+        maskedEditTextFiscaNascimento.setOnFocusChangeListener(new View.OnFocusChangeListener() {
+            @Override
+            public void onFocusChange(View v, boolean hasFocus) {
+                if(hasFocus){
+                    maskedEditTextFiscaNascimento.setKeepHint(true);
+                    maskedEditTextFiscaNascimento.setHint("XXXX");
+                    maskedEditTextFiscaNascimento.setMask("##/##/####");
+                }else{
+                    maskedEditTextFiscaNascimento.setKeepHint(false);
+                    maskedEditTextFiscaNascimento.setHint(null);
+                }
+            }
+        });
+
         textInputLayoutFiscaMedidor1 = findViewById(R.id.textInputLayoutFiscaMedidor1);
         textInputLayoutFiscaMedidor2 = findViewById(R.id.textInputLayoutFiscaMedidor2);
+
         textInputLayoutFiscaTelefone = findViewById(R.id.textInputLayoutFiscaTelefone);
+        maskedEditTextFiscaTelefone = this.findViewById(R.id.maskedEditTextFiscaTelefone);
+        maskedEditTextFiscaTelefone.setKeepHint(false);
+        maskedEditTextFiscaTelefone.setOnFocusChangeListener(new View.OnFocusChangeListener() {
+            @Override
+            public void onFocusChange(View v, boolean hasFocus) {
+                if(hasFocus){
+                    maskedEditTextFiscaTelefone.setKeepHint(true);
+                    maskedEditTextFiscaTelefone.setHint("XXXX");
+                    maskedEditTextFiscaTelefone.setMask("(##)####-####");
+                }else{
+                    maskedEditTextFiscaTelefone.setKeepHint(false);
+                    maskedEditTextFiscaTelefone.setHint(null);
+                }
+            }
+        });
+
         textInputLayoutFiscaCelular = findViewById(R.id.textInputLayoutFiscaCelular);
+        maskedEditTextFiscaCelular = this.findViewById(R.id.maskedEditTextFiscaCelular);
+        maskedEditTextFiscaCelular.setKeepHint(false);
+        maskedEditTextFiscaCelular.setOnFocusChangeListener(new View.OnFocusChangeListener() {
+            @Override
+            public void onFocusChange(View v, boolean hasFocus) {
+                if(hasFocus){
+                    maskedEditTextFiscaCelular.setKeepHint(true);
+                    maskedEditTextFiscaCelular.setHint("XXXX");
+                    maskedEditTextFiscaCelular.setMask("(##)#####-####");
+                }else{
+                    maskedEditTextFiscaCelular.setKeepHint(false);
+                    maskedEditTextFiscaCelular.setHint(null);
+                }
+            }
+        });
+
         textInputLayoutFiscaEmail = findViewById(R.id.textInputLayoutFiscaEmail);
         textInputLayoutFiscaLatitude = findViewById(R.id.textInputLayoutFiscaLatitude);
         textInputLayoutFiscaLongitude = findViewById(R.id.textInputLayoutFiscaLongitude);
@@ -359,12 +419,14 @@ public class fiscalizacaoClandestinoFormActivity extends AppCompatActivity {
         setValidateEmpty(textInputLayoutFiscaBairro);
         setValidateEmpty(textInputLayoutFiscaCPF);
         setValidateEmpty(textInputLayoutFiscaRG);
-        setValidateEmpty(textInputLayoutFiscaNascimento);
+
+//        setValidateEmpty(textInputLayoutFiscaNascimento);
+        setValidateEmptyMasked(maskedEditTextFiscaNascimento);
+
         setValidateEmpty(textInputLayoutFiscaMedidor1);
         setValidateEmpty(textInputLayoutFiscaLatitude);
         setValidateEmpty(textInputLayoutFiscaLongitude);
     }
-
 
     private void fillForm(fiscaModel fisca) {
         spinnerFiscaFuncionario.setSelection(spinnerFiscaFuncionarioAdapter.getPosition(fisca.getFuncionario()));
@@ -382,11 +444,14 @@ public class fiscalizacaoClandestinoFormActivity extends AppCompatActivity {
         }
         textInputLayoutFiscaNIS.getEditText().setText(fisca.getNis());
         textInputLayoutFiscaRG.getEditText().setText(fisca.getRg());
-        textInputLayoutFiscaNascimento.getEditText().setText(fisca.getData_nascimento());
+//        textInputLayoutFiscaNascimento.getEditText().setText(fisca.getData_nascimento());
+        maskedEditTextFiscaNascimento.setText(formatData(fisca.getData_nascimento()));
         textInputLayoutFiscaMedidor1.getEditText().setText(fisca.getMedidor_vizinho_1());
         textInputLayoutFiscaMedidor2.getEditText().setText(fisca.getMedidor_vizinho_2());
-        textInputLayoutFiscaTelefone.getEditText().setText(fisca.getTelefone());
-        textInputLayoutFiscaCelular.getEditText().setText(fisca.getCelular());
+//        textInputLayoutFiscaTelefone.getEditText().setText(fisca.getTelefone());
+        maskedEditTextFiscaTelefone.setText(formatTelefone(fisca.getTelefone(), "tel"));
+//        textInputLayoutFiscaCelular.getEditText().setText(fisca.getCelular());
+        maskedEditTextFiscaCelular.setText(formatTelefone(fisca.getCelular(), "cel"));
         textInputLayoutFiscaEmail.getEditText().setText(fisca.getEmail());
         textInputLayoutFiscaLatitude.getEditText().setText(fisca.getLatitude());
         textInputLayoutFiscaLongitude.getEditText().setText(fisca.getLongitude());
@@ -457,6 +522,41 @@ public class fiscalizacaoClandestinoFormActivity extends AppCompatActivity {
         }
     }
 
+    private String formatTelefone(String number, String type) {
+        if(number!=null){
+            if(!number.equals("")){
+
+                String ddd = number.substring(0, 1);
+                String middle = "";
+                String end = "";
+                if(type.equals("cel")){
+                    middle = number.substring(2, 6);
+                    end = number.substring(7, 10);
+                }else{
+                    middle = number.substring(2, 5);
+                    end = number.substring(6, 9);
+                }
+
+                return "("+ ddd +")"+ middle +"-"+end;
+            }
+        }
+        return "";
+    }
+
+    private String formatData(String data) {
+        if(data!=null){
+            if(!data.equals("")){
+
+                String dia = data.substring(0, 1);
+                String mes = data.substring(2, 4);
+                String ano = data.substring(5, 8);
+
+                return dia +"/"+ mes +"/"+ano;
+            }
+        }
+        return "";
+    }
+
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         MenuInflater inflater = getMenuInflater();
@@ -494,7 +594,8 @@ public class fiscalizacaoClandestinoFormActivity extends AppCompatActivity {
         if(fieldIsEmpty(textInputLayoutFiscaCPF)){isValid = "false";}
 //        if(fieldIsEmpty(textInputLayoutFiscaNIS)){isValid = "false";}
         if(fieldIsEmpty(textInputLayoutFiscaRG)){isValid = "false";}
-        if(fieldIsEmpty(textInputLayoutFiscaNascimento)){isValid = "false";}
+//        if(fieldIsEmpty(textInputLayoutFiscaNascimento)){isValid = "false";}
+        if (fieldIsEmptyMasked(maskedEditTextFiscaNascimento)){isValid = "false";}
         if(fieldIsEmpty(textInputLayoutFiscaMedidor1)){isValid = "false";}
 //        if(fieldIsEmpty(textInputLayoutFiscaMedidor2)){isValid = "false";}
 //        if(fieldIsEmpty(textInputLayoutFiscaTelefone)){isValid = "false";}
@@ -525,50 +626,35 @@ public class fiscalizacaoClandestinoFormActivity extends AppCompatActivity {
                 if(fieldIsEmpty(textInputLayoutCPFIndicado)){isValid = "false";}
                 break;
         }
-        switch(radioGroupFiscaServidao.getCheckedRadioButtonId()){
-            case -1:
-                isValid = "Servidao";
-                break;
+        if (radioGroupFiscaServidao.getCheckedRadioButtonId() == -1) {
+            isValid = "Servidao";
         }
-        switch(radioGroupFiscaPadrao.getCheckedRadioButtonId()){
-            case -1:
-                isValid = "Padrao";
-                break;
+        if (radioGroupFiscaPadrao.getCheckedRadioButtonId() == -1) {
+            isValid = "Padrao";
         }
-        switch(radioGroupFiscaRede.getCheckedRadioButtonId()){
-            case -1:
-                isValid = "Rede";
-                break;
+        if (radioGroupFiscaRede.getCheckedRadioButtonId() == -1) {
+            isValid = "Rede";
         }
-        switch(radioGroupFiscaLigacao.getCheckedRadioButtonId()){
-            case -1:
-                isValid = "Ligacao";
-                break;
+        if (radioGroupFiscaLigacao.getCheckedRadioButtonId() == -1) {
+            isValid = "Ligacao";
         }
-        switch(radioGroupFiscaInvadida.getCheckedRadioButtonId()){
-            case -1:
-                isValid = "Invadida";
-                break;
+        if (radioGroupFiscaInvadida.getCheckedRadioButtonId() == -1) {
+            isValid = "Invadida";
         }
 //        switch(radioGroupFiscaAreaPreserva.getCheckedRadioButtonId()){
 //            case -1:
 //                isValid = "AreaPreserva";
 //                break;
 //        }
-        switch(radioGroupFiscaCpfConsultado.getCheckedRadioButtonId()){
-            case -1:
-                isValid = "cpfConsultado";
-                break;
+        if (radioGroupFiscaCpfConsultado.getCheckedRadioButtonId() == -1) {
+            isValid = "cpfConsultado";
         }
-        switch(spinnerFiscaMunicipio.getSelectedItemPosition()){
-            case 0: // Selecione
-                isValid = "municipio";
-                break;
+
+        if (spinnerFiscaMunicipio.getSelectedItemPosition() == 0) {
+            isValid = "municipio";
         }
-        switch(spinnerFiscaFuncionario.getSelectedItemPosition()){
-            case 0: // Selecione
-                isValid = "funcionario";
-                break;
+        if (spinnerFiscaFuncionario.getSelectedItemPosition() == 0) {
+            isValid = "funcionario";
         }
 
         switch (isValid){
@@ -629,6 +715,16 @@ public class fiscalizacaoClandestinoFormActivity extends AppCompatActivity {
         return text.isEmpty();
     }
 
+    private boolean fieldIsEmptyMasked(MaskedEditText maskedEditText) {
+        String text = maskedEditText.getRawText();
+        if(text.isEmpty()) {
+            maskedEditText.setError("Campo obrigatório!");
+        }else{
+            maskedEditText.setError(null);
+        }
+        return text.isEmpty();
+    }
+
     private void setValidateEmpty(final TextInputLayout textInputCampo){
         final EditText campo = textInputCampo.getEditText();
         assert campo != null;
@@ -645,6 +741,23 @@ public class fiscalizacaoClandestinoFormActivity extends AppCompatActivity {
                 }else{
                     textInputCampo.setError(null);
                     textInputCampo.setErrorEnabled(false);
+                }
+            }
+        });
+    }
+
+    private void setValidateEmptyMasked(final MaskedEditText maskedEditText) {
+        maskedEditText.setOnFocusChangeListener(new View.OnFocusChangeListener() {
+            @Override
+            public void onFocusChange(View v, boolean hasFocus) {
+                maskedEditText.setError(null);
+                if(!hasFocus){
+                    String text = maskedEditText.getRawText();
+                    if(text.equals("")){
+                        maskedEditText.setError(REQUIRED_FIELD_ERROR_MSG);
+                    }
+                }else{
+                    maskedEditText.setError(null);
                 }
             }
         });

@@ -83,7 +83,8 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:hint="Nome"
-                android:inputType="textPersonName"/>
+                android:inputType="textPersonName"
+                android:maxLength="50"/>
         </android.support.design.widget.TextInputLayout>
 
         <android.support.design.widget.TextInputLayout
@@ -103,7 +104,8 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:hint="Endereço"
-                android:inputType="textPostalAddress"/>
+                android:inputType="textPostalAddress"
+                android:maxLength="75"/>
         </android.support.design.widget.TextInputLayout>
 
         <android.support.design.widget.TextInputLayout
@@ -123,7 +125,8 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:hint="Bairro"
-                android:inputType="text"/>
+                android:inputType="text"
+                android:maxLength="40"/>
         </android.support.design.widget.TextInputLayout>
 
         <TextView

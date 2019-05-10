@@ -22,7 +22,7 @@ public class fiscalizacaoMenuActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         Objects.requireNonNull(getSupportActionBar()).setDisplayHomeAsUpEnabled(true);
         setTitle("Fiscalizações");
-        setContentView(R.layout.activity_fiscalizacao_menu);
+        setContentView(R.layout.activity_menu_fiscalizacao);
 
 
         CardView cardViewFiscalizaMenuClandestino = this.findViewById(R.id.cardViewFiscalizaMenuClandestino);
