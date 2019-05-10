@@ -24,10 +24,33 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
         tools:ignore="AllowBackup,GoogleAppIndexingWarning">
-        <activity android:name=".fiscalizacaoClandestinoAlbumActivity"/>
-        <activity android:name=".fiscalizacaoClandestinoFormActivity" />
-        <activity android:name=".fiscalizacaoClandestinoActivity" />
-        <activity android:name=".fiscalizacaoMenuActivity" />
+
+        <activity android:name=".fiscalizacaoClandestinoAlbumActivity" android:launchMode="singleTop" />
+        <activity android:name=".fiscalizacaoClandestinoFormActivity" android:launchMode="singleTop" />
+        <activity android:name=".fiscalizacaoClandestinoActivity" android:launchMode="singleTop" />
+        <activity android:name=".fiscalizacaoMenuActivity" android:launchMode="singleTop" />
+        <activity android:name=".faqActivity" android:launchMode="singleTop" />
+        <activity android:name=".ligProvLevCargaActivity" android:launchMode="singleTop" />
+        <activity android:name=".clandestinoActivity" android:launchMode="singleTop" />
+        <activity android:name=".ligProvActivity" android:launchMode="singleTop" />
+        <activity android:name=".ligProvFormActivity" android:launchMode="singleTop" />
+        <activity android:name=".ligProvAlbumActivity" android:launchMode="singleTop" />
+        <activity android:name=".ligProvImageActivity" android:launchMode="singleTop" />
+        <activity android:name=".menuActivity" android:launchMode="singleTop" />
+        <activity android:name=".importActivity" android:launchMode="singleTop" />
+        <activity android:name=".clandestinoFormActivity" android:launchMode="singleTop" />
+        <activity android:name=".ligProvLevCargaFormActivity" android:launchMode="singleTop" />
+        <activity
+            android:name=".splashActivity"
+            android:theme="@style/AppCompat.fullScreen">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+
+
         <!--
              The API key for Google Maps-based APIs is defined as a string resource.
              (See the file "res/values/google_maps_api.xml").
@@ -43,26 +66,6 @@
         <activity
             android:name=".MapsActivity"
             android:label="@string/title_activity_maps" />
-        <activity android:name=".faqActivity" />
-        <activity android:name=".ligProvLevCargaActivity" />
-        <activity android:name=".clandestinoActivity" />
-        <activity android:name=".ligProvActivity" />
-        <activity android:name=".ligProvFormActivity" />
-        <activity android:name=".ligProvAlbumActivity" />
-        <activity android:name=".ligProvImageActivity" />
-        <activity android:name=".menuActivity" />
-        <activity android:name=".importActivity" />
-        <activity android:name=".clandestinoFormActivity" />
-        <activity android:name=".ligProvLevCargaFormActivity" />
-        <activity
-            android:name=".splashActivity"
-            android:theme="@style/AppCompat.fullScreen">
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
-
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
-        </activity>
 
         <provider
             android:name="android.support.v4.content.FileProvider"
