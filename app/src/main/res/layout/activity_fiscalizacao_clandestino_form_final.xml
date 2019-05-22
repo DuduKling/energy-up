@@ -25,7 +25,7 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="8dp"
         android:layout_marginLeft="8dp"
-        android:text="Existe ordem de serviço para o local?"
+        android:text="Existe ordem de serviço para o local? *"
         app:layout_constraintBottom_toBottomOf="@+id/radioGroupFiscaOrdemServico"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="@+id/radioGroupFiscaOrdemServico"
@@ -75,7 +75,7 @@
         <android.support.design.widget.TextInputEditText
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:hint="Número da ordem"
+            android:hint="Número da ordem *"
             android:inputType="number" />
     </android.support.design.widget.TextInputLayout>
 
@@ -85,7 +85,7 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="8dp"
         android:layout_marginLeft="8dp"
-        android:text="Estado da ordem"
+        android:text="Estado da ordem *"
         app:layout_constraintBottom_toBottomOf="@+id/radioGroupFiscaEstadoOrdem"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="@+id/radioGroupFiscaEstadoOrdem"
