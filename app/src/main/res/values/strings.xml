@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">Enel UP</string>
+    <string name="app_name">E-UP</string>
     <string name="menu_pesquisar">Pesquisar</string>
     <string name="menu_limpar_aplicativo">Deletar todos os registros</string>
     <string name="menu_exportar_modificacoes">Exportar registros</string>
