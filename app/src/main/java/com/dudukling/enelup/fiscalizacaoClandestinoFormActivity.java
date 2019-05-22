@@ -350,36 +350,37 @@ public class fiscalizacaoClandestinoFormActivity extends AppCompatActivity {
         textInputLayoutFiscaTelefone = findViewById(R.id.textInputLayoutFiscaTelefone);
         maskedEditTextFiscaTelefone = this.findViewById(R.id.maskedEditTextFiscaTelefone);
         maskedEditTextFiscaTelefone.setKeepHint(false);
-        maskedEditTextFiscaTelefone.setOnFocusChangeListener(new View.OnFocusChangeListener() {
-            @Override
-            public void onFocusChange(View v, boolean hasFocus) {
-                if(hasFocus){
-                    maskedEditTextFiscaTelefone.setKeepHint(true);
-                    maskedEditTextFiscaTelefone.setHint("XXXX");
-                    maskedEditTextFiscaTelefone.setMask("(##)####-####");
-                }else{
-                    maskedEditTextFiscaTelefone.setKeepHint(false);
-                    maskedEditTextFiscaTelefone.setHint(null);
-                }
-            }
-        });
+
+//        maskedEditTextFiscaTelefone.setOnFocusChangeListener(new View.OnFocusChangeListener() {
+//            @Override
+//            public void onFocusChange(View v, boolean hasFocus) {
+//                if(hasFocus){
+//                    maskedEditTextFiscaTelefone.setKeepHint(true);
+//                    maskedEditTextFiscaTelefone.setHint("XXXX");
+////                    maskedEditTextFiscaTelefone.setMask("(##)####-####");
+//                }else{
+//                    maskedEditTextFiscaTelefone.setKeepHint(false);
+//                    maskedEditTextFiscaTelefone.setHint(null);
+//                }
+//            }
+//        });
 
         textInputLayoutFiscaCelular = findViewById(R.id.textInputLayoutFiscaCelular);
         maskedEditTextFiscaCelular = this.findViewById(R.id.maskedEditTextFiscaCelular);
         maskedEditTextFiscaCelular.setKeepHint(false);
-        maskedEditTextFiscaCelular.setOnFocusChangeListener(new View.OnFocusChangeListener() {
-            @Override
-            public void onFocusChange(View v, boolean hasFocus) {
-                if(hasFocus){
-                    maskedEditTextFiscaCelular.setKeepHint(true);
-                    maskedEditTextFiscaCelular.setHint("XXXX");
-                    maskedEditTextFiscaCelular.setMask("(##)#####-####");
-                }else{
-                    maskedEditTextFiscaCelular.setKeepHint(false);
-                    maskedEditTextFiscaCelular.setHint(null);
-                }
-            }
-        });
+//        maskedEditTextFiscaCelular.setOnFocusChangeListener(new View.OnFocusChangeListener() {
+//            @Override
+//            public void onFocusChange(View v, boolean hasFocus) {
+//                if(hasFocus){
+//                    maskedEditTextFiscaCelular.setKeepHint(true);
+//                    maskedEditTextFiscaCelular.setHint("XXXX");
+//                    maskedEditTextFiscaCelular.setMask("(##)#####-####");
+//                }else{
+//                    maskedEditTextFiscaCelular.setKeepHint(false);
+//                    maskedEditTextFiscaCelular.setHint(null);
+//                }
+//            }
+//        });
 
         textInputLayoutFiscaEmail = findViewById(R.id.textInputLayoutFiscaEmail);
         textInputLayoutFiscaLatitude = findViewById(R.id.textInputLayoutFiscaLatitude);
