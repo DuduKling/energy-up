@@ -1,16 +1,24 @@
 package com.dudukling.enelup;
 
+import android.Manifest;
 import android.annotation.TargetApi;
 import android.content.ClipData;
 import android.content.ClipboardManager;
 import android.content.Context;
 import android.content.Intent;
+import android.content.pm.PackageManager;
+import android.content.res.ColorStateList;
 import android.graphics.Color;
+import android.location.Location;
+import android.location.LocationListener;
+import android.location.LocationManager;
 import android.net.Uri;
 import android.os.Build;
+import android.provider.Settings;
 import android.support.annotation.RequiresApi;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.TextInputLayout;
+import android.support.v4.app.ActivityCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.Menu;
@@ -20,13 +28,13 @@ import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ProgressBar;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.dudukling.enelup.dao.externalDAO;
 import com.dudukling.enelup.dao.fiscalizaDAO;
 import com.dudukling.enelup.model.fiscaModel;
 
@@ -36,6 +44,7 @@ import br.com.sapereaude.maskedEditText.MaskedEditText;
 
 public class fiscalizacaoClandestinoFormActivity extends AppCompatActivity {
     private static final String REQUIRED_FIELD_ERROR_MSG = "Campo obrigatório!";
+    private static final int GPS_REQUEST_CODE = 999;
 
     private fiscaModel fisca;
     private String formType;
@@ -78,6 +87,12 @@ public class fiscalizacaoClandestinoFormActivity extends AppCompatActivity {
     private FloatingActionButton floatingActionButtonFiscaAlbum;
     private Button buttonFiscaConsultaCPF;
 
+    private FloatingActionButton floatingActionButtonFiscaGPS;
+    private ProgressBar progressBarFiscaGPS;
+    private LocationManager locationManager;
+    private LocationListener locationListener;
+    private boolean get_gps;
+
 
     @TargetApi(Build.VERSION_CODES.KITKAT)
     @RequiresApi(api = Build.VERSION_CODES.KITKAT)
@@ -112,6 +127,7 @@ public class fiscalizacaoClandestinoFormActivity extends AppCompatActivity {
                     startActivity(goToAlbum);
                 }
             });
+            floatingActionButtonFiscaGPS.setVisibility(View.GONE);
         }
         if(formType.equals("edit")){
             fillForm(fisca);
@@ -139,6 +155,7 @@ public class fiscalizacaoClandestinoFormActivity extends AppCompatActivity {
                     }
                 }
             });
+            floatingActionButtonFiscaGPS.setVisibility(View.VISIBLE);
         }
     }
 
@@ -180,6 +197,12 @@ public class fiscalizacaoClandestinoFormActivity extends AppCompatActivity {
         editText.setKeyListener(null);
         editText.setTextColor(Color.parseColor("#616161"));
     }
+    private void disableSimpleEditText(EditText editText) {
+        editText.setEnabled(false);
+    }
+    private void enableEditText(EditText editText) {
+        editText.setEnabled(true);
+    }
     private void disableSpinner(Spinner spinner) {
         spinner.setEnabled(false);
         spinner.setClickable(false);
@@ -189,6 +212,7 @@ public class fiscalizacaoClandestinoFormActivity extends AppCompatActivity {
             radioGroup.getChildAt(i).setClickable(false);
         }
     }
+
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
@@ -426,6 +450,40 @@ public class fiscalizacaoClandestinoFormActivity extends AppCompatActivity {
         setValidateEmpty(textInputLayoutFiscaMedidor1);
         setValidateEmpty(textInputLayoutFiscaLatitude);
         setValidateEmpty(textInputLayoutFiscaLongitude);
+
+        progressBarFiscaGPS = findViewById(R.id.progressBarFiscaGPS);
+        progressBarFiscaGPS.setVisibility(View.GONE);
+        floatingActionButtonFiscaGPS = findViewById(R.id.floatingActionButtonFiscaGPS);
+        get_gps = false;
+        floatingActionButtonFiscaGPS.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if(!get_gps){
+                    getGPSLocation();
+                    progressBarFiscaGPS.setVisibility(View.VISIBLE);
+                    disableSimpleEditText(textInputLayoutFiscaLatitude.getEditText());
+                    disableSimpleEditText(textInputLayoutFiscaLongitude.getEditText());
+                    floatingActionButtonFiscaGPS.setImageResource(R.drawable.ic_gps_edit);
+                    floatingActionButtonFiscaGPS.setBackgroundTintList(ColorStateList.valueOf(Color.parseColor("#FFAAAAAA")));
+                    get_gps = true;
+                }else{
+                    enableEditText(textInputLayoutFiscaLatitude.getEditText());
+                    enableEditText(textInputLayoutFiscaLongitude.getEditText());
+                    if(locationListener!=null){
+                        locationManager.removeUpdates(locationListener);
+                    }
+                    progressBarFiscaGPS.setVisibility(View.GONE);
+                    if(textInputLayoutFiscaLatitude.getEditText().getText().toString().equals("") || textInputLayoutFiscaLongitude.getEditText().getText().toString().equals("")){
+                        floatingActionButtonFiscaGPS.setImageResource(R.drawable.ic_gps_add);
+                        floatingActionButtonFiscaGPS.setBackgroundTintList(ColorStateList.valueOf(Color.parseColor("#5db565")));
+                    }else{
+                        floatingActionButtonFiscaGPS.setImageResource(R.drawable.ic_gps_edit);
+                        floatingActionButtonFiscaGPS.setBackgroundTintList(ColorStateList.valueOf(Color.parseColor("#FFAAAAAA")));
+                    }
+                    get_gps = false;
+                }
+            }
+        });
     }
 
     private void fillForm(fiscaModel fisca) {
@@ -775,6 +833,82 @@ public class fiscalizacaoClandestinoFormActivity extends AppCompatActivity {
                 }
             }
         });
+    }
+
+
+    // GPS
+    @Override
+    public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) {
+        if (requestCode == GPS_REQUEST_CODE) {
+            if (permissions.length == 1 && grantResults[0]==PackageManager.PERMISSION_GRANTED){
+
+                getGPSLocation();
+
+            }else{
+                Toast.makeText(this, "Não é possível utilizar esta função sem GPS!", Toast.LENGTH_SHORT).show();
+                finish();
+            }
+        }
+    }
+
+    private void getGPSLocation() {
+        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+
+            ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, GPS_REQUEST_CODE);
+
+        }else{
+            locationManager = (LocationManager) this.getSystemService(Context.LOCATION_SERVICE);
+
+            locationListener = new LocationListener() {
+                public void onLocationChanged(Location location) {
+                    if(location != null){
+
+                        final double[] longitude = {0};
+                        final double[] latitude = {0};
+
+                        latitude[0] = location.getLatitude();
+                        longitude[0] = location.getLongitude();
+
+                        textInputLayoutFiscaLatitude.getEditText().setText(String.valueOf(latitude[0]));
+                        textInputLayoutFiscaLongitude.getEditText().setText(String.valueOf(longitude[0]));
+
+                        progressBarFiscaGPS.setVisibility(View.GONE);
+                    }
+                }
+
+                @Override
+                public void onStatusChanged(String provider, int status, Bundle extras) {
+
+                }
+
+                @Override
+                public void onProviderEnabled(String provider) {
+                    progressBarFiscaGPS.setVisibility(View.VISIBLE);
+                }
+
+                @Override
+                public void onProviderDisabled(String provider) {
+                    if (provider.equals(LocationManager.GPS_PROVIDER)) {
+                        progressBarFiscaGPS.setVisibility(View.GONE);
+                        Toast.makeText(fiscalizacaoClandestinoFormActivity.this, "Favor, habilitar o GPS!", Toast.LENGTH_LONG).show();
+                        Intent startGPSIntent = new Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS);
+                        fiscalizacaoClandestinoFormActivity.this.startActivity(startGPSIntent);
+                    }
+                }
+            };
+
+            assert locationManager != null;
+            locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 2000, 10, locationListener);
+        }
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+
+        if(locationListener!=null){
+            locationManager.removeUpdates(locationListener);
+        }
     }
 
 }
