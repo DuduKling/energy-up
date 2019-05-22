@@ -172,6 +172,7 @@
                 android:layout_height="wrap_content"
                 android:hint="CPF *"
                 android:inputType="number"
+                android:digits="0123456789"
                 android:maxLength="11"/>
         </android.support.design.widget.TextInputLayout>
         <Button

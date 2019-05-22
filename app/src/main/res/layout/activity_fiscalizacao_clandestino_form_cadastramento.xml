@@ -39,6 +39,7 @@
             android:layout_height="wrap_content"
             android:hint="NIS"
             android:inputType="number"
+            android:digits="0123456789"
             android:maxLength="30"/>
     </android.support.design.widget.TextInputLayout>
 
@@ -61,6 +62,7 @@
             android:layout_height="wrap_content"
             android:hint="RG *"
             android:inputType="number"
+            android:digits="0123456789"
             android:maxLength="11"/>
     </android.support.design.widget.TextInputLayout>
 
@@ -114,7 +116,8 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:hint="Medidor vizinho 1 *"
-            android:inputType="text"
+            android:inputType="number"
+            android:digits="0123456789"
             android:maxLength="50"/>
     </android.support.design.widget.TextInputLayout>
 
@@ -135,7 +138,8 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:hint="Medidor vizinho 2"
-            android:inputType="text"
+            android:inputType="number"
+            android:digits="0123456789"
             android:maxLength="50"/>
     </android.support.design.widget.TextInputLayout>
 
@@ -159,6 +163,7 @@
             android:layout_height="wrap_content"
             android:hint="Telefone       "
             android:inputType="phone"
+            android:digits="0123456789"
             app:layout_constraintEnd_toEndOf="@+id/textInputLayoutFiscaTelefone"
             app:layout_constraintStart_toStartOf="@+id/textInputLayoutFiscaTelefone"
             app:layout_constraintTop_toBottomOf="@+id/textInputLayoutFiscaTelefone"
@@ -193,6 +198,7 @@
             android:layout_height="wrap_content"
             android:hint="Celular         "
             android:inputType="number"
+            android:digits="0123456789"
             app:layout_constraintEnd_toEndOf="@+id/textInputLayoutFiscaCelular"
             app:layout_constraintStart_toStartOf="@+id/textInputLayoutFiscaCelular"
             app:layout_constraintTop_toBottomOf="@+id/textInputLayoutFiscaCelular"
@@ -260,6 +266,7 @@
             android:layout_height="wrap_content"
             android:hint="Latitude *"
             android:inputType="numberSigned|numberDecimal"
+            android:digits="-.0123456789"
             android:maxLength="20" />
     </android.support.design.widget.TextInputLayout>
 
@@ -281,6 +288,7 @@
             android:layout_height="wrap_content"
             android:hint="Longitude *"
             android:inputType="numberSigned|numberDecimal"
+            android:digits="-.0123456789"
             android:maxLength="20"/>
     </android.support.design.widget.TextInputLayout>
 
