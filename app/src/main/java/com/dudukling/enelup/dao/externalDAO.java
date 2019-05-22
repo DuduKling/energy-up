@@ -37,7 +37,7 @@ import java.util.List;
 import java.util.Map;
 
 public class externalDAO {
-    private static final String WEB_APP_URL = "https://script.google.com/macros/s/AKfycbwCwGCQjTEV9Ey1l1MCWbXbyCgpu2E-j-mB7sfqpqCLVJxLFFdC/exec";
+    private static final String WEB_APP_URL = "https://script.google.com/macros/s/AKfycbyWVi9aHnPc0o3rpVYa6f3qIAIQcmhufXtuie9xCrYsU0OPhs8/exec";
     private Context context;
 
     public externalDAO(Context context) {
