@@ -547,9 +547,23 @@ public class fiscalizacaoClandestinoFormActivity extends AppCompatActivity {
         if(data!=null){
             if(!data.equals("")){
 
-                String dia = data.substring(0, 1);
-                String mes = data.substring(2, 4);
-                String ano = data.substring(5, 8);
+                String dia = "";
+                String mes = "";
+                String ano = "";
+
+                if(data.length()>2){
+                     dia = data.substring(0, 2);
+                }
+                if(data.length()>5){
+                    mes = data.substring(2, 4);
+                }
+
+                if(data.length()<7){
+                    ano = data.substring(4, 6);
+                }else{
+                    ano = data.substring(4, 8);
+                }
+
 
                 return dia +"/"+ mes +"/"+ano;
             }
