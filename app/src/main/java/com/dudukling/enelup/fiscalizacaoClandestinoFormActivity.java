@@ -14,6 +14,7 @@ import android.location.LocationListener;
 import android.location.LocationManager;
 import android.net.Uri;
 import android.os.Build;
+import android.os.Environment;
 import android.provider.Settings;
 import android.support.annotation.RequiresApi;
 import android.support.design.widget.FloatingActionButton;
@@ -21,6 +22,7 @@ import android.support.design.widget.TextInputLayout;
 import android.support.v4.app.ActivityCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -38,6 +40,8 @@ import android.widget.Toast;
 import com.dudukling.enelup.dao.fiscalizaDAO;
 import com.dudukling.enelup.model.fiscaModel;
 
+import java.io.File;
+import java.util.List;
 import java.util.Objects;
 
 import br.com.sapereaude.maskedEditText.MaskedEditText;
@@ -110,23 +114,36 @@ public class fiscalizacaoClandestinoFormActivity extends AppCompatActivity {
         setFields();
 
         floatingActionButtonFiscaAlbum = findViewById(R.id.floatingActionButtonFiscaAlbum);
-        floatingActionButtonFiscaAlbum.setVisibility(View.GONE);
+//        floatingActionButtonFiscaAlbum.setVisibility(View.GONE);
+        floatingActionButtonFiscaAlbum.setOnClickListener(new View.OnClickListener() {
+            @RequiresApi(api = Build.VERSION_CODES.M)
+            @Override
+            public void onClick(View v) {
+                Intent goToAlbum = new Intent(fiscalizacaoClandestinoFormActivity.this, fiscalizacaoClandestinoAlbumActivity.class);
+
+                fiscaModel fiscaAlbum = new fiscaModel();
+                if(formType.equals("new")){
+                    fiscalizaDAO dao = new fiscalizaDAO(fiscalizacaoClandestinoFormActivity.this);
+                    int newID = dao.getNextID();
+                    dao.close();
+                    fiscaAlbum.setId(newID);
+                    goToAlbum.putExtra("fisca", fiscaAlbum);
+                }else{
+                    goToAlbum.putExtra("fisca", fisca);
+                }
+
+                startActivity(goToAlbum);
+            }
+        });
+
         buttonFiscaConsultaCPF = findViewById(R.id.buttonFiscaConsultaCPF);
         buttonFiscaConsultaCPF.setVisibility(View.GONE);
 
         if(formType.equals("readOnly")){
             fillForm(fisca);
             disableAll();
-            floatingActionButtonFiscaAlbum.setVisibility(View.VISIBLE);
-            floatingActionButtonFiscaAlbum.setOnClickListener(new View.OnClickListener() {
-                @RequiresApi(api = Build.VERSION_CODES.M)
-                @Override
-                public void onClick(View v) {
-                    Intent goToAlbum = new Intent(fiscalizacaoClandestinoFormActivity.this, fiscalizacaoClandestinoAlbumActivity.class);
-                    goToAlbum.putExtra("fisca", fisca);
-                    startActivity(goToAlbum);
-                }
-            });
+//            floatingActionButtonFiscaAlbum.setVisibility(View.VISIBLE);
+
             floatingActionButtonFiscaGPS.setVisibility(View.GONE);
         }
         if(formType.equals("edit")){
@@ -610,19 +627,20 @@ public class fiscalizacaoClandestinoFormActivity extends AppCompatActivity {
                 String mes = "";
                 String ano = "";
 
-                if(data.length()>2){
-                     dia = data.substring(0, 2);
-                }
-                if(data.length()>5){
+                if(data.length() == 2){
+                    dia = data.substring(0, 2);
+                }else if(data.length() == 4){
+                    dia = data.substring(0, 2);
                     mes = data.substring(2, 4);
-                }
-
-                if(data.length()<7){
+                }else if(data.length() == 6){
+                    dia = data.substring(0, 2);
+                    mes = data.substring(2, 4);
                     ano = data.substring(4, 6);
-                }else{
+                }else if(data.length() == 8){
+                    dia = data.substring(0, 2);
+                    mes = data.substring(2, 4);
                     ano = data.substring(4, 8);
                 }
-
 
                 return dia +"/"+ mes +"/"+ano;
             }
@@ -903,12 +921,40 @@ public class fiscalizacaoClandestinoFormActivity extends AppCompatActivity {
         }
     }
 
+
+
     @Override
     protected void onDestroy() {
         super.onDestroy();
 
         if(locationListener!=null){
             locationManager.removeUpdates(locationListener);
+        }
+
+        if(formType.equals("new")){
+            fiscalizaDAO dao = new fiscalizaDAO(fiscalizacaoClandestinoFormActivity.this);
+            int fiscaID = dao.getNextID();
+            fisca.setImagesList(dao.getImagesDB(fiscaID));
+            deleteImagesFromPhoneMemory(fisca);
+            dao.deleteImages(fiscaID);
+            dao.close();
+        }
+    }
+
+    public void deleteImagesFromPhoneMemory(fiscaModel fisca) {
+        List<String> imagesListToDelete = fisca.getImagesList();
+        for (int i = 0; i < imagesListToDelete.size(); i++) {
+            File file = new File(imagesListToDelete.get(i));
+            boolean deleted = file.delete();
+            Log.d("TAG4", "delete() called: " + deleted);
+        }
+
+        String path = this.getExternalFilesDir(Environment.DIRECTORY_PICTURES).toString();
+        File directory = new File(path);
+        File[] files = directory.listFiles();
+        for (File file : files) {
+            boolean deleted = file.delete();
+            Log.d("TAG4", "delete() called: " + deleted);
         }
     }
 
