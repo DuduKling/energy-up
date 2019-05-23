@@ -166,7 +166,7 @@
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent"
                     app:layout_constraintVertical_chainStyle="packed"
-                    app:srcCompat="@drawable/pirata" />
+                    app:srcCompat="@drawable/raio" />
 
                 <TextView
                     android:id="@+id/imageViewClandestl2"
