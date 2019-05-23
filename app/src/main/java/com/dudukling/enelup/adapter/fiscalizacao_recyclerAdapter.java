@@ -123,12 +123,10 @@ public class fiscalizacao_recyclerAdapter extends RecyclerView.Adapter {
                     dao.close();
 
                     if (!fiscaList.isEmpty()) {
-                        for (int i = 0; i < fiscaList.size(); i++) {
-                            fiscaModel fisca1 = fiscaList.get(i);
-                            List<String> fiscaImages = fisca1.getImagesList();
-                            if (!fiscaImages.isEmpty()) {
-                                deleteImagesFromPhoneMemory(fisca1);
-                            }
+                        fiscaModel fisca1 = fiscaList.get(position);
+                        List<String> fiscaImages = fisca1.getImagesList();
+                        if (!fiscaImages.isEmpty()) {
+                            deleteImagesFromPhoneMemory(fisca1);
                         }
                     }
 
@@ -155,15 +153,13 @@ public class fiscalizacao_recyclerAdapter extends RecyclerView.Adapter {
             Log.d("TAG4", "delete() called: " + deleted);
         }
 
-        String path = context.getExternalFilesDir(Environment.DIRECTORY_PICTURES).toString();
-        File directory = new File(path);
-        File[] files = directory.listFiles();
-        for (File file : files) {
-            boolean deleted = file.delete();
-            Log.d("TAG4", "delete() called: " + deleted);
-        }
-
-
+//        String path = context.getExternalFilesDir(Environment.DIRECTORY_PICTURES).toString();
+//        File directory = new File(path);
+//        File[] files = directory.listFiles();
+//        for (File file : files) {
+//            boolean deleted = file.delete();
+//            Log.d("TAG4", "delete() called: " + deleted);
+//        }
     }
 
 }

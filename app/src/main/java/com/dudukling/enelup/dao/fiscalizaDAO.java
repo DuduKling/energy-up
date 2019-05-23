@@ -120,7 +120,7 @@ public class fiscalizaDAO extends SQLiteOpenHelper {
         db.delete("fiscaImages","fiscaID = ? AND id = ?", params);
     }
 
-    private void deleteImages(int fiscaID) {
+    public void deleteImages(int fiscaID) {
         SQLiteDatabase db = getWritableDatabase();
         String[] params = {String.valueOf(fiscaID)};
         db.delete("fiscaImages","fiscaID = ?", params);
@@ -136,10 +136,12 @@ public class fiscalizaDAO extends SQLiteOpenHelper {
 
         db.insert("fiscaImages", null, queryData);
 
-        if(fisca.getFlag_google_sheets().equals("1")) {
-            updateToEditFiscaFlag(fisca.getId());
-            fiscalizacao_recyclerAdapter.fiscaList = getFiscaList();
-            fiscalizacao_recyclerAdapter.context2.notifyDataSetChanged();
+        if(fisca.getFlag_google_sheets()!=null){
+            if(fisca.getFlag_google_sheets().equals("1")) {
+                updateToEditFiscaFlag(fisca.getId());
+                fiscalizacao_recyclerAdapter.fiscaList = getFiscaList();
+                fiscalizacao_recyclerAdapter.context2.notifyDataSetChanged();
+            }
         }
     }
 
@@ -242,12 +244,12 @@ public class fiscalizaDAO extends SQLiteOpenHelper {
         return fiscaList;
     }
 
-    public List<String> getImagesDB(int dbSampleID) {
+    public List<String> getImagesDB(int dbFiscaID) {
         SQLiteDatabase db = getReadableDatabase();
 
         List<String> imagesList = new ArrayList<>();
         String sql2 = "SELECT * FROM fiscaImages WHERE fiscaID = ?";
-        Cursor c2 = db.rawQuery(sql2, new String[]{String.valueOf(dbSampleID)});
+        Cursor c2 = db.rawQuery(sql2, new String[]{String.valueOf(dbFiscaID)});
         while (c2.moveToNext()) {
             imagesList.add(c2.getString(c2.getColumnIndex("path")));
         }
@@ -406,5 +408,23 @@ public class fiscalizaDAO extends SQLiteOpenHelper {
         ContentValues queryData = new ContentValues();queryData.put("flag_google_sheets", 1);
 
         db.update("fiscaImages", queryData, "flag_google_sheets==0", null);
+    }
+
+
+
+    public int getNextID() {
+        SQLiteDatabase db = getReadableDatabase();
+
+        String sql = "SELECT "+ FIELD_ID +" FROM "+ TABLE_NAME +" ORDER BY "+ FIELD_ID +" DESC LIMIT 1";
+
+        Cursor c = db.rawQuery(sql, null);
+
+        int id = 0;
+        while (c.moveToNext()) {
+            id = c.getInt(c.getColumnIndex(FIELD_ID));
+        }
+
+        c.close();
+        return id+1;
     }
 }
