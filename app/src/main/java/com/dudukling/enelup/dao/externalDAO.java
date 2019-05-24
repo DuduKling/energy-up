@@ -82,6 +82,9 @@ public class externalDAO {
                 fiscaJSON.put("existe_ordem", list.getExiste_ordem());
                 fiscaJSON.put("numero_ordem", list.getNumero_ordem());
                 fiscaJSON.put("estado_ordem", list.getEstado_ordem());
+                fiscaJSON.put("servico_direcionado", list.getServico_direcionado());
+                fiscaJSON.put("frente_trabalho", list.getFrente_trabalho());
+                fiscaJSON.put("clandest_localizado", list.getClandest_localizado());
 
                 if(list.getImagesList().size() > 0){
                     JSONArray imagesArrJSON = new JSONArray();

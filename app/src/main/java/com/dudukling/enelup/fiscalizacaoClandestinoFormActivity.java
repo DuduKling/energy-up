@@ -34,11 +34,14 @@ import android.widget.ProgressBar;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.Spinner;
+import android.widget.SpinnerAdapter;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.dudukling.enelup.dao.fiscalizaDAO;
 import com.dudukling.enelup.model.fiscaModel;
+
+import org.apache.commons.text.TextRandomProvider;
 
 import java.io.File;
 import java.util.List;
@@ -96,6 +99,11 @@ public class fiscalizacaoClandestinoFormActivity extends AppCompatActivity {
     private LocationManager locationManager;
     private LocationListener locationListener;
     private boolean get_gps;
+
+    private RadioGroup radioGroupFiscaServicoDirecionado;
+    private Spinner spinnerFiscaFrente;
+    private ArrayAdapter<CharSequence> spinnerFiscaFrenteAdapter;
+    private RadioGroup radioGroupFiscaClandLocalizado;
 
 
     @TargetApi(Build.VERSION_CODES.KITKAT)
@@ -176,60 +184,17 @@ public class fiscalizacaoClandestinoFormActivity extends AppCompatActivity {
         }
     }
 
-    private void disableAll() {
-        disableSpinner(spinnerFiscaFuncionario);
-        disableEditText(textInputLayoutFiscaNome.getEditText());
-        disableEditText(textInputLayoutFiscaEndereco.getEditText());
-        disableEditText(textInputLayoutFiscaBairro.getEditText());
-        disableSpinner(spinnerFiscaMunicipio);
-        disableEditText(textInputLayoutFiscaCPF.getEditText());
-        disableRadioGroup(radioGroupFiscaCpfConsultado);
-        disableEditText(textInputLayoutFiscaNIS.getEditText());
-        disableEditText(textInputLayoutFiscaRG.getEditText());
-        disableEditText(textInputLayoutFiscaNascimento.getEditText());
-        disableEditText(textInputLayoutFiscaMedidor1.getEditText());
-        disableEditText(textInputLayoutFiscaMedidor2.getEditText());
-        disableEditText(textInputLayoutFiscaTelefone.getEditText());
-        disableEditText(textInputLayoutFiscaCelular.getEditText());
-        disableEditText(textInputLayoutFiscaEmail.getEditText());
-        disableEditText(textInputLayoutFiscaLatitude.getEditText());
-        disableEditText(textInputLayoutFiscaLongitude.getEditText());
-        disableRadioGroup(radioGroupFiscaAreaPreserva);
-        disableRadioGroup(radioGroupFiscaInvadida);
-        disableRadioGroup(radioGroupFiscaLigacao);
-        disableRadioGroup(radioGroupFiscaRede);
-        disableRadioGroup(radioGroupFiscaPadrao);
-        disableRadioGroup(radioGroupFiscaServidao);
-        disableRadioGroup(radioGroupFiscaIndicacao);
-        disableEditText(textInputLayoutCPFIndicado.getEditText());
-        disableRadioGroup(radioGroupFiscaOrdemServico);
-        disableEditText(textInputLayoutFiscaOrdem.getEditText());
-        disableRadioGroup(radioGroupFiscaEstadoOrdem);
-    }
-
-    private void disableEditText(EditText editText) {
-        editText.setFocusable(false);
-        editText.setEnabled(false);
-        editText.setCursorVisible(false);
-        editText.setKeyListener(null);
-        editText.setTextColor(Color.parseColor("#616161"));
-    }
-    private void disableSimpleEditText(EditText editText) {
-        editText.setEnabled(false);
-    }
-    private void enableEditText(EditText editText) {
-        editText.setEnabled(true);
-    }
-    private void disableSpinner(Spinner spinner) {
-        spinner.setEnabled(false);
-        spinner.setClickable(false);
-    }
-    private void disableRadioGroup(RadioGroup radioGroup) {
-        for(int i=0; i<radioGroup.getChildCount(); i++) {
-            radioGroup.getChildAt(i).setClickable(false);
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        MenuInflater inflater = getMenuInflater();
+        if(formType.equals("readOnly")){
+            inflater.inflate(R.menu.menu_edit_form, menu);
+        }else{
+            inflater.inflate(R.menu.menu_save_form, menu);
         }
-    }
 
+        return super.onCreateOptionsMenu(menu);
+    }
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
@@ -266,64 +231,54 @@ public class fiscalizacaoClandestinoFormActivity extends AppCompatActivity {
         return super.onOptionsItemSelected(item);
     }
 
-    private fiscaModel getFiscaFromFields(fiscaModel fisca) {
-        fisca.setFuncionario(spinnerFiscaFuncionario.getSelectedItem().toString());
-        fisca.setNome(textInputLayoutFiscaNome.getEditText().getText().toString());
-        fisca.setEndereco(textInputLayoutFiscaEndereco.getEditText().getText().toString());
-        fisca.setBairro(textInputLayoutFiscaBairro.getEditText().getText().toString());
-        fisca.setMunicipio(spinnerFiscaMunicipio.getSelectedItem().toString());
-        fisca.setCpf(textInputLayoutFiscaCPF.getEditText().getText().toString());
+    @Override
+    public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) {
+        if (requestCode == GPS_REQUEST_CODE) {
+            if (permissions.length == 1 && grantResults[0]==PackageManager.PERMISSION_GRANTED){
 
-        if(radioGroupFiscaCpfConsultado.getCheckedRadioButtonId() != -1) {fisca.setCpf_status(((RadioButton)findViewById(radioGroupFiscaCpfConsultado.getCheckedRadioButtonId())).getText().toString());
-        }else{fisca.setCpf_status("");}
+                getGPSLocation();
 
-        fisca.setNis(textInputLayoutFiscaNIS.getEditText().getText().toString());
-        fisca.setRg(textInputLayoutFiscaRG.getEditText().getText().toString());
-//        fisca.setData_nascimento(textInputLayoutFiscaNascimento.getEditText().getText().toString());
-        fisca.setData_nascimento(maskedEditTextFiscaNascimento.getRawText());
-        fisca.setMedidor_vizinho_1(textInputLayoutFiscaMedidor1.getEditText().getText().toString());
-        fisca.setMedidor_vizinho_2(textInputLayoutFiscaMedidor2.getEditText().getText().toString());
-//        fisca.setTelefone(textInputLayoutFiscaTelefone.getEditText().getText().toString());
-        if(maskedEditTextFiscaTelefone.getRawText().equals("(")){fisca.setTelefone("");}
-        else{fisca.setTelefone(maskedEditTextFiscaTelefone.getRawText());}
-//        fisca.setCelular(textInputLayoutFiscaCelular.getEditText().getText().toString());
-        if(maskedEditTextFiscaCelular.getRawText().equals("(")){fisca.setCelular("");}
-        else{fisca.setCelular(maskedEditTextFiscaCelular.getRawText());}
-        fisca.setEmail(textInputLayoutFiscaEmail.getEditText().getText().toString());
-        fisca.setLatitude(textInputLayoutFiscaLatitude.getEditText().getText().toString());
-        fisca.setLongitude(textInputLayoutFiscaLongitude.getEditText().getText().toString());
-
-        if(radioGroupFiscaAreaPreserva.getCheckedRadioButtonId() != -1) {fisca.setPreservacao_ambiental(((RadioButton) findViewById(radioGroupFiscaAreaPreserva.getCheckedRadioButtonId())).getText().toString());
-        }else{fisca.setPreservacao_ambiental("");}
-        if(radioGroupFiscaInvadida.getCheckedRadioButtonId() != -1) {fisca.setArea_invadida(((RadioButton)findViewById(radioGroupFiscaInvadida.getCheckedRadioButtonId())).getText().toString());
-        }else{fisca.setArea_invadida("");}
-        if(radioGroupFiscaLigacao.getCheckedRadioButtonId() != -1) {fisca.setTipo_ligacao(((RadioButton)findViewById(radioGroupFiscaLigacao.getCheckedRadioButtonId())).getText().toString());
-        }else{fisca.setTipo_ligacao("");}
-        if(radioGroupFiscaRede.getCheckedRadioButtonId() != -1) {fisca.setRede_local(((RadioButton)findViewById(radioGroupFiscaRede.getCheckedRadioButtonId())).getText().toString());
-        }else{fisca.setRede_local("");}
-        if(radioGroupFiscaPadrao.getCheckedRadioButtonId() != -1) {fisca.setPadrao_montado(((RadioButton)findViewById(radioGroupFiscaPadrao.getCheckedRadioButtonId())).getText().toString());
-        }else{fisca.setPadrao_montado("");}
-        if(radioGroupFiscaServidao.getCheckedRadioButtonId() != -1) {fisca.setFaixa_servidao(((RadioButton)findViewById(radioGroupFiscaServidao.getCheckedRadioButtonId())).getText().toString());
-        }else{fisca.setFaixa_servidao("");}
-        if(radioGroupFiscaIndicacao.getCheckedRadioButtonId() != -1) {fisca.setPre_indicacao(((RadioButton)findViewById(radioGroupFiscaIndicacao.getCheckedRadioButtonId())).getText().toString());
-        }else{fisca.setPre_indicacao("");}
-
-        fisca.setCpf_pre_indicacao(textInputLayoutCPFIndicado.getEditText().getText().toString());
-
-        if(radioGroupFiscaOrdemServico.getCheckedRadioButtonId() != -1) {fisca.setExiste_ordem(((RadioButton)findViewById(radioGroupFiscaOrdemServico.getCheckedRadioButtonId())).getText().toString());
-        }else{fisca.setExiste_ordem("");}
-
-        fisca.setNumero_ordem(textInputLayoutFiscaOrdem.getEditText().getText().toString());
-
-        if(radioGroupFiscaOrdemServico.getCheckedRadioButtonId() == R.id.radioButtonFiscaOrdemServico1){fisca.setEstado_ordem(((RadioButton)findViewById(radioGroupFiscaEstadoOrdem.getCheckedRadioButtonId())).getText().toString());
-        }else{
-            fisca.setNumero_ordem("");
-            fisca.setEstado_ordem("");
+            }else{
+                Toast.makeText(this, "Não é possível utilizar esta função sem GPS!", Toast.LENGTH_SHORT).show();
+                finish();
+            }
         }
-
-        return fisca;
     }
 
+    @Override
+    protected void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+        fiscaModel fiscaSaved = getFiscaFromFields(fisca);
+        outState.putSerializable("fisca", fiscaSaved);
+    }
+
+    @Override
+    protected void onRestoreInstanceState(Bundle savedInstanceState) {
+        super.onRestoreInstanceState(savedInstanceState);
+        fiscaModel fiscaSaved = (fiscaModel) savedInstanceState.getSerializable("fisca");
+        fillForm(fiscaSaved);
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+
+        if(locationListener!=null){
+            locationManager.removeUpdates(locationListener);
+        }
+
+        if(formType.equals("new")){
+            fiscalizaDAO dao = new fiscalizaDAO(fiscalizacaoClandestinoFormActivity.this);
+            int fiscaID = dao.getNextID();
+            fisca.setImagesList(dao.getImagesDB(fiscaID));
+            deleteImagesFromPhoneMemory(fisca);
+            dao.deleteImages(fiscaID);
+            dao.close();
+        }
+    }
+
+
+    // FUNCIONALIDADES
     private void setFields() {
         spinnerFiscaFuncionario = findViewById(R.id.spinnerFiscaFuncionario);
         spinnerFiscaFuncionarioAdapter = ArrayAdapter.createFromResource(this, R.array.funcionarios, android.R.layout.simple_spinner_item);
@@ -469,6 +424,40 @@ public class fiscalizacaoClandestinoFormActivity extends AppCompatActivity {
         setValidateEmpty(textInputLayoutFiscaLatitude);
         setValidateEmpty(textInputLayoutFiscaLongitude);
 
+
+
+        spinnerFiscaFrente = findViewById(R.id.spinnerFiscaFrente);
+        spinnerFiscaFrenteAdapter = ArrayAdapter.createFromResource(this, R.array.frentes, android.R.layout.simple_spinner_item);
+        spinnerFiscaFrenteAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        spinnerFiscaFrente.setAdapter(spinnerFiscaFrenteAdapter);
+        final TextView textViewFrente = findViewById(R.id.textView61);
+
+        spinnerFiscaFrente.setVisibility(View.GONE);
+        textViewFrente.setVisibility(View.GONE);
+
+        radioGroupFiscaServicoDirecionado = findViewById(R.id.radioGroupFiscaServicoDirecionado);
+        radioGroupFiscaServicoDirecionado.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener()
+        {
+            public void onCheckedChanged(RadioGroup group, int checkedId)
+            {
+                RadioButton checkedRadioButton = group.findViewById(checkedId);
+                boolean isChecked = checkedRadioButton.isChecked();
+                if (isChecked && checkedRadioButton.getText().toString().equals("Sim")){
+                    spinnerFiscaFrente.setVisibility(View.VISIBLE);
+                    textViewFrente.setVisibility(View.VISIBLE);
+                }else{
+                    spinnerFiscaFrente.setVisibility(View.GONE);
+                    spinnerFiscaFrente.setSelection(0);
+                    textViewFrente.setVisibility(View.GONE);
+                }
+            }
+        });
+
+        radioGroupFiscaClandLocalizado = findViewById(R.id.radioGroupFiscaClandLocalizado);
+
+
+
+
         progressBarFiscaGPS = findViewById(R.id.progressBarFiscaGPS);
         progressBarFiscaGPS.setVisibility(View.GONE);
         floatingActionButtonFiscaGPS = findViewById(R.id.floatingActionButtonFiscaGPS);
@@ -596,83 +585,109 @@ public class fiscalizacaoClandestinoFormActivity extends AppCompatActivity {
                 break;
             }
         }
-    }
 
-    private String formatTelefone(String number, String type) {
-        if(number!=null){
-            if(!number.equals("")){
-
-                String ddd = number.substring(0, 1);
-                String middle = "";
-                String end = "";
-                if(type.equals("cel")){
-                    middle = number.substring(2, 6);
-                    end = number.substring(7, 10);
-                }else{
-                    middle = number.substring(2, 5);
-                    end = number.substring(6, 9);
-                }
-
-                return "("+ ddd +")"+ middle +"-"+end;
+        spinnerFiscaFrente.setSelection(spinnerFiscaFrenteAdapter.getPosition(fisca.getFrente_trabalho()));
+        for(int i=0; i<radioGroupFiscaServicoDirecionado.getChildCount(); i++) {
+            RadioButton btn = (RadioButton) radioGroupFiscaServicoDirecionado.getChildAt(i);
+            if (btn.getText().toString().equals(fisca.getServico_direcionado())) {
+                btn.setChecked(true);
+                break;
             }
         }
-        return "";
-    }
-
-    private String formatData(String data) {
-        if(data!=null){
-            if(!data.equals("")){
-
-                String dia = "";
-                String mes = "";
-                String ano = "";
-
-                if(data.length() == 2){
-                    dia = data.substring(0, 2);
-                }else if(data.length() == 4){
-                    dia = data.substring(0, 2);
-                    mes = data.substring(2, 4);
-                }else if(data.length() == 6){
-                    dia = data.substring(0, 2);
-                    mes = data.substring(2, 4);
-                    ano = data.substring(4, 6);
-                }else if(data.length() == 8){
-                    dia = data.substring(0, 2);
-                    mes = data.substring(2, 4);
-                    ano = data.substring(4, 8);
-                }
-
-                return dia +"/"+ mes +"/"+ano;
+        for(int i=0; i<radioGroupFiscaClandLocalizado.getChildCount(); i++) {
+            RadioButton btn = (RadioButton) radioGroupFiscaClandLocalizado.getChildAt(i);
+            if (btn.getText().toString().equals(fisca.getClandest_localizado())) {
+                btn.setChecked(true);
+                break;
             }
         }
-        return "";
     }
 
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        MenuInflater inflater = getMenuInflater();
-        if(formType.equals("readOnly")){
-            inflater.inflate(R.menu.menu_edit_form, menu);
+    private fiscaModel getFiscaFromFields(fiscaModel fisca) {
+        fisca.setFuncionario(spinnerFiscaFuncionario.getSelectedItem().toString());
+        fisca.setNome(textInputLayoutFiscaNome.getEditText().getText().toString());
+        fisca.setEndereco(textInputLayoutFiscaEndereco.getEditText().getText().toString());
+        fisca.setBairro(textInputLayoutFiscaBairro.getEditText().getText().toString());
+        fisca.setMunicipio(spinnerFiscaMunicipio.getSelectedItem().toString());
+        fisca.setCpf(textInputLayoutFiscaCPF.getEditText().getText().toString());
+
+        if(radioGroupFiscaCpfConsultado.getCheckedRadioButtonId() != -1) {fisca.setCpf_status(((RadioButton)findViewById(radioGroupFiscaCpfConsultado.getCheckedRadioButtonId())).getText().toString());
+        }else{fisca.setCpf_status("");}
+
+        fisca.setNis(textInputLayoutFiscaNIS.getEditText().getText().toString());
+        fisca.setRg(textInputLayoutFiscaRG.getEditText().getText().toString());
+//        fisca.setData_nascimento(textInputLayoutFiscaNascimento.getEditText().getText().toString());
+        fisca.setData_nascimento(maskedEditTextFiscaNascimento.getRawText());
+        fisca.setMedidor_vizinho_1(textInputLayoutFiscaMedidor1.getEditText().getText().toString());
+        fisca.setMedidor_vizinho_2(textInputLayoutFiscaMedidor2.getEditText().getText().toString());
+//        fisca.setTelefone(textInputLayoutFiscaTelefone.getEditText().getText().toString());
+        if(maskedEditTextFiscaTelefone.getRawText().equals("(")){fisca.setTelefone("");}
+        else{fisca.setTelefone(maskedEditTextFiscaTelefone.getRawText());}
+//        fisca.setCelular(textInputLayoutFiscaCelular.getEditText().getText().toString());
+        if(maskedEditTextFiscaCelular.getRawText().equals("(")){fisca.setCelular("");}
+        else{fisca.setCelular(maskedEditTextFiscaCelular.getRawText());}
+        fisca.setEmail(textInputLayoutFiscaEmail.getEditText().getText().toString());
+        fisca.setLatitude(textInputLayoutFiscaLatitude.getEditText().getText().toString());
+        fisca.setLongitude(textInputLayoutFiscaLongitude.getEditText().getText().toString());
+
+        if(radioGroupFiscaAreaPreserva.getCheckedRadioButtonId() != -1) {fisca.setPreservacao_ambiental(((RadioButton) findViewById(radioGroupFiscaAreaPreserva.getCheckedRadioButtonId())).getText().toString());
+        }else{fisca.setPreservacao_ambiental("");}
+        if(radioGroupFiscaInvadida.getCheckedRadioButtonId() != -1) {fisca.setArea_invadida(((RadioButton)findViewById(radioGroupFiscaInvadida.getCheckedRadioButtonId())).getText().toString());
+        }else{fisca.setArea_invadida("");}
+        if(radioGroupFiscaLigacao.getCheckedRadioButtonId() != -1) {fisca.setTipo_ligacao(((RadioButton)findViewById(radioGroupFiscaLigacao.getCheckedRadioButtonId())).getText().toString());
+        }else{fisca.setTipo_ligacao("");}
+        if(radioGroupFiscaRede.getCheckedRadioButtonId() != -1) {fisca.setRede_local(((RadioButton)findViewById(radioGroupFiscaRede.getCheckedRadioButtonId())).getText().toString());
+        }else{fisca.setRede_local("");}
+        if(radioGroupFiscaPadrao.getCheckedRadioButtonId() != -1) {fisca.setPadrao_montado(((RadioButton)findViewById(radioGroupFiscaPadrao.getCheckedRadioButtonId())).getText().toString());
+        }else{fisca.setPadrao_montado("");}
+        if(radioGroupFiscaServidao.getCheckedRadioButtonId() != -1) {fisca.setFaixa_servidao(((RadioButton)findViewById(radioGroupFiscaServidao.getCheckedRadioButtonId())).getText().toString());
+        }else{fisca.setFaixa_servidao("");}
+        if(radioGroupFiscaIndicacao.getCheckedRadioButtonId() != -1) {fisca.setPre_indicacao(((RadioButton)findViewById(radioGroupFiscaIndicacao.getCheckedRadioButtonId())).getText().toString());
+        }else{fisca.setPre_indicacao("");}
+
+        fisca.setCpf_pre_indicacao(textInputLayoutCPFIndicado.getEditText().getText().toString());
+
+        if(radioGroupFiscaOrdemServico.getCheckedRadioButtonId() != -1) {fisca.setExiste_ordem(((RadioButton)findViewById(radioGroupFiscaOrdemServico.getCheckedRadioButtonId())).getText().toString());
+        }else{fisca.setExiste_ordem("");}
+
+        fisca.setNumero_ordem(textInputLayoutFiscaOrdem.getEditText().getText().toString());
+
+        if(radioGroupFiscaOrdemServico.getCheckedRadioButtonId() == R.id.radioButtonFiscaOrdemServico1){fisca.setEstado_ordem(((RadioButton)findViewById(radioGroupFiscaEstadoOrdem.getCheckedRadioButtonId())).getText().toString());
         }else{
-            inflater.inflate(R.menu.menu_save_form, menu);
+            fisca.setNumero_ordem("");
+            fisca.setEstado_ordem("");
         }
 
-        return super.onCreateOptionsMenu(menu);
+        if(radioGroupFiscaServicoDirecionado.getCheckedRadioButtonId() != -1) {fisca.setServico_direcionado(((RadioButton)findViewById(radioGroupFiscaServicoDirecionado.getCheckedRadioButtonId())).getText().toString());
+        }else{fisca.setServico_direcionado("");}
+        if(spinnerFiscaFrente.getSelectedItem().toString().equals("Selecione")){
+            fisca.setFrente_trabalho("");
+        }else{
+            fisca.setFrente_trabalho(spinnerFiscaFrente.getSelectedItem().toString());
+        }
+        if(radioGroupFiscaClandLocalizado.getCheckedRadioButtonId() != -1) {fisca.setClandest_localizado(((RadioButton)findViewById(radioGroupFiscaClandLocalizado.getCheckedRadioButtonId())).getText().toString());
+        }else{fisca.setClandest_localizado("");}
+
+        return fisca;
     }
 
-    @Override
-    protected void onSaveInstanceState(Bundle outState) {
-        super.onSaveInstanceState(outState);
-        fiscaModel fiscaSaved = getFiscaFromFields(fisca);
-        outState.putSerializable("fisca", fiscaSaved);
+    public void deleteImagesFromPhoneMemory(fiscaModel fisca) {
+        List<String> imagesListToDelete = fisca.getImagesList();
+        for (int i = 0; i < imagesListToDelete.size(); i++) {
+            File file = new File(imagesListToDelete.get(i));
+            boolean deleted = file.delete();
+            Log.d("TAG4", "delete() called: " + deleted);
+        }
+
+        String path = this.getExternalFilesDir(Environment.DIRECTORY_PICTURES).toString();
+        File directory = new File(path);
+        File[] files = directory.listFiles();
+        for (File file : files) {
+            boolean deleted = file.delete();
+            Log.d("TAG4", "delete() called: " + deleted);
+        }
     }
 
-    @Override
-    protected void onRestoreInstanceState(Bundle savedInstanceState) {
-        super.onRestoreInstanceState(savedInstanceState);
-        fiscaModel fiscaSaved = (fiscaModel) savedInstanceState.getSerializable("fisca");
-        fillForm(fiscaSaved);
-    }
 
 
     // VALIDAÇÃO
@@ -748,6 +763,20 @@ public class fiscalizacaoClandestinoFormActivity extends AppCompatActivity {
             isValid = "funcionario";
         }
 
+        switch(radioGroupFiscaServicoDirecionado.getCheckedRadioButtonId()){
+            case -1:
+                isValid = "ServicoDirecionado";
+                break;
+            case R.id.radioButtonFiscaServicoDirecionado1:
+                if (spinnerFiscaFrente.getSelectedItemPosition() == 0) {
+                    isValid = "frente";
+                }
+                break;
+        }
+        if (radioGroupFiscaClandLocalizado.getCheckedRadioButtonId() == -1) {
+            isValid = "ClandLocalizado";
+        }
+
         switch (isValid){
             case "false":
                 Toast.makeText(this, "Favor preencher todos os campos obrigatórios!", Toast.LENGTH_SHORT).show();
@@ -788,6 +817,15 @@ public class fiscalizacaoClandestinoFormActivity extends AppCompatActivity {
             case "Ordem":
                 Toast.makeText(this, "Favor selecionar a opção Existe ordem de serviço para o local!", Toast.LENGTH_SHORT).show();
                 break;
+            case "ServicoDirecionado":
+                Toast.makeText(this, "Favor selecionar a opção Serviço direcionado!", Toast.LENGTH_SHORT).show();
+                break;
+            case "frente":
+                Toast.makeText(this, "Favor selecionar uma Frente de trabalho!", Toast.LENGTH_SHORT).show();
+                break;
+            case "ClandLocalizado":
+                Toast.makeText(this, "Favor selecionar a opção Clandestino localizado!", Toast.LENGTH_SHORT).show();
+                break;
         }
 
         return isValid.isEmpty();
@@ -805,7 +843,6 @@ public class fiscalizacaoClandestinoFormActivity extends AppCompatActivity {
         }
         return text.isEmpty();
     }
-
     private boolean fieldIsEmptyMasked(MaskedEditText maskedEditText) {
         String text = maskedEditText.getRawText();
         if(text.isEmpty()) {
@@ -836,7 +873,6 @@ public class fiscalizacaoClandestinoFormActivity extends AppCompatActivity {
             }
         });
     }
-
     private void setValidateEmptyMasked(final MaskedEditText maskedEditText) {
         maskedEditText.setOnFocusChangeListener(new View.OnFocusChangeListener() {
             @Override
@@ -856,20 +892,6 @@ public class fiscalizacaoClandestinoFormActivity extends AppCompatActivity {
 
 
     // GPS
-    @Override
-    public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) {
-        if (requestCode == GPS_REQUEST_CODE) {
-            if (permissions.length == 1 && grantResults[0]==PackageManager.PERMISSION_GRANTED){
-
-                getGPSLocation();
-
-            }else{
-                Toast.makeText(this, "Não é possível utilizar esta função sem GPS!", Toast.LENGTH_SHORT).show();
-                finish();
-            }
-        }
-    }
-
     private void getGPSLocation() {
         if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
 
@@ -922,40 +944,112 @@ public class fiscalizacaoClandestinoFormActivity extends AppCompatActivity {
     }
 
 
+    // HELPERS
+    private void disableAll() {
+        disableSpinner(spinnerFiscaFuncionario);
+        disableEditText(textInputLayoutFiscaNome.getEditText());
+        disableEditText(textInputLayoutFiscaEndereco.getEditText());
+        disableEditText(textInputLayoutFiscaBairro.getEditText());
+        disableSpinner(spinnerFiscaMunicipio);
+        disableEditText(textInputLayoutFiscaCPF.getEditText());
+        disableRadioGroup(radioGroupFiscaCpfConsultado);
+        disableEditText(textInputLayoutFiscaNIS.getEditText());
+        disableEditText(textInputLayoutFiscaRG.getEditText());
+        disableEditText(textInputLayoutFiscaNascimento.getEditText());
+        disableEditText(textInputLayoutFiscaMedidor1.getEditText());
+        disableEditText(textInputLayoutFiscaMedidor2.getEditText());
+        disableEditText(textInputLayoutFiscaTelefone.getEditText());
+        disableEditText(textInputLayoutFiscaCelular.getEditText());
+        disableEditText(textInputLayoutFiscaEmail.getEditText());
+        disableEditText(textInputLayoutFiscaLatitude.getEditText());
+        disableEditText(textInputLayoutFiscaLongitude.getEditText());
+        disableRadioGroup(radioGroupFiscaAreaPreserva);
+        disableRadioGroup(radioGroupFiscaInvadida);
+        disableRadioGroup(radioGroupFiscaLigacao);
+        disableRadioGroup(radioGroupFiscaRede);
+        disableRadioGroup(radioGroupFiscaPadrao);
+        disableRadioGroup(radioGroupFiscaServidao);
+        disableRadioGroup(radioGroupFiscaIndicacao);
+        disableEditText(textInputLayoutCPFIndicado.getEditText());
+        disableRadioGroup(radioGroupFiscaOrdemServico);
+        disableEditText(textInputLayoutFiscaOrdem.getEditText());
+        disableRadioGroup(radioGroupFiscaEstadoOrdem);
 
-    @Override
-    protected void onDestroy() {
-        super.onDestroy();
+        disableRadioGroup(radioGroupFiscaServicoDirecionado);
+        disableSpinner(spinnerFiscaFrente);
+        disableRadioGroup(radioGroupFiscaClandLocalizado);
+    }
 
-        if(locationListener!=null){
-            locationManager.removeUpdates(locationListener);
-        }
-
-        if(formType.equals("new")){
-            fiscalizaDAO dao = new fiscalizaDAO(fiscalizacaoClandestinoFormActivity.this);
-            int fiscaID = dao.getNextID();
-            fisca.setImagesList(dao.getImagesDB(fiscaID));
-            deleteImagesFromPhoneMemory(fisca);
-            dao.deleteImages(fiscaID);
-            dao.close();
+    private void disableEditText(EditText editText) {
+        editText.setFocusable(false);
+        editText.setEnabled(false);
+        editText.setCursorVisible(false);
+        editText.setKeyListener(null);
+        editText.setTextColor(Color.parseColor("#616161"));
+    }
+    private void disableSimpleEditText(EditText editText) {
+        editText.setEnabled(false);
+    }
+    private void enableEditText(EditText editText) {
+        editText.setEnabled(true);
+    }
+    private void disableSpinner(Spinner spinner) {
+        spinner.setEnabled(false);
+        spinner.setClickable(false);
+    }
+    private void disableRadioGroup(RadioGroup radioGroup) {
+        for(int i=0; i<radioGroup.getChildCount(); i++) {
+            radioGroup.getChildAt(i).setClickable(false);
         }
     }
 
-    public void deleteImagesFromPhoneMemory(fiscaModel fisca) {
-        List<String> imagesListToDelete = fisca.getImagesList();
-        for (int i = 0; i < imagesListToDelete.size(); i++) {
-            File file = new File(imagesListToDelete.get(i));
-            boolean deleted = file.delete();
-            Log.d("TAG4", "delete() called: " + deleted);
-        }
+    private String formatTelefone(String number, String type) {
+        if(number!=null){
+            if(!number.equals("")){
 
-        String path = this.getExternalFilesDir(Environment.DIRECTORY_PICTURES).toString();
-        File directory = new File(path);
-        File[] files = directory.listFiles();
-        for (File file : files) {
-            boolean deleted = file.delete();
-            Log.d("TAG4", "delete() called: " + deleted);
+                String ddd = number.substring(0, 1);
+                String middle = "";
+                String end = "";
+                if(type.equals("cel")){
+                    middle = number.substring(2, 6);
+                    end = number.substring(7, 10);
+                }else{
+                    middle = number.substring(2, 5);
+                    end = number.substring(6, 9);
+                }
+
+                return "("+ ddd +")"+ middle +"-"+end;
+            }
         }
+        return "";
+    }
+    private String formatData(String data) {
+        if(data!=null){
+            if(!data.equals("")){
+
+                String dia = "";
+                String mes = "";
+                String ano = "";
+
+                if(data.length() == 2){
+                    dia = data.substring(0, 2);
+                }else if(data.length() == 4){
+                    dia = data.substring(0, 2);
+                    mes = data.substring(2, 4);
+                }else if(data.length() == 6){
+                    dia = data.substring(0, 2);
+                    mes = data.substring(2, 4);
+                    ano = data.substring(4, 6);
+                }else if(data.length() == 8){
+                    dia = data.substring(0, 2);
+                    mes = data.substring(2, 4);
+                    ano = data.substring(4, 8);
+                }
+
+                return dia +"/"+ mes +"/"+ano;
+            }
+        }
+        return "";
     }
 
 }

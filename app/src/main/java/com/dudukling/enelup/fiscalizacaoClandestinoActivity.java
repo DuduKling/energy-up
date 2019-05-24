@@ -137,57 +137,8 @@ public class fiscalizacaoClandestinoActivity extends AppCompatActivity {
         return super.onCreateOptionsMenu(menu);
     }
 
-
-    private void deleteAll() {
-        DialogInterface.OnClickListener dialogClickListener = new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-                switch (which) {
-                    case DialogInterface.BUTTON_POSITIVE:
-                        exportDB("backup");
-
-                        if (!fiscaList.isEmpty()) {
-                            for (int i = 0; i < fiscaList.size(); i++) {
-                                fiscaModel fisca = fiscaList.get(i);
-                                List<String> fiscaImages = fisca.getImagesList();
-                                if (!fiscaImages.isEmpty()) {
-                                    deleteImagesFromPhoneMemory(fisca);
-                                }
-                            }
-                        }
-
-                        fiscalizaDAO dao = new fiscalizaDAO(fiscalizacaoClandestinoActivity.this);
-                        dao.truncateFiscalizacoes();
-                        dao.close();
-
-                        fiscaList.clear();
-                        RecyclerAdapter = new fiscalizacao_recyclerAdapter(fiscalizacaoClandestinoActivity.this);
-                        recyclerView.setAdapter(RecyclerAdapter);
-
-                        textViewNoRecord.setVisibility(View.VISIBLE);
-                        break;
-                    case DialogInterface.BUTTON_NEGATIVE:
-                        //No button clicked
-                        break;
-                }
-            }
-        };
-
-        AlertDialog.Builder builder = new AlertDialog.Builder(this);
-        builder.setMessage("Tem certeza que deseja deletar todas as Fiscalizações?").setPositiveButton("Confirmar", dialogClickListener)
-                .setNegativeButton("Cancelar", dialogClickListener).show();
-    }
-
-    @RequiresApi(api = Build.VERSION_CODES.M)
-    private void checkPermissionBeforeExport() {
-        if (this.checkSelfPermission(Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
-            ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE}, EXPORT_WRITE_PERMISSION_CODE);
-        } else {
-            exportDB("");
-        }
-    }
-
-    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+    @Override
+    public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
         if (requestCode == EXPORT_WRITE_PERMISSION_CODE) {
             if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_DENIED) {
@@ -195,6 +146,17 @@ public class fiscalizacaoClandestinoActivity extends AppCompatActivity {
             } else {
                 exportDB("");
             }
+        }
+    }
+
+
+    // EXPORT
+    @RequiresApi(api = Build.VERSION_CODES.M)
+    private void checkPermissionBeforeExport() {
+        if (this.checkSelfPermission(Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
+            ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE}, EXPORT_WRITE_PERMISSION_CODE);
+        } else {
+            exportDB("");
         }
     }
 
@@ -263,7 +225,10 @@ public class fiscalizacaoClandestinoActivity extends AppCompatActivity {
                         " cpf_pre_indicacao,"+
                         " existe_ordem,"+
                         " numero_ordem,"+
-                        " estado_ordem"+
+                        " estado_ordem,"+
+                        " servico_direcionado,"+
+                        " frente_trabalho,"+
+                        " clandest_localizado"+
                     " FROM fiscaTable "
                     , null);
 
@@ -295,7 +260,10 @@ public class fiscalizacaoClandestinoActivity extends AppCompatActivity {
                     "cpf_pre_indicacao",
                     "existe_ordem",
                     "numero_ordem",
-                    "estado_ordem"
+                    "estado_ordem",
+                    "servico_direcionado",
+                    "frente_trabalho",
+                    "clandest_localizado"
                 };
 
             csvWrite.writeNext(str);
@@ -330,6 +298,9 @@ public class fiscalizacaoClandestinoActivity extends AppCompatActivity {
                 String existe_ordem = stripAccents(curCSV.getString(26));
                 String numero_ordem = stripAccents(curCSV.getString(27));
                 String estado_ordem = stripAccents(curCSV.getString(28));
+                String servico_direcionado = stripAccents(curCSV.getString(29));
+                String frente_trabalho = stripAccents(curCSV.getString(30));
+                String clandest_localizado = stripAccents(curCSV.getString(31));
 
                 String arrStr[] = {
                         id,
@@ -360,7 +331,10 @@ public class fiscalizacaoClandestinoActivity extends AppCompatActivity {
                         cpf_pre_indicacao,
                         existe_ordem,
                         numero_ordem,
-                        estado_ordem
+                        estado_ordem,
+                        servico_direcionado,
+                        frente_trabalho,
+                        clandest_localizado
                     };
 
                 csvWrite.writeNext(arrStr);
@@ -382,10 +356,46 @@ public class fiscalizacaoClandestinoActivity extends AppCompatActivity {
         }
     }
 
-    public static String stripAccents(String s) {
-        s = Normalizer.normalize(s, Normalizer.Form.NFD);
-        s = s.replaceAll("[\\p{InCombiningDiacriticalMarks}]", "");
-        return s;
+
+    // DELETE
+    private void deleteAll() {
+        DialogInterface.OnClickListener dialogClickListener = new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                switch (which) {
+                    case DialogInterface.BUTTON_POSITIVE:
+                        exportDB("backup");
+
+                        if (!fiscaList.isEmpty()) {
+                            for (int i = 0; i < fiscaList.size(); i++) {
+                                fiscaModel fisca = fiscaList.get(i);
+                                List<String> fiscaImages = fisca.getImagesList();
+                                if (!fiscaImages.isEmpty()) {
+                                    deleteImagesFromPhoneMemory(fisca);
+                                }
+                            }
+                        }
+
+                        fiscalizaDAO dao = new fiscalizaDAO(fiscalizacaoClandestinoActivity.this);
+                        dao.truncateFiscalizacoes();
+                        dao.close();
+
+                        fiscaList.clear();
+                        RecyclerAdapter = new fiscalizacao_recyclerAdapter(fiscalizacaoClandestinoActivity.this);
+                        recyclerView.setAdapter(RecyclerAdapter);
+
+                        textViewNoRecord.setVisibility(View.VISIBLE);
+                        break;
+                    case DialogInterface.BUTTON_NEGATIVE:
+                        //No button clicked
+                        break;
+                }
+            }
+        };
+
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setMessage("Tem certeza que deseja deletar todas as Fiscalizações?").setPositiveButton("Confirmar", dialogClickListener)
+                .setNegativeButton("Cancelar", dialogClickListener).show();
     }
 
     public void deleteImagesFromPhoneMemory(fiscaModel fisca) {
@@ -406,6 +416,15 @@ public class fiscalizacaoClandestinoActivity extends AppCompatActivity {
     }
 
 
+    // HELPERS
+    public static String stripAccents(String s) {
+        s = Normalizer.normalize(s, Normalizer.Form.NFD);
+        s = s.replaceAll("[\\p{InCombiningDiacriticalMarks}]", "");
+        return s;
+    }
+
+
+    // UPLOAD
     public boolean isInternetConnectionOk() {
         // ICMP
         Runtime runtime = Runtime.getRuntime();

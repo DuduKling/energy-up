@@ -38,6 +38,10 @@ public class fiscaModel implements Serializable {
     private String data_google_sheets;
     private String flag_google_sheets;
 
+    private String servico_direcionado;
+    private String frente_trabalho;
+    private String clandest_localizado;
+
     private List<String> imagesList  = new ArrayList<>();
 
 
@@ -263,5 +267,26 @@ public class fiscaModel implements Serializable {
     }
     public void setFlag_google_sheets(String flag_google_sheets) {
         this.flag_google_sheets = flag_google_sheets;
+    }
+
+    public String getServico_direcionado() {
+        return servico_direcionado;
+    }
+    public void setServico_direcionado(String servico_direcionado) {
+        this.servico_direcionado = servico_direcionado;
+    }
+
+    public String getFrente_trabalho() {
+        return frente_trabalho;
+    }
+    public void setFrente_trabalho(String frente_trabalho) {
+        this.frente_trabalho = frente_trabalho;
+    }
+
+    public String getClandest_localizado() {
+        return clandest_localizado;
+    }
+    public void setClandest_localizado(String clandest_localizado) {
+        this.clandest_localizado = clandest_localizado;
     }
 }

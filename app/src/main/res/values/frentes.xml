@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string-array name="frentes">
+        <item>Selecione</item>
+        <item>Análise de Quadrados</item>
+        <item>Análise de Alimentadores</item>
+        <item>Carga de Trafos</item>
+        <item>Denúncia</item>
+        <item>TOI em Clandestino</item>
+        <item>Ordens de Novas Ligações - Suspensas</item>
+        <item>Ordens de Novas Ligações - Defeito Técnico</item>
+        <item>Ordens de Clientes Retirados</item>
+    </string-array>
+</resources>
