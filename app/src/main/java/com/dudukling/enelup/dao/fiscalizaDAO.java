@@ -48,8 +48,6 @@ public class fiscalizaDAO extends SQLiteOpenHelper {
     private String FIELD_FLAG_GOOGLE_SHEETS = "flag_google_sheets";     // '' - new, 0 - editado, 1 - enviado
     private String FIELD_SERVICO_DIRECIONADO = "servico_direcionado";
     private String FIELD_FRENTE_TRABALHO = "frente_trabalho";
-    private String FIELD_CLANDEST_LOCALIZADO = "clandest_localizado";
-
 
     public fiscalizaDAO(Context context) {
         super(context, "fiscaTable", null, 1);
@@ -90,8 +88,7 @@ public class fiscalizaDAO extends SQLiteOpenHelper {
                 FIELD_DATA_ENVIO_GOOGLE_SHEETS + " TEXT NOT NULL," +
                 FIELD_FLAG_GOOGLE_SHEETS + " TEXT NOT NULL," +
                 FIELD_SERVICO_DIRECIONADO + " TEXT NOT NULL," +
-                FIELD_FRENTE_TRABALHO + " TEXT NOT NULL," +
-                FIELD_CLANDEST_LOCALIZADO + " TEXT NOT NULL" +
+                FIELD_FRENTE_TRABALHO + " TEXT NOT NULL" +
                 ");";
         db.execSQL(sql);
 
@@ -240,7 +237,6 @@ public class fiscalizaDAO extends SQLiteOpenHelper {
             fisca.setFlag_google_sheets(c.getString(c.getColumnIndex(FIELD_FLAG_GOOGLE_SHEETS)));
             fisca.setServico_direcionado(c.getString(c.getColumnIndex(FIELD_SERVICO_DIRECIONADO)));
             fisca.setFrente_trabalho(c.getString(c.getColumnIndex(FIELD_FRENTE_TRABALHO)));
-            fisca.setClandest_localizado(c.getString(c.getColumnIndex(FIELD_CLANDEST_LOCALIZADO)));
 
             // Imagens:
             List<String> imagesList = getImagesDB(dbFiscaList);
@@ -314,7 +310,6 @@ public class fiscalizaDAO extends SQLiteOpenHelper {
             fisca.setFlag_google_sheets(c.getString(c.getColumnIndex(FIELD_FLAG_GOOGLE_SHEETS)));
             fisca.setServico_direcionado(c.getString(c.getColumnIndex(FIELD_SERVICO_DIRECIONADO)));
             fisca.setFrente_trabalho(c.getString(c.getColumnIndex(FIELD_FRENTE_TRABALHO)));
-            fisca.setClandest_localizado(c.getString(c.getColumnIndex(FIELD_CLANDEST_LOCALIZADO)));
 
             // Imagens:
             List<String> imagesList = getImagesDB(dbFiscaList);
@@ -398,10 +393,6 @@ public class fiscalizaDAO extends SQLiteOpenHelper {
         if(fisca.getFrente_trabalho()==null){queryData.put(FIELD_FRENTE_TRABALHO, "");}
         else if(fisca.getFrente_trabalho().isEmpty()){queryData.put(FIELD_FRENTE_TRABALHO, "");}
         else{queryData.put(FIELD_FRENTE_TRABALHO, fisca.getFrente_trabalho());}
-
-        if(fisca.getClandest_localizado()==null){queryData.put(FIELD_CLANDEST_LOCALIZADO, "");}
-        else if(fisca.getClandest_localizado().isEmpty()){queryData.put(FIELD_CLANDEST_LOCALIZADO, "");}
-        else{queryData.put(FIELD_CLANDEST_LOCALIZADO, fisca.getClandest_localizado());}
 
         return queryData;
     }

@@ -227,8 +227,7 @@ public class fiscalizacaoClandestinoActivity extends AppCompatActivity {
                         " numero_ordem,"+
                         " estado_ordem,"+
                         " servico_direcionado,"+
-                        " frente_trabalho,"+
-                        " clandest_localizado"+
+                        " frente_trabalho"+
                     " FROM fiscaTable "
                     , null);
 
@@ -262,9 +261,8 @@ public class fiscalizacaoClandestinoActivity extends AppCompatActivity {
                     "numero_ordem",
                     "estado_ordem",
                     "servico_direcionado",
-                    "frente_trabalho",
-                    "clandest_localizado"
-                };
+                    "frente_trabalho"
+            };
 
             csvWrite.writeNext(str);
 
@@ -300,7 +298,6 @@ public class fiscalizacaoClandestinoActivity extends AppCompatActivity {
                 String estado_ordem = stripAccents(curCSV.getString(28));
                 String servico_direcionado = stripAccents(curCSV.getString(29));
                 String frente_trabalho = stripAccents(curCSV.getString(30));
-                String clandest_localizado = stripAccents(curCSV.getString(31));
 
                 String arrStr[] = {
                         id,
@@ -333,9 +330,8 @@ public class fiscalizacaoClandestinoActivity extends AppCompatActivity {
                         numero_ordem,
                         estado_ordem,
                         servico_direcionado,
-                        frente_trabalho,
-                        clandest_localizado
-                    };
+                        frente_trabalho
+                };
 
                 csvWrite.writeNext(arrStr);
             }

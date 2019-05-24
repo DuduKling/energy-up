@@ -40,7 +40,6 @@ public class fiscaModel implements Serializable {
 
     private String servico_direcionado;
     private String frente_trabalho;
-    private String clandest_localizado;
 
     private List<String> imagesList  = new ArrayList<>();
 
@@ -283,10 +282,4 @@ public class fiscaModel implements Serializable {
         this.frente_trabalho = frente_trabalho;
     }
 
-    public String getClandest_localizado() {
-        return clandest_localizado;
-    }
-    public void setClandest_localizado(String clandest_localizado) {
-        this.clandest_localizado = clandest_localizado;
-    }
 }

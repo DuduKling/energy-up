@@ -103,8 +103,6 @@ public class fiscalizacaoClandestinoFormActivity extends AppCompatActivity {
     private RadioGroup radioGroupFiscaServicoDirecionado;
     private Spinner spinnerFiscaFrente;
     private ArrayAdapter<CharSequence> spinnerFiscaFrenteAdapter;
-    private RadioGroup radioGroupFiscaClandLocalizado;
-
 
     @TargetApi(Build.VERSION_CODES.KITKAT)
     @RequiresApi(api = Build.VERSION_CODES.KITKAT)
@@ -453,9 +451,6 @@ public class fiscalizacaoClandestinoFormActivity extends AppCompatActivity {
             }
         });
 
-        radioGroupFiscaClandLocalizado = findViewById(R.id.radioGroupFiscaClandLocalizado);
-
-
 
 
         progressBarFiscaGPS = findViewById(R.id.progressBarFiscaGPS);
@@ -594,13 +589,6 @@ public class fiscalizacaoClandestinoFormActivity extends AppCompatActivity {
                 break;
             }
         }
-        for(int i=0; i<radioGroupFiscaClandLocalizado.getChildCount(); i++) {
-            RadioButton btn = (RadioButton) radioGroupFiscaClandLocalizado.getChildAt(i);
-            if (btn.getText().toString().equals(fisca.getClandest_localizado())) {
-                btn.setChecked(true);
-                break;
-            }
-        }
     }
 
     private fiscaModel getFiscaFromFields(fiscaModel fisca) {
@@ -665,8 +653,6 @@ public class fiscalizacaoClandestinoFormActivity extends AppCompatActivity {
         }else{
             fisca.setFrente_trabalho(spinnerFiscaFrente.getSelectedItem().toString());
         }
-        if(radioGroupFiscaClandLocalizado.getCheckedRadioButtonId() != -1) {fisca.setClandest_localizado(((RadioButton)findViewById(radioGroupFiscaClandLocalizado.getCheckedRadioButtonId())).getText().toString());
-        }else{fisca.setClandest_localizado("");}
 
         return fisca;
     }
@@ -773,9 +759,6 @@ public class fiscalizacaoClandestinoFormActivity extends AppCompatActivity {
                 }
                 break;
         }
-        if (radioGroupFiscaClandLocalizado.getCheckedRadioButtonId() == -1) {
-            isValid = "ClandLocalizado";
-        }
 
         switch (isValid){
             case "false":
@@ -822,9 +805,6 @@ public class fiscalizacaoClandestinoFormActivity extends AppCompatActivity {
                 break;
             case "frente":
                 Toast.makeText(this, "Favor selecionar uma Frente de trabalho!", Toast.LENGTH_SHORT).show();
-                break;
-            case "ClandLocalizado":
-                Toast.makeText(this, "Favor selecionar a opção Clandestino localizado!", Toast.LENGTH_SHORT).show();
                 break;
         }
 
@@ -977,7 +957,6 @@ public class fiscalizacaoClandestinoFormActivity extends AppCompatActivity {
 
         disableRadioGroup(radioGroupFiscaServicoDirecionado);
         disableSpinner(spinnerFiscaFrente);
-        disableRadioGroup(radioGroupFiscaClandLocalizado);
     }
 
     private void disableEditText(EditText editText) {
