@@ -452,26 +452,28 @@ public class fiscalizacaoClandestinoActivity extends AppCompatActivity {
     }
 
     private void uploadToCloud() {
-        ProgressDialog dialog = ProgressDialog.show(this, "Enviar dados",
-                "Enviando. Favor aguarde...", true);
+        fiscalizaDAO dao = new fiscalizaDAO(this);
+        externalDAO extDao = new externalDAO(this);
 
-        if(isInternetConnectionOk() || checkOnlineState()){
-            fiscalizaDAO dao = new fiscalizaDAO(this);
-            externalDAO extDao = new externalDAO(this);
+        List<fiscaModel> list = dao.getFiscaListNotUploadedYet();
+        dao.close();
 
-            List<fiscaModel> list = dao.getFiscaListNotUploadedYet();
-            dao.close();
+        if(list.size() > 0){
+            Toast.makeText(this, "Verificando conexão com o servidor..", Toast.LENGTH_SHORT).show();
+            boolean internetTest1 = isInternetConnectionOk();
+            boolean internetTest2 = checkOnlineState();
 
-            if(list.size() > 0){
+            if(internetTest1 || internetTest2){
+                ProgressDialog dialog = ProgressDialog.show(this, "Enviar dados",
+                        "Enviando. Favor aguarde...", true);
+
                 extDao.sendFiscalizacaoClandestinoExternal(list, dialog);
-            }else{
-                dialog.dismiss();
-                Toast.makeText(this, "Não há mudanças para serem enviadas.", Toast.LENGTH_SHORT).show();
-            }
 
+            }else{
+                Toast.makeText(this, "Não foi possível realizar o envio dos dados para o servidor. Tente novamente mais tarde.", Toast.LENGTH_SHORT).show();
+            }
         }else{
-            dialog.dismiss();
-            Toast.makeText(this, "Sem conexão de internet para envio dos dados..", Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, "Não há mudanças para serem enviadas.", Toast.LENGTH_SHORT).show();
         }
 
     }
