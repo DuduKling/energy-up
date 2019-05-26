@@ -4,12 +4,15 @@ import android.Manifest;
 import android.annotation.SuppressLint;
 import android.annotation.TargetApi;
 import android.app.ProgressDialog;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.database.Cursor;
 import android.database.DatabaseUtils;
 import android.database.sqlite.SQLiteDatabase;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Environment;
@@ -40,6 +43,10 @@ import com.opencsv.CSVWriter;
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.net.InetAddress;
+import java.net.InetSocketAddress;
+import java.net.Socket;
+import java.net.SocketAddress;
 import java.text.Normalizer;
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -435,11 +442,20 @@ public class fiscalizacaoClandestinoActivity extends AppCompatActivity {
         return false;
     }
 
+    public boolean checkOnlineState() {
+        ConnectivityManager CManager = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
+        NetworkInfo NInfo = CManager.getActiveNetworkInfo();
+        if (NInfo != null && NInfo.isConnectedOrConnecting()) {
+            return true;
+        }
+        return false;
+    }
+
     private void uploadToCloud() {
         ProgressDialog dialog = ProgressDialog.show(this, "Enviar dados",
                 "Enviando. Favor aguarde...", true);
 
-        if(isInternetConnectionOk()){
+        if(isInternetConnectionOk() || checkOnlineState()){
             fiscalizaDAO dao = new fiscalizaDAO(this);
             externalDAO extDao = new externalDAO(this);
 

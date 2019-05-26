@@ -50,7 +50,7 @@ public class fiscalizaDAO extends SQLiteOpenHelper {
     private String FIELD_FRENTE_TRABALHO = "frente_trabalho";
 
     public fiscalizaDAO(Context context) {
-        super(context, "fiscaTable", null, 1);
+        super(context, "fiscaTable", null, 2);
     }
 
     @Override
@@ -104,10 +104,15 @@ public class fiscalizaDAO extends SQLiteOpenHelper {
 
     @Override
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
-        String sql = "DROP TABLE IF EXISTS lpTable";
+        String sql = "DROP TABLE IF EXISTS fiscaTable";
         db.execSQL(sql);
+
+        String sql2 = "DROP TABLE IF EXISTS fiscaImages";
+        db.execSQL(sql2);
+
         onCreate(db);
     }
+
 
 
 
