@@ -17,7 +17,7 @@ public class menuActivity extends AppCompatActivity {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setTitle("Menu");
+        setTitle("E-UP");
         setContentView(R.layout.activity_menu);
 
 

@@ -67,7 +67,7 @@ public class fiscalizacaoClandestinoActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         Objects.requireNonNull(getSupportActionBar()).setDisplayHomeAsUpEnabled(true);
-        setTitle("Fiscalizações Clandestinos");
+        setTitle("Cadastro de Clandestinos");
         setContentView(R.layout.activity_fiscalizacao_clandestino);
 
         FloatingActionButton floatingActionButtonFiscalizaClandestinoAdd = this.findViewById(R.id.floatingActionButtonFiscalizaClandestinoAdd);

@@ -55,7 +55,7 @@ public class clandestinoActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_clandestino);
         Objects.requireNonNull(getSupportActionBar()).setDisplayHomeAsUpEnabled(true);
-        setTitle("Ligações Clandestinos");
+        setTitle("Provisórias Clandestinas");
 
 
         fragmentManager = getSupportFragmentManager();
