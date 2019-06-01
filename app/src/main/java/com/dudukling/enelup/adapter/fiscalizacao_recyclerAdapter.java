@@ -2,8 +2,6 @@ package com.dudukling.enelup.adapter;
 
 import android.content.Context;
 import android.content.Intent;
-import android.graphics.Color;
-import android.os.Environment;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
@@ -17,12 +15,10 @@ import android.widget.TextView;
 
 import com.dudukling.enelup.R;
 import com.dudukling.enelup.dao.fiscalizaDAO;
-import com.dudukling.enelup.fiscalizacaoClandestinoFormActivity;
+import com.dudukling.enelup.fiscalizacao.fiscalizacaoClandestinoFormActivity;
 import com.dudukling.enelup.model.fiscaModel;
 
 import java.io.File;
-import java.io.Serializable;
-import java.util.ArrayList;
 import java.util.List;
 
 

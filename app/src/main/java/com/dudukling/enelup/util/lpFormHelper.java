@@ -19,10 +19,10 @@ import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.dudukling.enelup.ligProvLevCargaActivity;
+import com.dudukling.enelup.ligacaoes_provisorias.ligProvLevCargaActivity;
 import com.dudukling.enelup.R;
 import com.dudukling.enelup.dao.lpDAO;
-import com.dudukling.enelup.ligProvFormActivity;
+import com.dudukling.enelup.ligacaoes_provisorias.ligProvFormActivity;
 import com.dudukling.enelup.model.lpModel;
 import com.dudukling.enelup.model.lpPotencia;
 

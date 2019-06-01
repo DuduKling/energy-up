@@ -1,4 +1,4 @@
-package com.dudukling.enelup;
+package com.dudukling.enelup.fiscalizacao;
 
 import android.annotation.TargetApi;
 import android.content.Intent;
@@ -10,6 +10,8 @@ import android.support.v7.widget.CardView;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Toast;
+
+import com.dudukling.enelup.R;
 
 import java.util.Objects;
 

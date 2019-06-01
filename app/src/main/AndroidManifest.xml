@@ -25,21 +25,21 @@
         android:theme="@style/AppTheme"
         tools:ignore="AllowBackup,GoogleAppIndexingWarning">
 
-        <activity android:name=".fiscalizacaoClandestinoAlbumActivity" android:launchMode="singleTop" />
-        <activity android:name=".fiscalizacaoClandestinoFormActivity" android:launchMode="singleTop" />
-        <activity android:name=".fiscalizacaoClandestinoActivity" android:launchMode="singleTop" />
-        <activity android:name=".fiscalizacaoMenuActivity" android:launchMode="singleTop" />
+        <activity android:name=".fiscalizacao.fiscalizacaoClandestinoAlbumActivity" android:launchMode="singleTop" />
+        <activity android:name=".fiscalizacao.fiscalizacaoClandestinoFormActivity" android:launchMode="singleTop" />
+        <activity android:name=".fiscalizacao.fiscalizacaoClandestinoActivity" android:launchMode="singleTop" />
+        <activity android:name=".fiscalizacao.fiscalizacaoMenuActivity" android:launchMode="singleTop" />
         <activity android:name=".faqActivity" android:launchMode="singleTop" />
-        <activity android:name=".ligProvLevCargaActivity" android:launchMode="singleTop" />
-        <activity android:name=".clandestinoActivity" android:launchMode="singleTop" />
-        <activity android:name=".ligProvActivity" android:launchMode="singleTop" />
-        <activity android:name=".ligProvFormActivity" android:launchMode="singleTop" />
-        <activity android:name=".ligProvAlbumActivity" android:launchMode="singleTop" />
-        <activity android:name=".ligProvImageActivity" android:launchMode="singleTop" />
+        <activity android:name=".ligacaoes_provisorias.ligProvLevCargaActivity" android:launchMode="singleTop" />
+        <activity android:name=".ligacoes_clandestinas.clandestinoActivity" android:launchMode="singleTop" />
+        <activity android:name=".ligacaoes_provisorias.ligProvActivity" android:launchMode="singleTop" />
+        <activity android:name=".ligacaoes_provisorias.ligProvFormActivity" android:launchMode="singleTop" />
+        <activity android:name=".ligacaoes_provisorias.ligProvAlbumActivity" android:launchMode="singleTop" />
+        <activity android:name=".ligacaoes_provisorias.ligProvImageActivity" android:launchMode="singleTop" />
         <activity android:name=".menuActivity" android:launchMode="singleTop" />
         <activity android:name=".importActivity" android:launchMode="singleTop" />
-        <activity android:name=".clandestinoFormActivity" android:launchMode="singleTop" />
-        <activity android:name=".ligProvLevCargaFormActivity" android:launchMode="singleTop" />
+        <activity android:name=".ligacoes_clandestinas.clandestinoFormActivity" android:launchMode="singleTop" />
+        <activity android:name=".ligacaoes_provisorias.ligProvLevCargaFormActivity" android:launchMode="singleTop" />
         <activity
             android:name=".splashActivity"
             android:theme="@style/AppCompat.fullScreen">
@@ -62,10 +62,6 @@
         <meta-data
             android:name="com.google.android.geo.API_KEY"
             android:value="@string/google_maps_key" />
-
-        <activity
-            android:name=".MapsActivity"
-            android:label="@string/title_activity_maps" />
 
         <provider
             android:name="android.support.v4.content.FileProvider"

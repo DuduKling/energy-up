@@ -1,4 +1,4 @@
-package com.dudukling.enelup;
+package com.dudukling.enelup.fiscalizacao;
 
 import android.Manifest;
 import android.annotation.SuppressLint;
@@ -16,7 +16,6 @@ import android.net.NetworkInfo;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Environment;
-import android.support.annotation.NonNull;
 import android.support.annotation.RequiresApi;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.ActivityCompat;
@@ -34,8 +33,9 @@ import android.view.View;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.dudukling.enelup.R;
 import com.dudukling.enelup.adapter.fiscalizacao_recyclerAdapter;
-import com.dudukling.enelup.dao.externalDAO;
+import com.dudukling.enelup.util.sendGoogleScripts;
 import com.dudukling.enelup.dao.fiscalizaDAO;
 import com.dudukling.enelup.model.fiscaModel;
 import com.opencsv.CSVWriter;
@@ -43,10 +43,6 @@ import com.opencsv.CSVWriter;
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
-import java.net.InetAddress;
-import java.net.InetSocketAddress;
-import java.net.Socket;
-import java.net.SocketAddress;
 import java.text.Normalizer;
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -453,7 +449,7 @@ public class fiscalizacaoClandestinoActivity extends AppCompatActivity {
 
     private void uploadToCloud() {
         fiscalizaDAO dao = new fiscalizaDAO(this);
-        externalDAO extDao = new externalDAO(this);
+        sendGoogleScripts extDao = new sendGoogleScripts(this);
 
         List<fiscaModel> list = dao.getFiscaListNotUploadedYet();
         dao.close();

@@ -11,7 +11,7 @@ import android.support.annotation.RequiresApi;
 import android.support.v4.content.FileProvider;
 import android.util.Log;
 
-import com.dudukling.enelup.ligProvAlbumActivity;
+import com.dudukling.enelup.ligacaoes_provisorias.ligProvAlbumActivity;
 import com.dudukling.enelup.model.lpModel;
 
 import java.io.File;
@@ -19,7 +19,7 @@ import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
-import static com.dudukling.enelup.ligProvAlbumActivity.CAMERA_REQUEST_CODE;
+import static com.dudukling.enelup.ligacaoes_provisorias.ligProvAlbumActivity.CAMERA_REQUEST_CODE;
 
 public class cameraController {
     private final lpModel lp;

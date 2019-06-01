@@ -15,7 +15,7 @@ import android.widget.ImageView;
 
 import com.dudukling.enelup.R;
 import com.dudukling.enelup.dao.lpDAO;
-import com.dudukling.enelup.ligProvImageActivity;
+import com.dudukling.enelup.ligacaoes_provisorias.ligProvImageActivity;
 import com.dudukling.enelup.model.lpModel;
 import com.dudukling.enelup.util.lpFormHelper;
 

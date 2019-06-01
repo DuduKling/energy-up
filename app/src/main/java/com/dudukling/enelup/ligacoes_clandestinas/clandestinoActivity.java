@@ -1,8 +1,7 @@
-package com.dudukling.enelup;
+package com.dudukling.enelup.ligacoes_clandestinas;
 
 import android.Manifest;
 import android.annotation.SuppressLint;
-import android.app.ProgressDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
@@ -24,22 +23,17 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
-import android.view.Window;
 import android.widget.Toast;
 
-import com.dudukling.enelup.dao.externalDAO;
-import com.dudukling.enelup.dao.fiscalizaDAO;
+import com.dudukling.enelup.R;
 import com.dudukling.enelup.dao.lpDAO;
-import com.dudukling.enelup.model.fiscaModel;
 import com.opencsv.CSVWriter;
 
 import java.io.File;
 import java.io.FileWriter;
-import java.io.IOException;
 import java.text.Normalizer;
 import java.text.SimpleDateFormat;
 import java.util.Date;
-import java.util.List;
 import java.util.Objects;
 
 //public class clandestinoActivity extends AppCompatActivity implements clandestinoFrag.OnItemSelectedListener {

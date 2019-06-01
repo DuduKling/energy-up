@@ -12,7 +12,7 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.dudukling.enelup.R;
-import com.dudukling.enelup.clandestinoFormActivity;
+import com.dudukling.enelup.ligacoes_clandestinas.clandestinoFormActivity;
 import com.dudukling.enelup.dao.lpDAO;
 import com.dudukling.enelup.model.lpClandestino;
 

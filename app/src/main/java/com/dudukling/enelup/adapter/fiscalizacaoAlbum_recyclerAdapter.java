@@ -13,14 +13,12 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
-import android.widget.Toast;
 
 import com.dudukling.enelup.R;
 import com.dudukling.enelup.dao.fiscalizaDAO;
-import com.dudukling.enelup.fiscalizacaoClandestinoAlbumActivity;
-import com.dudukling.enelup.ligProvImageActivity;
+import com.dudukling.enelup.fiscalizacao.fiscalizacaoClandestinoAlbumActivity;
+import com.dudukling.enelup.ligacaoes_provisorias.ligProvImageActivity;
 import com.dudukling.enelup.model.fiscaModel;
-import com.dudukling.enelup.model.lpModel;
 
 import java.io.File;
 import java.util.ArrayList;

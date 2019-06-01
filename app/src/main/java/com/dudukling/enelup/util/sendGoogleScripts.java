@@ -1,4 +1,4 @@
-package com.dudukling.enelup.dao;
+package com.dudukling.enelup.util;
 
 import android.app.ProgressDialog;
 import android.content.Context;
@@ -25,6 +25,7 @@ import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 import com.dudukling.enelup.adapter.fiscalizacao_recyclerAdapter;
+import com.dudukling.enelup.dao.fiscalizaDAO;
 import com.dudukling.enelup.model.fiscaModel;
 
 import org.json.JSONArray;
@@ -36,11 +37,11 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-public class externalDAO {
+public class sendGoogleScripts {
     private static final String WEB_APP_URL = "https://script.google.com/macros/s/AKfycbyWVi9aHnPc0o3rpVYa6f3qIAIQcmhufXtuie9xCrYsU0OPhs8/exec";
     private Context context;
 
-    public externalDAO(Context context) {
+    public sendGoogleScripts(Context context) {
         this.context = context;
     }
 

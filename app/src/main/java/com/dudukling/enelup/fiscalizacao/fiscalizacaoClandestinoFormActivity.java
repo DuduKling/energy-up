@@ -1,4 +1,4 @@
-package com.dudukling.enelup;
+package com.dudukling.enelup.fiscalizacao;
 
 import android.Manifest;
 import android.annotation.TargetApi;
@@ -34,14 +34,12 @@ import android.widget.ProgressBar;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.Spinner;
-import android.widget.SpinnerAdapter;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.dudukling.enelup.R;
 import com.dudukling.enelup.dao.fiscalizaDAO;
 import com.dudukling.enelup.model.fiscaModel;
-
-import org.apache.commons.text.TextRandomProvider;
 
 import java.io.File;
 import java.util.List;

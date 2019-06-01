@@ -12,7 +12,7 @@ import android.support.annotation.RequiresApi;
 import android.support.v4.content.FileProvider;
 import android.util.Log;
 
-import com.dudukling.enelup.fiscalizacaoClandestinoAlbumActivity;
+import com.dudukling.enelup.fiscalizacao.fiscalizacaoClandestinoAlbumActivity;
 import com.dudukling.enelup.model.fiscaModel;
 
 import java.io.File;
@@ -20,7 +20,7 @@ import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
-import static com.dudukling.enelup.fiscalizacaoClandestinoAlbumActivity.CAMERA_REQUEST_CODE;
+import static com.dudukling.enelup.fiscalizacao.fiscalizacaoClandestinoAlbumActivity.CAMERA_REQUEST_CODE;
 
 public class cameraFiscaController {
     private final fiscaModel fisca;

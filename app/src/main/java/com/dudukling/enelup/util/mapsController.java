@@ -9,7 +9,7 @@ import android.widget.ImageView;
 import android.widget.ScrollView;
 
 import com.dudukling.enelup.R;
-import com.dudukling.enelup.ligProvFormActivity;
+import com.dudukling.enelup.ligacaoes_provisorias.ligProvFormActivity;
 import com.dudukling.enelup.model.lpModel;
 
 public class mapsController {

@@ -1,4 +1,4 @@
-package com.dudukling.enelup;
+package com.dudukling.enelup.ligacoes_clandestinas;
 
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -12,6 +12,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
+import com.dudukling.enelup.R;
 import com.dudukling.enelup.adapter.clandestino_recyclerAdapter;
 import com.dudukling.enelup.dao.lpDAO;
 import com.dudukling.enelup.model.lpClandestino;

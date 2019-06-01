@@ -3,7 +3,6 @@ package com.dudukling.enelup.adapter;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
-import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
 import android.view.ContextMenu;
@@ -17,7 +16,7 @@ import android.widget.TextView;
 
 import com.dudukling.enelup.R;
 import com.dudukling.enelup.dao.lpDAO;
-import com.dudukling.enelup.ligProvFormActivity;
+import com.dudukling.enelup.ligacaoes_provisorias.ligProvFormActivity;
 import com.dudukling.enelup.model.lpModel;
 
 import java.util.ArrayList;

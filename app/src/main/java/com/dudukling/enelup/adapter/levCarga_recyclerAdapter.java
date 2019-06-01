@@ -10,7 +10,7 @@ import android.view.ViewGroup;
 import android.widget.ImageButton;
 import android.widget.TextView;
 
-import com.dudukling.enelup.ligProvLevCargaActivity;
+import com.dudukling.enelup.ligacaoes_provisorias.ligProvLevCargaActivity;
 import com.dudukling.enelup.R;
 import com.dudukling.enelup.dao.lpDAO;
 import com.dudukling.enelup.model.lpPotencia;

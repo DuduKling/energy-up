@@ -3,7 +3,7 @@ package com.dudukling.enelup.util;
 import android.os.Bundle;
 
 import com.dudukling.enelup.dao.lpDAO;
-import com.dudukling.enelup.ligProvFormActivity;
+import com.dudukling.enelup.ligacaoes_provisorias.ligProvFormActivity;
 import com.dudukling.enelup.model.lpModel;
 import com.google.android.gms.maps.CameraUpdate;
 import com.google.android.gms.maps.CameraUpdateFactory;

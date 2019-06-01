@@ -1,4 +1,4 @@
-package com.dudukling.enelup;
+package com.dudukling.enelup.ligacaoes_provisorias;
 
 import android.content.Intent;
 import android.os.Build;
@@ -13,6 +13,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.TextView;
 
+import com.dudukling.enelup.R;
 import com.dudukling.enelup.adapter.levCarga_recyclerAdapter;
 import com.dudukling.enelup.dao.lpDAO;
 import com.dudukling.enelup.model.lpPotencia;

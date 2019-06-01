@@ -1,4 +1,4 @@
-package com.dudukling.enelup;
+package com.dudukling.enelup.ligacaoes_provisorias;
 
 import android.content.Intent;
 import android.os.Build;
@@ -17,6 +17,7 @@ import android.widget.EditText;
 import android.widget.Spinner;
 import android.widget.TextView;
 
+import com.dudukling.enelup.R;
 import com.dudukling.enelup.dao.lpDAO;
 import com.dudukling.enelup.model.lpPotencia;
 

@@ -1,4 +1,4 @@
-package com.dudukling.enelup;
+package com.dudukling.enelup.ligacaoes_provisorias;
 
 import android.Manifest;
 import android.annotation.SuppressLint;
@@ -31,6 +31,7 @@ import android.widget.ArrayAdapter;
 import android.widget.Spinner;
 import android.widget.Toast;
 
+import com.dudukling.enelup.R;
 import com.dudukling.enelup.adapter.ligProv_recyclerAdapter;
 import com.dudukling.enelup.dao.lpDAO;
 import com.dudukling.enelup.model.lpModel;

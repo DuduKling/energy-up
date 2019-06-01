@@ -1,4 +1,4 @@
-package com.dudukling.enelup;
+package com.dudukling.enelup.ligacaoes_provisorias;
 
 import android.Manifest;
 import android.content.Context;
@@ -29,6 +29,8 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.dudukling.enelup.R;
+import com.dudukling.enelup.ligacoes_clandestinas.clandestinoFormActivity;
 import com.dudukling.enelup.dao.lpDAO;
 import com.dudukling.enelup.model.lpClandestino;
 import com.dudukling.enelup.model.lpModel;

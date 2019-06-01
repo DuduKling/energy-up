@@ -1,4 +1,4 @@
-package com.dudukling.enelup;
+package com.dudukling.enelup.ligacoes_clandestinas;
 
 import android.Manifest;
 import android.content.Context;
@@ -31,6 +31,7 @@ import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.dudukling.enelup.R;
 import com.dudukling.enelup.dao.lpDAO;
 import com.dudukling.enelup.model.lpClandestino;
 

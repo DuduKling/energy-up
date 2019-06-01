@@ -5,7 +5,10 @@ import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.CardView;
 import android.view.View;
-import android.widget.Toast;
+
+import com.dudukling.enelup.fiscalizacao.fiscalizacaoMenuActivity;
+import com.dudukling.enelup.ligacaoes_provisorias.ligProvActivity;
+import com.dudukling.enelup.ligacoes_clandestinas.clandestinoActivity;
 
 public class menuActivity extends AppCompatActivity {
     private CardView cardViewLP;
