@@ -8,7 +8,7 @@
 
     <include
         android:id="@+id/includeLigProvFilter"
-        layout="@layout/activity_lig_prov_filter"
+        layout="@layout/lig_prov_activity_main_filter"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         app:layout_constraintEnd_toEndOf="parent"

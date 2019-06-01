@@ -71,7 +71,7 @@ public class ligProvActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         Objects.requireNonNull(getSupportActionBar()).setDisplayHomeAsUpEnabled(true);
         setTitle("Ligações Provisórias");
-        setContentView(R.layout.activity_lig_prov);
+        setContentView(R.layout.lig_prov_activity_main);
         recyclerView = findViewById(R.id.recyclerViewLP);
 
         registerForContextMenu(recyclerView);

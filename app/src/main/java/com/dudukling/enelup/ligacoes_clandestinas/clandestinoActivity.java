@@ -47,7 +47,7 @@ public class clandestinoActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_clandestino);
+        setContentView(R.layout.clandestino_activity);
         Objects.requireNonNull(getSupportActionBar()).setDisplayHomeAsUpEnabled(true);
         setTitle("Provisórias Clandestinas");
 

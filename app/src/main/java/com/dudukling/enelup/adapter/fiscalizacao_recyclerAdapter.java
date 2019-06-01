@@ -15,7 +15,7 @@ import android.widget.TextView;
 
 import com.dudukling.enelup.R;
 import com.dudukling.enelup.dao.fiscalizaDAO;
-import com.dudukling.enelup.fiscalizacao.fiscalizacaoClandestinoFormActivity;
+import com.dudukling.enelup.fiscalizacao_clandestino.fiscalizacaoClandestinoFormActivity;
 import com.dudukling.enelup.model.fiscaModel;
 
 import java.io.File;

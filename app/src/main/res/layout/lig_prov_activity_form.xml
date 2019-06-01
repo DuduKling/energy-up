@@ -36,7 +36,7 @@
         </RelativeLayout>
         <include
             android:id="@+id/mapLegenda"
-            layout="@layout/activity_form_lig_prov_legenda"
+            layout="@layout/lig_prov_activity_form_legenda"
 
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -50,7 +50,7 @@
 
         <include
             android:id="@+id/mapBottomHeader"
-            layout="@layout/activity_form_lig_prov_header"
+            layout="@layout/lig_prov_activity_form_header"
 
             android:layout_width="0dp"
             android:layout_height="60dp"
@@ -295,7 +295,7 @@
 
         <include
             android:id="@+id/calcDec"
-            layout="@layout/activity_form_lig_prov_calc_dec"
+            layout="@layout/lig_prov_activity_form_calc_dec"
 
             android:layout_width="0dp"
             android:layout_height="wrap_content"
@@ -311,7 +311,7 @@
 
         <include
             android:id="@+id/calcEnc"
-            layout="@layout/activity_form_lig_prov_calc_enc"
+            layout="@layout/lig_prov_activity_form_calc_enc"
 
             android:layout_width="0dp"
             android:layout_height="wrap_content"
@@ -326,7 +326,7 @@
 
         <include
             android:id="@+id/calcInfo"
-            layout="@layout/activity_form_lig_prov_calc_info"
+            layout="@layout/lig_prov_activity_form_calc_info"
 
             android:layout_width="0dp"
             android:layout_height="wrap_content"

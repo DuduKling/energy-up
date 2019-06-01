@@ -31,7 +31,7 @@ public class clandestinoFrag extends Fragment {
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
 
-        view = inflater.inflate(R.layout.frag_clandestino, container,false);
+        view = inflater.inflate(R.layout.clandestino_frag_main, container,false);
 
 
         recyclerView = view.findViewById(R.id.recyclerViewClandest);

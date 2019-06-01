@@ -1,4 +1,4 @@
-package com.dudukling.enelup.fiscalizacao;
+package com.dudukling.enelup.fiscalizacao_clandestino;
 
 import android.Manifest;
 import android.annotation.SuppressLint;
@@ -64,7 +64,7 @@ public class fiscalizacaoClandestinoActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         Objects.requireNonNull(getSupportActionBar()).setDisplayHomeAsUpEnabled(true);
         setTitle("Cadastro de Clandestinos");
-        setContentView(R.layout.activity_fiscalizacao_clandestino);
+        setContentView(R.layout.fisc_clandest_activity_main);
 
         FloatingActionButton floatingActionButtonFiscalizaClandestinoAdd = this.findViewById(R.id.floatingActionButtonFiscalizaClandestinoAdd);
         floatingActionButtonFiscalizaClandestinoAdd.setOnClickListener(new View.OnClickListener() {

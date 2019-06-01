@@ -39,7 +39,7 @@ public class ligProvLevCargaFormActivity extends AppCompatActivity {
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         Objects.requireNonNull(getSupportActionBar()).setDisplayHomeAsUpEnabled(true);
-        setContentView(R.layout.activity_form_lig_prov_form_lev_carga);
+        setContentView(R.layout.lig_prov_activity_form_lev_carga_form);
         setTitle("Adicionar carga");
 
         Intent intent = getIntent();

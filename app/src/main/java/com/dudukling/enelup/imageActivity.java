@@ -1,4 +1,4 @@
-package com.dudukling.enelup.ligacaoes_provisorias;
+package com.dudukling.enelup;
 
 import android.os.Build;
 import android.os.Bundle;
@@ -7,18 +7,17 @@ import android.view.MenuItem;
 import android.widget.ImageView;
 
 import com.bumptech.glide.Glide;
-import com.dudukling.enelup.R;
 
 import java.util.Objects;
 
-public class ligProvImageActivity  extends AppCompatActivity {
+public class imageActivity extends AppCompatActivity {
     ImageView fullImage;
     String url = "";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_image_lig_prov);
+        setContentView(R.layout.activity_image_view);
         setTitle("Image " + getIntent().getStringExtra("position"));
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
             Objects.requireNonNull(getSupportActionBar()).setDisplayHomeAsUpEnabled(true);

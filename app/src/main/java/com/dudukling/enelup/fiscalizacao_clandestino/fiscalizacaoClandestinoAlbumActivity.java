@@ -1,4 +1,4 @@
-package com.dudukling.enelup.fiscalizacao;
+package com.dudukling.enelup.fiscalizacao_clandestino;
 
 import android.Manifest;
 import android.annotation.TargetApi;
@@ -43,7 +43,7 @@ public class fiscalizacaoClandestinoAlbumActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_fiscalizacao_clandestino_album);
+        setContentView(R.layout.fisc_clandest_activity_album);
         Objects.requireNonNull(getSupportActionBar()).setDisplayHomeAsUpEnabled(true);
         recyclerView = findViewById(R.id.recyclerViewFiscaAlbum);
 

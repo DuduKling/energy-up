@@ -6,7 +6,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.CardView;
 import android.view.View;
 
-import com.dudukling.enelup.fiscalizacao.fiscalizacaoMenuActivity;
+import com.dudukling.enelup.fiscalizacao_clandestino.fiscalizacaoMenuActivity;
 import com.dudukling.enelup.ligacaoes_provisorias.ligProvActivity;
 import com.dudukling.enelup.ligacoes_clandestinas.clandestinoActivity;
 

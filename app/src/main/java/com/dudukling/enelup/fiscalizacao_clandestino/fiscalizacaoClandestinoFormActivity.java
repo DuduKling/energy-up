@@ -1,4 +1,4 @@
-package com.dudukling.enelup.fiscalizacao;
+package com.dudukling.enelup.fiscalizacao_clandestino;
 
 import android.Manifest;
 import android.annotation.TargetApi;
@@ -108,7 +108,7 @@ public class fiscalizacaoClandestinoFormActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         Objects.requireNonNull(getSupportActionBar()).setDisplayHomeAsUpEnabled(true);
-        setContentView(R.layout.activity_fiscalizacao_clandestino_form);
+        setContentView(R.layout.fisc_clandest_activity_form);
         setTitle("Cadastramento Clandestino");
 
         Intent intent = getIntent();

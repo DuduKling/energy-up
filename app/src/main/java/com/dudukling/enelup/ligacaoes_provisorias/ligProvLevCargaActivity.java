@@ -35,7 +35,7 @@ public class ligProvLevCargaActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         Objects.requireNonNull(getSupportActionBar()).setDisplayHomeAsUpEnabled(true);
-        setContentView(R.layout.activity_form_lig_prov_lev_carga);
+        setContentView(R.layout.lig_prov_activity_form_lev_carga_main);
         setTitle("Levantamento de Carga");
 
         recyclerViewLevCarga = findViewById(R.id.recyclerViewLevCarga);

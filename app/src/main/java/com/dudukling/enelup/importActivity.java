@@ -23,7 +23,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.dudukling.enelup.dao.lpDAO;
-import com.dudukling.enelup.util.OpenCSVReader;
+import com.dudukling.enelup.util.openCSVReader;
 
 import java.io.IOException;
 import java.util.Objects;
@@ -132,7 +132,7 @@ public class importActivity extends AppCompatActivity {
 
                     boolean success = true;
                     try {
-                        OpenCSVReader.readCSVFile(this, path);
+                        openCSVReader.readCSVFile(this, path);
                         success = true;
                     }catch(IOException e) {
                         e.printStackTrace();

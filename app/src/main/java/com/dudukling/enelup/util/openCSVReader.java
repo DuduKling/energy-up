@@ -23,7 +23,7 @@ import java.nio.file.Paths;
 import java.text.Normalizer;
 
 
-public class OpenCSVReader {
+public class openCSVReader {
 
     @RequiresApi(api = Build.VERSION_CODES.O)
     public static void readCSVFile(Context context, String arquivoPath) throws IOException {

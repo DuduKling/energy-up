@@ -41,7 +41,7 @@ public class ligProvAlbumActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_album_lig_prov);
+        setContentView(R.layout.lig_prov_activity_album);
         recyclerView = findViewById(R.id.lp_album_list);
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
             Objects.requireNonNull(getSupportActionBar()).setDisplayHomeAsUpEnabled(true);

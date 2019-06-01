@@ -16,8 +16,8 @@ import android.widget.ImageView;
 
 import com.dudukling.enelup.R;
 import com.dudukling.enelup.dao.fiscalizaDAO;
-import com.dudukling.enelup.fiscalizacao.fiscalizacaoClandestinoAlbumActivity;
-import com.dudukling.enelup.ligacaoes_provisorias.ligProvImageActivity;
+import com.dudukling.enelup.fiscalizacao_clandestino.fiscalizacaoClandestinoAlbumActivity;
+import com.dudukling.enelup.imageActivity;
 import com.dudukling.enelup.model.fiscaModel;
 
 import java.io.File;
@@ -74,7 +74,7 @@ public class fiscalizacaoAlbum_recyclerAdapter extends RecyclerView.Adapter {
                 @Override
                 public void onClick(View v) {
                     int position = getAdapterPosition();
-                    Intent goToImageActivity = new Intent(context, ligProvImageActivity.class);
+                    Intent goToImageActivity = new Intent(context, imageActivity.class);
                     goToImageActivity.putExtra("image_url", imagesList.get(position))
                             .putExtra("position", Integer.toString(position+1));
                     context.startActivity(goToImageActivity);

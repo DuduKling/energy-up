@@ -1,4 +1,4 @@
-package com.dudukling.enelup.fiscalizacao;
+package com.dudukling.enelup.fiscalizacao_clandestino;
 
 import android.annotation.TargetApi;
 import android.content.Intent;
@@ -24,7 +24,7 @@ public class fiscalizacaoMenuActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         Objects.requireNonNull(getSupportActionBar()).setDisplayHomeAsUpEnabled(true);
         setTitle("Fiscalizações");
-        setContentView(R.layout.activity_menu_fiscalizacao);
+        setContentView(R.layout.fisc_clandest_activity_menu);
 
 
         CardView cardViewFiscalizaMenuClandestino = this.findViewById(R.id.cardViewFiscalizaMenuClandestino);
