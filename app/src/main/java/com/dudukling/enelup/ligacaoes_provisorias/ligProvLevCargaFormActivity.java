@@ -19,7 +19,7 @@ import android.widget.TextView;
 
 import com.dudukling.enelup.R;
 import com.dudukling.enelup.dao.lpDAO;
-import com.dudukling.enelup.model.lpPotencia;
+import com.dudukling.enelup.model.lpPotenciaModel;
 
 import java.util.List;
 import java.util.Objects;
@@ -107,7 +107,7 @@ public class ligProvLevCargaFormActivity extends AppCompatActivity {
 
             case R.id.menu_save_button:
                 if(validadeFields()){
-                    lpPotencia lpPot = getLpPotFromFields();
+                    lpPotenciaModel lpPot = getLpPotFromFields();
                     dao.insertPotencia(lpPot, lpID);
                     finish();
                 }
@@ -118,8 +118,8 @@ public class ligProvLevCargaFormActivity extends AppCompatActivity {
         return super.onOptionsItemSelected(item);
     }
 
-    private lpPotencia getLpPotFromFields() {
-        lpPotencia pot = new lpPotencia();
+    private lpPotenciaModel getLpPotFromFields() {
+        lpPotenciaModel pot = new lpPotenciaModel();
         pot.setQuantidade(textInputLayoutLevCargaQuantidade.getEditText().getText().toString());
 
         if(spinnerLevCargaEquip.getSelectedItemPosition()==0) {
@@ -127,7 +127,7 @@ public class ligProvLevCargaFormActivity extends AppCompatActivity {
             pot.setPotencia(textInputLayoutLevCargaOtherPotencia.getEditText().getText().toString());
         }else{
             lpDAO dao = new lpDAO(this);
-            lpPotencia potDao = dao.getPotInfo(spinnerLevCargaEquip.getSelectedItemPosition()+1);
+            lpPotenciaModel potDao = dao.getPotInfo(spinnerLevCargaEquip.getSelectedItemPosition()+1);
             dao.close();
             pot.setDescricao(potDao.getDescricao());
             pot.setPotencia(potDao.getPotencia());

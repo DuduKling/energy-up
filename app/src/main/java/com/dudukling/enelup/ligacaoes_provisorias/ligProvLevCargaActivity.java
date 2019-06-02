@@ -16,7 +16,7 @@ import android.widget.TextView;
 import com.dudukling.enelup.R;
 import com.dudukling.enelup.adapter.levCarga_recyclerAdapter;
 import com.dudukling.enelup.dao.lpDAO;
-import com.dudukling.enelup.model.lpPotencia;
+import com.dudukling.enelup.model.lpPotenciaModel;
 
 import java.util.List;
 import java.util.Objects;
@@ -24,7 +24,7 @@ import java.util.Objects;
 public class ligProvLevCargaActivity extends AppCompatActivity {
 
     private RecyclerView recyclerViewLevCarga;
-    private List<lpPotencia> lpPotencia;
+    private List<lpPotenciaModel> lpPotenciaModel;
     private levCarga_recyclerAdapter RecyclerAdapter;
     private int lpID;
     private String typeofForm;
@@ -67,10 +67,10 @@ public class ligProvLevCargaActivity extends AppCompatActivity {
     @Override
     protected void onResume() {
         lpDAO dao = new lpDAO(this);
-        lpPotencia = dao.getLPPotenciaList(lpID);
+        lpPotenciaModel = dao.getLPPotenciaList(lpID);
         dao.close();
 
-        RecyclerAdapter = new levCarga_recyclerAdapter(lpPotencia, this, lpID, typeofForm);
+        RecyclerAdapter = new levCarga_recyclerAdapter(lpPotenciaModel, this, lpID, typeofForm);
 
         recyclerViewLevCarga.setAdapter(RecyclerAdapter);
         RecyclerView.LayoutManager layout = new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false);
@@ -78,7 +78,7 @@ public class ligProvLevCargaActivity extends AppCompatActivity {
 
 
         TextView textViewLevCargaNoRecords = findViewById(R.id.textViewLevCargaNoRecords);
-        if (lpPotencia.size() > 0) {
+        if (lpPotenciaModel.size() > 0) {
             textViewLevCargaNoRecords.setVisibility(View.GONE);
         } else {
             textViewLevCargaNoRecords.setVisibility(View.VISIBLE);

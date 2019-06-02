@@ -1,11 +1,11 @@
 package com.dudukling.enelup.model;
 
-public class lpPotencia {
+public class lpPotenciaModel {
     private int id;
 
-    private String quantidade;
-    private String descricao;
-    private String potencia;
+    private String quantidade = "";
+    private String descricao = "";
+    private String potencia = "";
 
 
     public int getId() {

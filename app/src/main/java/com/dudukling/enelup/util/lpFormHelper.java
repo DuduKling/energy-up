@@ -24,7 +24,7 @@ import com.dudukling.enelup.R;
 import com.dudukling.enelup.dao.lpDAO;
 import com.dudukling.enelup.ligacaoes_provisorias.ligProvFormActivity;
 import com.dudukling.enelup.model.lpModel;
-import com.dudukling.enelup.model.lpPotencia;
+import com.dudukling.enelup.model.lpPotenciaModel;
 
 import java.io.File;
 import java.math.BigDecimal;
@@ -1139,7 +1139,7 @@ public class lpFormHelper {
 
         if(checkBoxCalcEncLevCarga.isChecked()){
             lpDAO dao = new lpDAO(activity);
-            List<lpPotencia> potlist = dao.getLPPotenciaList(lp.getId());
+            List<lpPotenciaModel> potlist = dao.getLPPotenciaList(lp.getId());
             dao.close();
             if(potlist.size()<1){
                 Toast.makeText(activity, "Favor preencher a área de Levantamento de Carga!", Toast.LENGTH_SHORT).show();
@@ -1168,7 +1168,7 @@ public class lpFormHelper {
         }
 
         lpDAO dao = new lpDAO(activity);
-        List<lpPotencia> potlist = dao.getLPPotenciaList(lp.getId());
+        List<lpPotenciaModel> potlist = dao.getLPPotenciaList(lp.getId());
         dao.close();
         if(potlist.size()>0){
             checkBoxCalcEncLevCarga.setChecked(true);

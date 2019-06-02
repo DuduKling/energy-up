@@ -7,44 +7,44 @@ import java.util.List;
 public class lpModel implements Serializable {
     private int id;
 
-    private String ordem;
-    private String cliente;
-    private String endereco;
+    private String ordem = "";
+    private String cliente = "";
+    private String endereco = "";
 
-    private String numero_cliente;
-    private String bairro;
-    private String descricao_etapa;
-    private String observacoes;
+    private String numero_cliente = "";
+    private String bairro = "";
+    private String descricao_etapa = "";
+    private String observacoes = "";
 
     private List<String> imagesList  = new ArrayList<>();
 
 
-    private String userObservacao;
+    private String userObservacao = "";
 
-    private String tipoOrdem;
-    private String etapa;
-    private String localidade;
+    private String tipoOrdem = "";
+    private String etapa = "";
+    private String localidade = "";
 
-    private String latitude;
-    private String longitude;
+    private String latitude = "";
+    private String longitude = "";
 
-    private String autoLat;
-    private String autoLong;
-
-
-    private String calcDecValor;
-    private String calcDecFatorPotencia;
-    private String calcDecPeriodo;
-    private String calcDecTempo;
-    private String calcDecTensao;
-    private String calcDecKwh;
+    private String autoLat = "";
+    private String autoLong = "";
 
 
-    private String calcEncPeriodo;
-    private String calcEncTempo;
-    private String calcEncCorrente;
-    private String calcEncTensao;
-    private String calcEncKwh;
+    private String calcDecValor = "";
+    private String calcDecFatorPotencia = "";
+    private String calcDecPeriodo = "";
+    private String calcDecTempo = "";
+    private String calcDecTensao = "";
+    private String calcDecKwh = "";
+
+
+    private String calcEncPeriodo = "";
+    private String calcEncTempo = "";
+    private String calcEncCorrente = "";
+    private String calcEncTensao = "";
+    private String calcEncKwh = "";
 
 
 

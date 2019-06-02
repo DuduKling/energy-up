@@ -69,7 +69,7 @@ public class clandestinoActivity extends AppCompatActivity {
             case R.id.menu_delete:
                 lpDAO dao = new lpDAO(this);
                 SQLiteDatabase db = dao.getReadableDatabase();
-                long qtdCSVClandest = DatabaseUtils.queryNumEntries(db, "lpClandestino");
+                long qtdCSVClandest = DatabaseUtils.queryNumEntries(db, "lpClandestinoModel");
 
                 if (qtdCSVClandest != 0) {
                     deleteAll();
@@ -137,7 +137,7 @@ public class clandestinoActivity extends AppCompatActivity {
         lpDAO dao = new lpDAO(this);
 
         SQLiteDatabase db = dao.getReadableDatabase();
-        long qtdCSVClandest = DatabaseUtils.queryNumEntries(db, "lpClandestino");
+        long qtdCSVClandest = DatabaseUtils.queryNumEntries(db, "lpClandestinoModel");
         if (qtdCSVClandest != 0) {
             exportClandests(type, db);
         } else if (!type.equals("backup")) {
@@ -227,7 +227,7 @@ public class clandestinoActivity extends AppCompatActivity {
     }
 
 //    @Override
-//    public void onItemSelected(lpClandestino clandest, int lpID, String type) {
+//    public void onItemSelected(lpClandestinoModel clandest, int lpID, String type) {
 //        FragmentTransaction tx = fragmentManager.beginTransaction();
 //        tx.replace(R.id.fragmentClandestino, clandestinoFragFormNewInstance(clandest, lpID, type));
 //        tx.commit();
@@ -235,7 +235,7 @@ public class clandestinoActivity extends AppCompatActivity {
 //        setTitle("Ponto clandestino");
 //    }
 
-//    public static clandestinoFormActivity clandestinoFragFormNewInstance(lpClandestino clandest, int lpID, String type) {
+//    public static clandestinoFormActivity clandestinoFragFormNewInstance(lpClandestinoModel clandest, int lpID, String type) {
 //        clandestinoFormActivity f = new clandestinoFormActivity();
 //        Bundle args = new Bundle();
 //        args.putSerializable("clandest", clandest);

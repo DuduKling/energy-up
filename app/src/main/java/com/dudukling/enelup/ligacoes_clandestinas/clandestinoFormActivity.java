@@ -33,7 +33,7 @@ import android.widget.Toast;
 
 import com.dudukling.enelup.R;
 import com.dudukling.enelup.dao.lpDAO;
-import com.dudukling.enelup.model.lpClandestino;
+import com.dudukling.enelup.model.lpClandestinoModel;
 
 import java.util.Objects;
 
@@ -42,7 +42,7 @@ public class clandestinoFormActivity extends AppCompatActivity {
     private static final int GPS_REQUEST_CODE = 999;
 
     private String LPOrdem;
-    private lpClandestino lpClandest = new lpClandestino();
+    private lpClandestinoModel lpClandest = new lpClandestinoModel();
     private String tipoForm;
 
     private TextInputLayout textInputLayoutClandestEndereco;
@@ -75,7 +75,7 @@ public class clandestinoFormActivity extends AppCompatActivity {
 
         Intent intent = getIntent();
         LPOrdem = (String) intent.getSerializableExtra("lpOrdem");
-        lpClandest = (lpClandestino) intent.getSerializableExtra("clandest");
+        lpClandest = (lpClandestinoModel) intent.getSerializableExtra("clandest");
         tipoForm = (String) intent.getSerializableExtra("type");
 
         textViewClandestNumero = this.findViewById(R.id.textViewClandestNumero);
@@ -204,7 +204,7 @@ public class clandestinoFormActivity extends AppCompatActivity {
         editText.setTextColor(Color.parseColor("#616161"));
     }
 
-    private void fillForm(lpClandestino lpClandest) {
+    private void fillForm(lpClandestinoModel lpClandest) {
         textInputLayoutClandestEndereco.getEditText().setText(lpClandest.getEndereco());
         textInputLayoutClandestTransformador.getEditText().setText(lpClandest.getTransformador());
         textInputLayoutClandestTensao.getEditText().setText(lpClandest.getTensao());
@@ -410,7 +410,7 @@ public class clandestinoFormActivity extends AppCompatActivity {
     private void salvaClandest() {
         lpDAO dao = new lpDAO(this);
 
-        lpClandestino clandestSave = getClandestFromForm(lpClandest);
+        lpClandestinoModel clandestSave = getClandestFromForm(lpClandest);
         if(tipoForm.equals("new")){
             dao.insertClandestino(clandestSave, LPOrdem);
         }else{
@@ -536,7 +536,7 @@ public class clandestinoFormActivity extends AppCompatActivity {
         return text.isEmpty();
     }
 
-    public lpClandestino getClandestFromForm(lpClandestino lpClandest) {
+    public lpClandestinoModel getClandestFromForm(lpClandestinoModel lpClandest) {
 
         lpClandest.setEndereco(textInputLayoutClandestEndereco.getEditText().getText().toString());
         lpClandest.setTransformador(textInputLayoutClandestTransformador.getEditText().getText().toString());
@@ -564,14 +564,14 @@ public class clandestinoFormActivity extends AppCompatActivity {
     @Override
     protected void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
-        lpClandestino clandestSaved = getClandestFromForm(lpClandest);
+        lpClandestinoModel clandestSaved = getClandestFromForm(lpClandest);
         outState.putSerializable("clandest", clandestSaved);
     }
 
     @Override
     protected void onRestoreInstanceState(Bundle savedInstanceState) {
         super.onRestoreInstanceState(savedInstanceState);
-        lpClandestino clandestSaved = (lpClandestino) savedInstanceState.getSerializable("clandest");
+        lpClandestinoModel clandestSaved = (lpClandestinoModel) savedInstanceState.getSerializable("clandest");
         fillForm(clandestSaved);
     }
 }

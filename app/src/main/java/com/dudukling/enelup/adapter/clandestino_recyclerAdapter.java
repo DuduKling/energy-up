@@ -14,7 +14,7 @@ import android.widget.TextView;
 import com.dudukling.enelup.R;
 import com.dudukling.enelup.ligacoes_clandestinas.clandestinoFormActivity;
 import com.dudukling.enelup.dao.lpDAO;
-import com.dudukling.enelup.model.lpClandestino;
+import com.dudukling.enelup.model.lpClandestinoModel;
 
 import java.util.List;
 
@@ -22,9 +22,9 @@ public class clandestino_recyclerAdapter extends RecyclerView.Adapter {
 //    private final clandestinoFrag.OnItemSelectedListener listener;
     private Context context;
 
-    private List<lpClandestino> lpClandest;
+    private List<lpClandestinoModel> lpClandest;
 
-    public clandestino_recyclerAdapter(List<lpClandestino> lpClandest, Context context) {
+    public clandestino_recyclerAdapter(List<lpClandestinoModel> lpClandest, Context context) {
         this.lpClandest = lpClandest;
         this.context = context;
 //        this.listener = listener;
@@ -41,7 +41,7 @@ public class clandestino_recyclerAdapter extends RecyclerView.Adapter {
     @Override
     public void onBindViewHolder(@NonNull RecyclerView.ViewHolder viewHolder, int position) {
         aViewHolder holder = (aViewHolder) viewHolder;
-        lpClandestino clandest  = lpClandest.get(position);
+        lpClandestinoModel clandest  = lpClandest.get(position);
 
         holder.viewClandestNome.setText("Clandestino #"+clandest.getId());
         holder.viewClandestEndereco.setText(clandest.getEndereco());
@@ -65,7 +65,7 @@ public class clandestino_recyclerAdapter extends RecyclerView.Adapter {
                 @Override
                 public void onClick(View v) {
                     int position = getAdapterPosition();
-                    lpClandestino clandest  = lpClandest.get(position);
+                    lpClandestinoModel clandest  = lpClandest.get(position);
 
                     Intent goToFormActivity = new Intent(context, clandestinoFormActivity.class);
                     goToFormActivity
@@ -86,7 +86,7 @@ public class clandestino_recyclerAdapter extends RecyclerView.Adapter {
                 @Override
                 public boolean onMenuItemClick(MenuItem item) {
                     int position = getAdapterPosition();
-                    lpClandestino clandest  = lpClandest.get(position);
+                    lpClandestinoModel clandest  = lpClandest.get(position);
 
                     Intent goToFormActivity = new Intent(context, clandestinoFormActivity.class);
                     goToFormActivity
@@ -106,7 +106,7 @@ public class clandestino_recyclerAdapter extends RecyclerView.Adapter {
             @Override
             public boolean onMenuItemClick(MenuItem item) {
                 int position = getAdapterPosition();
-                lpClandestino clandest  = lpClandest.get(position);
+                lpClandestinoModel clandest  = lpClandest.get(position);
 
                 lpDAO dao = new lpDAO(context);
                 dao.deleteClandestino(clandest);

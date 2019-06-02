@@ -32,7 +32,7 @@ import android.widget.Toast;
 import com.dudukling.enelup.R;
 import com.dudukling.enelup.ligacoes_clandestinas.clandestinoFormActivity;
 import com.dudukling.enelup.dao.lpDAO;
-import com.dudukling.enelup.model.lpClandestino;
+import com.dudukling.enelup.model.lpClandestinoModel;
 import com.dudukling.enelup.model.lpModel;
 import com.dudukling.enelup.util.lpFormHelper;
 import com.dudukling.enelup.util.mapsController;
@@ -205,7 +205,7 @@ public class ligProvFormActivity extends AppCompatActivity {
             public void onClick(View v) {
                 Intent goToClandestino = new Intent(ligProvFormActivity.this, clandestinoFormActivity.class);
                 goToClandestino
-                        .putExtra("clandest", new lpClandestino())
+                        .putExtra("clandest", new lpClandestinoModel())
                         .putExtra("lpOrdem", lp.getOrdem())
                         .putExtra("type", "new");
                 startActivity(goToClandestino);

@@ -2,24 +2,24 @@ package com.dudukling.enelup.model;
 
 import java.io.Serializable;
 
-public class lpClandestino  implements Serializable {
+public class lpClandestinoModel implements Serializable {
 
     private int id;
 
-    private String endereco;
-    private String transformador;
-    private String tensao;
-    private String corrente;
-    private String protecao;
-    private String fatorPotencia;
-    private String carga;
-    private String descricao;
-    private String obs;
+    private String endereco = "";
+    private String transformador = "";
+    private String tensao = "";
+    private String corrente = "";
+    private String protecao = "";
+    private String fatorPotencia = "";
+    private String carga = "";
+    private String descricao = "";
+    private String obs = "";
 
-    private String Ordem;
+    private String Ordem = "";
 
-    private String autoLat;
-    private String autoLong;
+    private String autoLat = "";
+    private String autoLong = "";
 
 
     public int getId() {

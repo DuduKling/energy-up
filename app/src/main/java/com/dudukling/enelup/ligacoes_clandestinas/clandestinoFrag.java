@@ -15,14 +15,14 @@ import android.widget.TextView;
 import com.dudukling.enelup.R;
 import com.dudukling.enelup.adapter.clandestino_recyclerAdapter;
 import com.dudukling.enelup.dao.lpDAO;
-import com.dudukling.enelup.model.lpClandestino;
+import com.dudukling.enelup.model.lpClandestinoModel;
 
 import java.util.List;
 
 public class clandestinoFrag extends Fragment {
     private RecyclerView recyclerView;
     private clandestino_recyclerAdapter RecyclerAdapter;
-    private List<lpClandestino> lpClandest;
+    private List<lpClandestinoModel> lpClandest;
     private View view;
 
 //    private OnItemSelectedListener listener;
@@ -72,7 +72,7 @@ public class clandestinoFrag extends Fragment {
 
 
 //    public interface OnItemSelectedListener {
-//        void onItemSelected(lpClandestino clandest, int lpID, String type);
+//        void onItemSelected(lpClandestinoModel clandest, int lpID, String type);
 //    }
 
 //    @Override

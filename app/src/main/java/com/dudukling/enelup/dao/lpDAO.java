@@ -6,9 +6,9 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 
-import com.dudukling.enelup.model.lpClandestino;
+import com.dudukling.enelup.model.lpClandestinoModel;
 import com.dudukling.enelup.model.lpModel;
-import com.dudukling.enelup.model.lpPotencia;
+import com.dudukling.enelup.model.lpPotenciaModel;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -156,7 +156,7 @@ public class lpDAO extends SQLiteOpenHelper {
 
     public void truncateClandests() {
         SQLiteDatabase db = getWritableDatabase();
-        db.delete("lpClandestino", null,null);
+        db.delete("lpClandestinoModel", null,null);
     }
 
     public void insertImage(lpModel lp, String path) {
@@ -365,7 +365,7 @@ public class lpDAO extends SQLiteOpenHelper {
 
 
     // CLANDESTINO
-    public void insertClandestino(lpClandestino clandest, String LPOrdem) {
+    public void insertClandestino(lpClandestinoModel clandest, String LPOrdem) {
         SQLiteDatabase db = getWritableDatabase();
 
         ContentValues queryData = new ContentValues();
@@ -388,10 +388,10 @@ public class lpDAO extends SQLiteOpenHelper {
 
         queryData.put("NumeroOrdemLP", LPOrdem);
 
-        db.insert("lpClandestino", null, queryData);
+        db.insert("lpClandestinoModel", null, queryData);
     }
 
-    public List<lpClandestino> getClandestinoList() {
+    public List<lpClandestinoModel> getClandestinoList() {
         SQLiteDatabase db = getReadableDatabase();
 
         String sql = "SELECT " +
@@ -412,10 +412,10 @@ public class lpDAO extends SQLiteOpenHelper {
                 "ORDER BY idClandest DESC";
 
         Cursor c = db.rawQuery(sql, null);
-        List<lpClandestino> lpClandestList = new ArrayList<>();
+        List<lpClandestinoModel> lpClandestList = new ArrayList<>();
 
         while (c.moveToNext()) {
-            lpClandestino clandest = new lpClandestino();
+            lpClandestinoModel clandest = new lpClandestinoModel();
 
             int dbLPID = c.getInt(c.getColumnIndex("idClandest"));
             clandest.setId(dbLPID);
@@ -444,13 +444,13 @@ public class lpDAO extends SQLiteOpenHelper {
         return lpClandestList;
     }
 
-    public void deleteClandestino(lpClandestino clandest) {
+    public void deleteClandestino(lpClandestinoModel clandest) {
             SQLiteDatabase db = getWritableDatabase();
             String[] params = {String.valueOf(clandest.getId())};
-            db.delete("lpClandestino","id = ?", params);
+            db.delete("lpClandestinoModel","id = ?", params);
     }
 
-    public void updateClandestino(lpClandestino clandest) {
+    public void updateClandestino(lpClandestinoModel clandest) {
         SQLiteDatabase db = getWritableDatabase();
 
         ContentValues queryData = new ContentValues();
@@ -472,7 +472,7 @@ public class lpDAO extends SQLiteOpenHelper {
         else{queryData.put("autoLong", clandest.getAutoLong());}
 
         String[] params = {String.valueOf(clandest.getId())};
-        db.update("lpClandestino", queryData, "id=?", params);
+        db.update("lpClandestinoModel", queryData, "id=?", params);
     }
 
     public int getClandestinoLastID() {
@@ -633,16 +633,16 @@ public class lpDAO extends SQLiteOpenHelper {
 
     }
 
-    public List<lpPotencia> getLPPotenciaList(int lpID){
+    public List<lpPotenciaModel> getLPPotenciaList(int lpID){
         SQLiteDatabase db = getReadableDatabase();
 
         String sql = "SELECT * FROM lpInterPotencia WHERE lpID = ?";
         Cursor c = db.rawQuery(sql, new String[]{String.valueOf(lpID)});
 
-        List<lpPotencia> lpPotList = new ArrayList<>();
+        List<lpPotenciaModel> lpPotList = new ArrayList<>();
 
         while (c.moveToNext()){
-            lpPotencia lp = new lpPotencia();
+            lpPotenciaModel lp = new lpPotenciaModel();
 
             lp.setId(c.getInt(c.getColumnIndex("id")));
             lp.setQuantidade(c.getString(c.getColumnIndex("quantidade")));
@@ -696,7 +696,7 @@ public class lpDAO extends SQLiteOpenHelper {
         return aString;
     }
 
-    public void insertPotencia(lpPotencia lpPot, int lpID) {
+    public void insertPotencia(lpPotenciaModel lpPot, int lpID) {
         SQLiteDatabase db = getWritableDatabase();
 
         ContentValues queryData = new ContentValues();
@@ -709,13 +709,13 @@ public class lpDAO extends SQLiteOpenHelper {
         db.insert("lpInterPotencia", null, queryData);
     }
 
-    public lpPotencia getPotInfo(int i) {
+    public lpPotenciaModel getPotInfo(int i) {
         SQLiteDatabase db = getReadableDatabase();
 
         String sql = "SELECT * FROM lpPotencia WHERE id=?";
         Cursor c = db.rawQuery(sql, new String[]{String.valueOf(i)});
 
-        lpPotencia pot = new lpPotencia();
+        lpPotenciaModel pot = new lpPotenciaModel();
         while (c.moveToNext()){
             pot.setDescricao(c.getString(c.getColumnIndex("descricao")));
             pot.setPotencia(c.getString(c.getColumnIndex("potencia")));
