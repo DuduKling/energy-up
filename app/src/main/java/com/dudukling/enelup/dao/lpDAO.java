@@ -293,50 +293,21 @@ public class lpDAO extends SQLiteOpenHelper {
         queryData.put("latitude", lp.getLatitude());
         queryData.put("longitude", lp.getLongitude());
 
+        queryData.put("autoLat", lp.getAutoLat());
+        queryData.put("autoLong", lp.getAutoLong());
 
+        queryData.put("calcDecValor", lp.getCalcDecValor());
+        queryData.put("calcDecFatorPotencia", lp.getCalcDecFatorPotencia());
+        queryData.put("calcDecPeriodo", lp.getCalcDecPeriodo());
+        queryData.put("calcDecTensao", lp.getCalcDecTensao());
+        queryData.put("calcDecTempo", lp.getCalcDecTempo());
+        queryData.put("calcDecKwh", lp.getCalcDecKwh());
 
-        if(lp.getAutoLat()==null){queryData.put("autoLat", "");}
-        else{queryData.put("autoLat", lp.getAutoLat());}
-
-        if(lp.getAutoLong()==null){queryData.put("autoLong", "");}
-        else{queryData.put("autoLong", lp.getAutoLong());}
-
-
-
-        if(lp.getCalcDecValor()==null){queryData.put("calcDecValor", "");}
-        else{queryData.put("calcDecValor", lp.getCalcDecValor());}
-
-        if(lp.getCalcDecFatorPotencia()==null){queryData.put("calcDecFatorPotencia", "");}
-        else{queryData.put("calcDecFatorPotencia", lp.getCalcDecFatorPotencia());}
-
-        if(lp.getCalcDecPeriodo()==null){queryData.put("calcDecPeriodo", "");}
-        else{queryData.put("calcDecPeriodo", lp.getCalcDecPeriodo());}
-
-        if(lp.getCalcDecTensao()==null){queryData.put("calcDecTensao", "");}
-        else{queryData.put("calcDecTensao", lp.getCalcDecTensao());}
-
-        if(lp.getCalcDecTempo()==null){queryData.put("calcDecTempo", "");}
-        else{queryData.put("calcDecTempo", lp.getCalcDecTempo());}
-
-        if(lp.getCalcDecKwh()==null){queryData.put("calcDecKwh", "");}
-        else{queryData.put("calcDecKwh", lp.getCalcDecKwh());}
-
-
-
-        if(lp.getCalcEncPeriodo()==null){queryData.put("calcEncPeriodo", "");}
-        else{queryData.put("calcEncPeriodo", lp.getCalcEncPeriodo());}
-
-        if(lp.getCalcEncTempo()==null){queryData.put("calcEncTempo", "");}
-        else{queryData.put("calcEncTempo", lp.getCalcEncTempo());}
-
-        if(lp.getCalcEncCorrente()==null){queryData.put("calcEncCorrente", "");}
-        else{queryData.put("calcEncCorrente", lp.getCalcEncCorrente());}
-
-        if(lp.getCalcEncTensao()==null){queryData.put("calcEncTensao", "");}
-        else{queryData.put("calcEncTensao", lp.getCalcEncTensao());}
-
-        if(lp.getCalcEncKwh()==null){queryData.put("calcEncKwh", "");}
-        else{queryData.put("calcEncKwh", lp.getCalcEncKwh());}
+        queryData.put("calcEncPeriodo", lp.getCalcEncPeriodo());
+        queryData.put("calcEncTempo", lp.getCalcEncTempo());
+        queryData.put("calcEncCorrente", lp.getCalcEncCorrente());
+        queryData.put("calcEncTensao", lp.getCalcEncTensao());
+        queryData.put("calcEncKwh", lp.getCalcEncKwh());
 
         return queryData;
     }
@@ -380,11 +351,8 @@ public class lpDAO extends SQLiteOpenHelper {
         queryData.put("descricao", clandest.getDescricao());
         queryData.put("obs", clandest.getObs());
 
-        if(clandest.getAutoLat()==null){queryData.put("autoLat", "");}
-        else{queryData.put("autoLat", clandest.getAutoLat());}
-
-        if(clandest.getAutoLong()==null){queryData.put("autoLong", "");}
-        else{queryData.put("autoLong", clandest.getAutoLong());}
+        queryData.put("autoLat", clandest.getAutoLat());
+        queryData.put("autoLong", clandest.getAutoLong());
 
         queryData.put("NumeroOrdemLP", LPOrdem);
 
@@ -465,11 +433,8 @@ public class lpDAO extends SQLiteOpenHelper {
         queryData.put("descricao", clandest.getDescricao());
         queryData.put("obs", clandest.getObs());
 
-        if(clandest.getAutoLat()==null){queryData.put("autoLat", "");}
-        else{queryData.put("autoLat", clandest.getAutoLat());}
-
-        if(clandest.getAutoLong()==null){queryData.put("autoLong", "");}
-        else{queryData.put("autoLong", clandest.getAutoLong());}
+        queryData.put("autoLat", clandest.getAutoLat());
+        queryData.put("autoLong", clandest.getAutoLong());
 
         String[] params = {String.valueOf(clandest.getId())};
         db.update("lpClandestinoModel", queryData, "id=?", params);

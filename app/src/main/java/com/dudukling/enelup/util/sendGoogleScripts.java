@@ -62,6 +62,7 @@ public class sendGoogleScripts {
                 fiscaJSON.put("municipio", list.getMunicipio());
                 fiscaJSON.put("cpf", list.getCpf());
                 fiscaJSON.put("cpf_status", list.getCpf_status());
+                fiscaJSON.put("cnpj", list.getCnpj());
                 fiscaJSON.put("nis", list.getNis());
                 fiscaJSON.put("rg", list.getRg());
                 fiscaJSON.put("data_nascimento", list.getData_nascimento());
@@ -107,7 +108,7 @@ public class sendGoogleScripts {
             e.printStackTrace();
         }
 
-        Log.d("PORRA", String.valueOf(finalJSON));
+        Log.d("POW", String.valueOf(finalJSON));
 
         JsonObjectRequest jsonObjReq = new JsonObjectRequest(Request.Method.POST, WEB_APP_URL, finalJSON,
             new Response.Listener<JSONObject>() {
@@ -128,7 +129,7 @@ public class sendGoogleScripts {
                         dao.close();
 
                         dialog.dismiss();
-                        Toast.makeText(context, "Enviado com sucesso!!", Toast.LENGTH_LONG).show();
+                        Toast.makeText(context, "Enviado com sucesso!", Toast.LENGTH_LONG).show();
                     }
                 }
             },
@@ -161,9 +162,9 @@ public class sendGoogleScripts {
             }
         };
 
-        int socketTimeOut = 300000;
+        int socketTimeOut = 500000;
 
-        RetryPolicy retryPolicy = new DefaultRetryPolicy(socketTimeOut, 0, DefaultRetryPolicy.DEFAULT_BACKOFF_MULT);
+        RetryPolicy retryPolicy = new DefaultRetryPolicy(socketTimeOut, 1, DefaultRetryPolicy.DEFAULT_BACKOFF_MULT);
         jsonObjReq.setRetryPolicy(retryPolicy);
 
         RequestQueue queue = Volley.newRequestQueue(context);

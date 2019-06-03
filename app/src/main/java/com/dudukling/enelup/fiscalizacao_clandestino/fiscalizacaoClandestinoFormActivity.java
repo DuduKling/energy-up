@@ -18,6 +18,7 @@ import android.os.Environment;
 import android.provider.Settings;
 import android.support.annotation.RequiresApi;
 import android.support.design.widget.FloatingActionButton;
+import android.support.design.widget.TextInputEditText;
 import android.support.design.widget.TextInputLayout;
 import android.support.v4.app.ActivityCompat;
 import android.support.v7.app.AppCompatActivity;
@@ -54,26 +55,36 @@ public class fiscalizacaoClandestinoFormActivity extends AppCompatActivity {
     private fiscaModel fisca;
     private String formType;
 
-    private Spinner spinnerFiscaFuncionario;
     private TextInputLayout textInputLayoutFiscaNome;
     private TextInputLayout textInputLayoutFiscaEndereco;
     private TextInputLayout textInputLayoutFiscaBairro;
-    private Spinner spinnerFiscaMunicipio;
     private TextInputLayout textInputLayoutFiscaCPF;
-    private RadioGroup radioGroupFiscaCpfConsultado;
     private TextInputLayout textInputLayoutFiscaNIS;
     private TextInputLayout textInputLayoutFiscaRG;
     private TextInputLayout textInputLayoutFiscaNascimento;
-    private MaskedEditText maskedEditTextFiscaNascimento;
     private TextInputLayout textInputLayoutFiscaMedidor1;
     private TextInputLayout textInputLayoutFiscaMedidor2;
     private TextInputLayout textInputLayoutFiscaTelefone;
-    private MaskedEditText maskedEditTextFiscaTelefone;
     private TextInputLayout textInputLayoutFiscaCelular;
-    private MaskedEditText maskedEditTextFiscaCelular;
     private TextInputLayout textInputLayoutFiscaEmail;
     private TextInputLayout textInputLayoutFiscaLatitude;
     private TextInputLayout textInputLayoutFiscaLongitude;
+    private TextInputLayout textInputLayoutCPFIndicado;
+    private TextInputLayout textInputLayoutFiscaOrdem;
+    private TextInputLayout textInputLayoutFiscaCNPJ;
+
+    private Spinner spinnerFiscaFuncionario;
+    private Spinner spinnerFiscaMunicipio;
+    private Spinner spinnerFiscaFrente;
+    private ArrayAdapter<CharSequence> spinnerFiscaFuncionarioAdapter;
+    private ArrayAdapter<CharSequence> spinnerFiscaMunicipioAdapter;
+    private ArrayAdapter<CharSequence> spinnerFiscaFrenteAdapter;
+
+    private MaskedEditText maskedEditTextFiscaNascimento;
+    private MaskedEditText maskedEditTextFiscaTelefone;
+    private MaskedEditText maskedEditTextFiscaCelular;
+
+    private RadioGroup radioGroupFiscaCpfConsultado;
     private RadioGroup radioGroupFiscaAreaPreserva;
     private RadioGroup radioGroupFiscaInvadida;
     private RadioGroup radioGroupFiscaLigacao;
@@ -81,16 +92,10 @@ public class fiscalizacaoClandestinoFormActivity extends AppCompatActivity {
     private RadioGroup radioGroupFiscaPadrao;
     private RadioGroup radioGroupFiscaServidao;
     private RadioGroup radioGroupFiscaIndicacao;
-    private TextInputLayout textInputLayoutCPFIndicado;
     private RadioGroup radioGroupFiscaOrdemServico;
-    private TextInputLayout textInputLayoutFiscaOrdem;
-    private TextView textViewFiscaEstadoOrdem;
     private RadioGroup radioGroupFiscaEstadoOrdem;
-
-    private ArrayAdapter<CharSequence> spinnerFiscaFuncionarioAdapter;
-    private ArrayAdapter<CharSequence> spinnerFiscaMunicipioAdapter;
-    private FloatingActionButton floatingActionButtonFiscaAlbum;
-    private Button buttonFiscaConsultaCPF;
+    private RadioGroup radioGroupFiscaServicoDirecionado;
+    private RadioGroup radioGroupFiscaCPFouCNPJ;
 
     private FloatingActionButton floatingActionButtonFiscaGPS;
     private ProgressBar progressBarFiscaGPS;
@@ -98,9 +103,9 @@ public class fiscalizacaoClandestinoFormActivity extends AppCompatActivity {
     private LocationListener locationListener;
     private boolean get_gps;
 
-    private RadioGroup radioGroupFiscaServicoDirecionado;
-    private Spinner spinnerFiscaFrente;
-    private ArrayAdapter<CharSequence> spinnerFiscaFrenteAdapter;
+    private FloatingActionButton floatingActionButtonFiscaAlbum;
+    private Button buttonFiscaConsultaCPF;
+
 
     @TargetApi(Build.VERSION_CODES.KITKAT)
     @RequiresApi(api = Build.VERSION_CODES.KITKAT)
@@ -117,37 +122,9 @@ public class fiscalizacaoClandestinoFormActivity extends AppCompatActivity {
 
         setFields();
 
-        floatingActionButtonFiscaAlbum = findViewById(R.id.floatingActionButtonFiscaAlbum);
-//        floatingActionButtonFiscaAlbum.setVisibility(View.GONE);
-        floatingActionButtonFiscaAlbum.setOnClickListener(new View.OnClickListener() {
-            @RequiresApi(api = Build.VERSION_CODES.M)
-            @Override
-            public void onClick(View v) {
-                Intent goToAlbum = new Intent(fiscalizacaoClandestinoFormActivity.this, fiscalizacaoClandestinoAlbumActivity.class);
-
-                fiscaModel fiscaAlbum = new fiscaModel();
-                if(formType.equals("new")){
-                    fiscalizaDAO dao = new fiscalizaDAO(fiscalizacaoClandestinoFormActivity.this);
-                    int newID = dao.getNextID();
-                    dao.close();
-                    fiscaAlbum.setId(newID);
-                    goToAlbum.putExtra("fisca", fiscaAlbum);
-                }else{
-                    goToAlbum.putExtra("fisca", fisca);
-                }
-
-                startActivity(goToAlbum);
-            }
-        });
-
-        buttonFiscaConsultaCPF = findViewById(R.id.buttonFiscaConsultaCPF);
-        buttonFiscaConsultaCPF.setVisibility(View.GONE);
-
         if(formType.equals("readOnly")){
             fillForm(fisca);
             disableAll();
-//            floatingActionButtonFiscaAlbum.setVisibility(View.VISIBLE);
-
             floatingActionButtonFiscaGPS.setVisibility(View.GONE);
         }
         if(formType.equals("edit")){
@@ -155,27 +132,6 @@ public class fiscalizacaoClandestinoFormActivity extends AppCompatActivity {
         }
         if(formType.equals("edit")||formType.equals("new")){
             buttonFiscaConsultaCPF.setVisibility(View.VISIBLE);
-            buttonFiscaConsultaCPF.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    String CPF = textInputLayoutFiscaCPF.getEditText().getText().toString();
-
-                    if(!CPF.isEmpty()){
-                        ClipboardManager clipboard = (ClipboardManager) getSystemService(Context.CLIPBOARD_SERVICE);
-                        ClipData clip = ClipData.newPlainText("cpf copiado", CPF);
-                        clipboard.setPrimaryClip(clip);
-
-                        Toast.makeText(fiscalizacaoClandestinoFormActivity.this, "CPF "+CPF+" copiado para a área de transferência!", Toast.LENGTH_SHORT).show();
-
-                        String url = "https://www.situacaocadastral.com.br";
-                        Intent i = new Intent(Intent.ACTION_VIEW);
-                        i.setData(Uri.parse(url));
-                        startActivity(i);
-                    }else{
-                        Toast.makeText(getBaseContext(), "Nenhum CPF informado..", Toast.LENGTH_SHORT).show();
-                    }
-                }
-            });
             floatingActionButtonFiscaGPS.setVisibility(View.VISIBLE);
         }
     }
@@ -276,183 +232,11 @@ public class fiscalizacaoClandestinoFormActivity extends AppCompatActivity {
 
     // FUNCIONALIDADES
     private void setFields() {
-        spinnerFiscaFuncionario = findViewById(R.id.spinnerFiscaFuncionario);
-        spinnerFiscaFuncionarioAdapter = ArrayAdapter.createFromResource(this, R.array.funcionarios, android.R.layout.simple_spinner_item);
-        spinnerFiscaFuncionarioAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-        spinnerFiscaFuncionario.setAdapter(spinnerFiscaFuncionarioAdapter);
 
-        textInputLayoutFiscaNome = findViewById(R.id.textInputLayoutFiscaNome);
-        textInputLayoutFiscaEndereco = findViewById(R.id.textInputLayoutFiscaEndereco);
-        textInputLayoutFiscaBairro = findViewById(R.id.textInputLayoutFiscaBairro);
-
-        spinnerFiscaMunicipio = findViewById(R.id.spinnerFiscaMunicipio);
-        spinnerFiscaMunicipioAdapter = ArrayAdapter.createFromResource(this, R.array.municipios, android.R.layout.simple_spinner_item);
-        spinnerFiscaMunicipioAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-        spinnerFiscaMunicipio.setAdapter(spinnerFiscaMunicipioAdapter);
-
-        textInputLayoutFiscaCPF = findViewById(R.id.textInputLayoutFiscaCPF);
-        radioGroupFiscaCpfConsultado = findViewById(R.id.radioGroupFiscaCpfConsultado);
-        textInputLayoutFiscaNIS = findViewById(R.id.textInputLayoutFiscaNIS);
-        textInputLayoutFiscaRG = findViewById(R.id.textInputLayoutFiscaRG);
-
-        textInputLayoutFiscaNascimento = findViewById(R.id.textInputLayoutFiscaNascimento);
-        maskedEditTextFiscaNascimento = this.findViewById(R.id.maskedEditTextFiscaNascimento);
-        maskedEditTextFiscaNascimento.setKeepHint(false);
-        maskedEditTextFiscaNascimento.setOnFocusChangeListener(new View.OnFocusChangeListener() {
-            @Override
-            public void onFocusChange(View v, boolean hasFocus) {
-                if(hasFocus){
-                    maskedEditTextFiscaNascimento.setKeepHint(true);
-                    maskedEditTextFiscaNascimento.setHint("XXXX");
-                    maskedEditTextFiscaNascimento.setMask("##/##/####");
-                }else{
-                    maskedEditTextFiscaNascimento.setKeepHint(false);
-                    maskedEditTextFiscaNascimento.setHint(null);
-                }
-            }
-        });
-
-        textInputLayoutFiscaMedidor1 = findViewById(R.id.textInputLayoutFiscaMedidor1);
-        textInputLayoutFiscaMedidor2 = findViewById(R.id.textInputLayoutFiscaMedidor2);
-
-        textInputLayoutFiscaTelefone = findViewById(R.id.textInputLayoutFiscaTelefone);
-        maskedEditTextFiscaTelefone = this.findViewById(R.id.maskedEditTextFiscaTelefone);
-        maskedEditTextFiscaTelefone.setKeepHint(false);
-
-//        maskedEditTextFiscaTelefone.setOnFocusChangeListener(new View.OnFocusChangeListener() {
-//            @Override
-//            public void onFocusChange(View v, boolean hasFocus) {
-//                if(hasFocus){
-//                    maskedEditTextFiscaTelefone.setKeepHint(true);
-//                    maskedEditTextFiscaTelefone.setHint("XXXX");
-////                    maskedEditTextFiscaTelefone.setMask("(##)####-####");
-//                }else{
-//                    maskedEditTextFiscaTelefone.setKeepHint(false);
-//                    maskedEditTextFiscaTelefone.setHint(null);
-//                }
-//            }
-//        });
-
-        textInputLayoutFiscaCelular = findViewById(R.id.textInputLayoutFiscaCelular);
-        maskedEditTextFiscaCelular = this.findViewById(R.id.maskedEditTextFiscaCelular);
-        maskedEditTextFiscaCelular.setKeepHint(false);
-//        maskedEditTextFiscaCelular.setOnFocusChangeListener(new View.OnFocusChangeListener() {
-//            @Override
-//            public void onFocusChange(View v, boolean hasFocus) {
-//                if(hasFocus){
-//                    maskedEditTextFiscaCelular.setKeepHint(true);
-//                    maskedEditTextFiscaCelular.setHint("XXXX");
-//                    maskedEditTextFiscaCelular.setMask("(##)#####-####");
-//                }else{
-//                    maskedEditTextFiscaCelular.setKeepHint(false);
-//                    maskedEditTextFiscaCelular.setHint(null);
-//                }
-//            }
-//        });
-
-        textInputLayoutFiscaEmail = findViewById(R.id.textInputLayoutFiscaEmail);
-        textInputLayoutFiscaLatitude = findViewById(R.id.textInputLayoutFiscaLatitude);
-        textInputLayoutFiscaLongitude = findViewById(R.id.textInputLayoutFiscaLongitude);
-        radioGroupFiscaAreaPreserva = findViewById(R.id.radioGroupFiscaAreaPreserva);
-        radioGroupFiscaInvadida = findViewById(R.id.radioGroupFiscaInvadida);
-        radioGroupFiscaLigacao = findViewById(R.id.radioGroupFiscaLigacao);
-        radioGroupFiscaRede = findViewById(R.id.radioGroupFiscaRede);
-        radioGroupFiscaPadrao = findViewById(R.id.radioGroupFiscaPadrao);
-        radioGroupFiscaServidao = findViewById(R.id.radioGroupFiscaServidao);
-
-        textInputLayoutCPFIndicado = findViewById(R.id.textInputLayoutCPFIndicado);
-        textInputLayoutCPFIndicado.setVisibility(View.GONE);
-        radioGroupFiscaIndicacao = findViewById(R.id.radioGroupFiscaIndicacao);
-        radioGroupFiscaIndicacao.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener()
-        {
-            public void onCheckedChanged(RadioGroup group, int checkedId)
-            {
-                // This will get the radiobutton that has changed in its check state
-                RadioButton checkedRadioButton = group.findViewById(checkedId);
-                // This puts the value (true/false) into the variable
-                boolean isChecked = checkedRadioButton.isChecked();
-                // If the radiobutton that has changed in check state is now checked...
-                if (isChecked && checkedRadioButton.getText().toString().equals("Sim")){
-                    textInputLayoutCPFIndicado.setVisibility(View.VISIBLE);
-                    setValidateEmpty(textInputLayoutCPFIndicado);
-                }else{
-                    textInputLayoutCPFIndicado.setVisibility(View.GONE);
-                }
-            }
-        });
-
-        textInputLayoutFiscaOrdem = findViewById(R.id.textInputLayoutFiscaOrdem);
-        textInputLayoutFiscaOrdem.setVisibility(View.GONE);
-        textViewFiscaEstadoOrdem = findViewById(R.id.textViewFiscaEstadoOrdem);
-        textViewFiscaEstadoOrdem.setVisibility(View.GONE);
-        radioGroupFiscaEstadoOrdem = findViewById(R.id.radioGroupFiscaEstadoOrdem);
-        radioGroupFiscaEstadoOrdem.setVisibility(View.GONE);
-        radioGroupFiscaOrdemServico = findViewById(R.id.radioGroupFiscaOrdemServico);
-        radioGroupFiscaOrdemServico.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener()
-        {
-            public void onCheckedChanged(RadioGroup group, int checkedId)
-            {
-                RadioButton checkedRadioButton = group.findViewById(checkedId);
-                boolean isChecked = checkedRadioButton.isChecked();
-                if (isChecked && checkedRadioButton.getText().toString().equals("Sim")){
-                    textInputLayoutFiscaOrdem.setVisibility(View.VISIBLE);
-                    textViewFiscaEstadoOrdem.setVisibility(View.VISIBLE);
-                    radioGroupFiscaEstadoOrdem.setVisibility(View.VISIBLE);
-                    setValidateEmpty(textInputLayoutFiscaOrdem);
-                }else{
-                    textInputLayoutFiscaOrdem.setVisibility(View.GONE);
-                    textViewFiscaEstadoOrdem.setVisibility(View.GONE);
-                    radioGroupFiscaEstadoOrdem.setVisibility(View.GONE);
-                }
-            }
-        });
-
-        setValidateEmpty(textInputLayoutFiscaNome);
-        setValidateEmpty(textInputLayoutFiscaEndereco);
-        setValidateEmpty(textInputLayoutFiscaBairro);
-        setValidateEmpty(textInputLayoutFiscaCPF);
-        setValidateEmpty(textInputLayoutFiscaRG);
-
-//        setValidateEmpty(textInputLayoutFiscaNascimento);
-        setValidateEmptyMasked(maskedEditTextFiscaNascimento);
-
-        setValidateEmpty(textInputLayoutFiscaMedidor1);
-        setValidateEmpty(textInputLayoutFiscaLatitude);
-        setValidateEmpty(textInputLayoutFiscaLongitude);
-
-
-
-        spinnerFiscaFrente = findViewById(R.id.spinnerFiscaFrente);
-        spinnerFiscaFrenteAdapter = ArrayAdapter.createFromResource(this, R.array.frentes, android.R.layout.simple_spinner_item);
-        spinnerFiscaFrenteAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-        spinnerFiscaFrente.setAdapter(spinnerFiscaFrenteAdapter);
-        final TextView textViewFrente = findViewById(R.id.textView61);
-
-        spinnerFiscaFrente.setVisibility(View.GONE);
-        textViewFrente.setVisibility(View.GONE);
-
-        radioGroupFiscaServicoDirecionado = findViewById(R.id.radioGroupFiscaServicoDirecionado);
-        radioGroupFiscaServicoDirecionado.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener()
-        {
-            public void onCheckedChanged(RadioGroup group, int checkedId)
-            {
-                RadioButton checkedRadioButton = group.findViewById(checkedId);
-                boolean isChecked = checkedRadioButton.isChecked();
-                if (isChecked && checkedRadioButton.getText().toString().equals("Sim")){
-                    spinnerFiscaFrente.setVisibility(View.VISIBLE);
-                    textViewFrente.setVisibility(View.VISIBLE);
-                }else{
-                    spinnerFiscaFrente.setVisibility(View.GONE);
-                    spinnerFiscaFrente.setSelection(0);
-                    textViewFrente.setVisibility(View.GONE);
-                }
-            }
-        });
-
-
-
+        // GERAL
         progressBarFiscaGPS = findViewById(R.id.progressBarFiscaGPS);
         progressBarFiscaGPS.setVisibility(View.GONE);
+
         floatingActionButtonFiscaGPS = findViewById(R.id.floatingActionButtonFiscaGPS);
         get_gps = false;
         floatingActionButtonFiscaGPS.setOnClickListener(new View.OnClickListener() {
@@ -484,15 +268,256 @@ public class fiscalizacaoClandestinoFormActivity extends AppCompatActivity {
                 }
             }
         });
+
+        floatingActionButtonFiscaAlbum = findViewById(R.id.floatingActionButtonFiscaAlbum);
+        floatingActionButtonFiscaAlbum.setOnClickListener(new View.OnClickListener() {
+            @RequiresApi(api = Build.VERSION_CODES.M)
+            @Override
+            public void onClick(View v) {
+                Intent goToAlbum = new Intent(fiscalizacaoClandestinoFormActivity.this, fiscalizacaoClandestinoAlbumActivity.class);
+
+                fiscaModel fiscaAlbum = new fiscaModel();
+                if(formType.equals("new")){
+                    fiscalizaDAO dao = new fiscalizaDAO(fiscalizacaoClandestinoFormActivity.this);
+                    int newID = dao.getNextID();
+                    dao.close();
+                    fiscaAlbum.setId(newID);
+                    goToAlbum.putExtra("fisca", fiscaAlbum);
+                }else{
+                    goToAlbum.putExtra("fisca", fisca);
+                }
+
+                startActivity(goToAlbum);
+            }
+        });
+
+        buttonFiscaConsultaCPF = findViewById(R.id.buttonFiscaConsultaCPF);
+        buttonFiscaConsultaCPF.setVisibility(View.GONE);
+        buttonFiscaConsultaCPF.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                String CPF = textInputLayoutFiscaCPF.getEditText().getText().toString();
+
+                if(!CPF.isEmpty()){
+                    ClipboardManager clipboard = (ClipboardManager) getSystemService(Context.CLIPBOARD_SERVICE);
+                    ClipData clip = ClipData.newPlainText("cpf copiado", CPF);
+                    clipboard.setPrimaryClip(clip);
+
+                    Toast.makeText(fiscalizacaoClandestinoFormActivity.this, "CPF "+CPF+" copiado para a área de transferência!", Toast.LENGTH_SHORT).show();
+
+                    String url = "https://www.situacaocadastral.com.br";
+                    Intent i = new Intent(Intent.ACTION_VIEW);
+                    i.setData(Uri.parse(url));
+                    startActivity(i);
+                }else{
+                    Toast.makeText(getBaseContext(), "Nenhum CPF informado..", Toast.LENGTH_SHORT).show();
+                }
+            }
+        });
+
+
+
+        // TEXT INPUT LAYOUT
+        textInputLayoutFiscaNome = findViewById(R.id.textInputLayoutFiscaNome);
+        textInputLayoutFiscaEndereco = findViewById(R.id.textInputLayoutFiscaEndereco);
+        textInputLayoutFiscaBairro = findViewById(R.id.textInputLayoutFiscaBairro);
+        textInputLayoutFiscaCPF = findViewById(R.id.textInputLayoutFiscaCPF);
+        textInputLayoutFiscaNIS = findViewById(R.id.textInputLayoutFiscaNIS);
+        textInputLayoutFiscaRG = findViewById(R.id.textInputLayoutFiscaRG);
+        textInputLayoutFiscaNascimento = findViewById(R.id.textInputLayoutFiscaNascimento);
+        textInputLayoutFiscaMedidor1 = findViewById(R.id.textInputLayoutFiscaMedidor1);
+        textInputLayoutFiscaMedidor2 = findViewById(R.id.textInputLayoutFiscaMedidor2);
+        textInputLayoutFiscaTelefone = findViewById(R.id.textInputLayoutFiscaTelefone);
+        textInputLayoutFiscaEmail = findViewById(R.id.textInputLayoutFiscaEmail);
+        textInputLayoutFiscaLatitude = findViewById(R.id.textInputLayoutFiscaLatitude);
+        textInputLayoutFiscaLongitude = findViewById(R.id.textInputLayoutFiscaLongitude);
+        textInputLayoutFiscaCelular = findViewById(R.id.textInputLayoutFiscaCelular);
+        textInputLayoutCPFIndicado = findViewById(R.id.textInputLayoutCPFIndicado);
+        textInputLayoutFiscaOrdem = findViewById(R.id.textInputLayoutFiscaOrdem);
+        textInputLayoutFiscaCNPJ = findViewById(R.id.textInputLayoutFiscaCNPJ);
+
+        textInputLayoutCPFIndicado.setVisibility(View.GONE);
+        textInputLayoutFiscaOrdem.setVisibility(View.GONE);
+        textInputLayoutFiscaCPF.setVisibility(View.GONE);
+        textInputLayoutFiscaCNPJ.setVisibility(View.GONE);
+
+
+
+        // SPINNER
+        spinnerFiscaFuncionario = findViewById(R.id.spinnerFiscaFuncionario);
+        spinnerFiscaFuncionarioAdapter = ArrayAdapter.createFromResource(this, R.array.funcionarios, android.R.layout.simple_spinner_item);
+        spinnerFiscaFuncionarioAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        spinnerFiscaFuncionario.setAdapter(spinnerFiscaFuncionarioAdapter);
+
+        spinnerFiscaMunicipio = findViewById(R.id.spinnerFiscaMunicipio);
+        spinnerFiscaMunicipioAdapter = ArrayAdapter.createFromResource(this, R.array.municipios, android.R.layout.simple_spinner_item);
+        spinnerFiscaMunicipioAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        spinnerFiscaMunicipio.setAdapter(spinnerFiscaMunicipioAdapter);
+
+        spinnerFiscaFrente = findViewById(R.id.spinnerFiscaFrente);
+        spinnerFiscaFrenteAdapter = ArrayAdapter.createFromResource(this, R.array.frentes, android.R.layout.simple_spinner_item);
+        spinnerFiscaFrenteAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        spinnerFiscaFrente.setAdapter(spinnerFiscaFrenteAdapter);
+        spinnerFiscaFrente.setVisibility(View.GONE);
+
+
+
+        // RADIO GROUP
+        radioGroupFiscaCpfConsultado = findViewById(R.id.radioGroupFiscaCpfConsultado);
+        radioGroupFiscaAreaPreserva = findViewById(R.id.radioGroupFiscaAreaPreserva);
+        radioGroupFiscaInvadida = findViewById(R.id.radioGroupFiscaInvadida);
+        radioGroupFiscaLigacao = findViewById(R.id.radioGroupFiscaLigacao);
+        radioGroupFiscaRede = findViewById(R.id.radioGroupFiscaRede);
+        radioGroupFiscaPadrao = findViewById(R.id.radioGroupFiscaPadrao);
+        radioGroupFiscaServidao = findViewById(R.id.radioGroupFiscaServidao);
+
+        radioGroupFiscaEstadoOrdem = findViewById(R.id.radioGroupFiscaEstadoOrdem);
+        radioGroupFiscaEstadoOrdem.setVisibility(View.GONE);
+
+        radioGroupFiscaIndicacao = findViewById(R.id.radioGroupFiscaIndicacao);
+        radioGroupFiscaIndicacao.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
+            public void onCheckedChanged(RadioGroup group, int checkedId) {
+                // This will get the radiobutton that has changed in its check state
+                RadioButton checkedRadioButton = group.findViewById(checkedId);
+                // This puts the value (true/false) into the variable
+                boolean isChecked = checkedRadioButton.isChecked();
+                // If the radiobutton that has changed in check state is now checked...
+                if (isChecked && checkedRadioButton.getText().toString().equals("Sim")){
+                    textInputLayoutCPFIndicado.setVisibility(View.VISIBLE);
+                    setValidateEmpty(textInputLayoutCPFIndicado);
+                }else{
+                    textInputLayoutCPFIndicado.setVisibility(View.GONE);
+                }
+            }
+        });
+
+        final TextView textViewFiscaEstadoOrdem = findViewById(R.id.textViewFiscaEstadoOrdem);
+        textViewFiscaEstadoOrdem.setVisibility(View.GONE);
+        radioGroupFiscaOrdemServico = findViewById(R.id.radioGroupFiscaOrdemServico);
+        radioGroupFiscaOrdemServico.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
+            public void onCheckedChanged(RadioGroup group, int checkedId) {
+                RadioButton checkedRadioButton = group.findViewById(checkedId);
+                boolean isChecked = checkedRadioButton.isChecked();
+                if (isChecked && checkedRadioButton.getText().toString().equals("Sim")){
+                    textInputLayoutFiscaOrdem.setVisibility(View.VISIBLE);
+                    textViewFiscaEstadoOrdem.setVisibility(View.VISIBLE);
+                    radioGroupFiscaEstadoOrdem.setVisibility(View.VISIBLE);
+                    setValidateEmpty(textInputLayoutFiscaOrdem);
+                }else{
+                    textInputLayoutFiscaOrdem.setVisibility(View.GONE);
+                    textViewFiscaEstadoOrdem.setVisibility(View.GONE);
+                    radioGroupFiscaEstadoOrdem.setVisibility(View.GONE);
+                }
+            }
+        });
+
+        final TextView textViewFrente = findViewById(R.id.textView61);
+        textViewFrente.setVisibility(View.GONE);
+        radioGroupFiscaServicoDirecionado = findViewById(R.id.radioGroupFiscaServicoDirecionado);
+        radioGroupFiscaServicoDirecionado.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
+            public void onCheckedChanged(RadioGroup group, int checkedId) {
+                RadioButton checkedRadioButton = group.findViewById(checkedId);
+                boolean isChecked = checkedRadioButton.isChecked();
+                if (isChecked && checkedRadioButton.getText().toString().equals("Sim")){
+                    spinnerFiscaFrente.setVisibility(View.VISIBLE);
+                    textViewFrente.setVisibility(View.VISIBLE);
+                }else{
+                    spinnerFiscaFrente.setVisibility(View.GONE);
+                    spinnerFiscaFrente.setSelection(0);
+                    textViewFrente.setVisibility(View.GONE);
+                }
+            }
+        });
+
+        final TextView textViewCPF = findViewById(R.id.textView29);
+        textViewCPF.setVisibility(View.GONE);
+        radioGroupFiscaCpfConsultado.setVisibility(View.GONE);
+        radioGroupFiscaCPFouCNPJ = findViewById(R.id.radioGroupFiscaCPFouCNPJ);
+        radioGroupFiscaCPFouCNPJ.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
+            public void onCheckedChanged(RadioGroup group, int checkedId) {
+                RadioButton checkedRadioButton = group.findViewById(checkedId);
+                boolean isChecked = checkedRadioButton.isChecked();
+                if (isChecked && checkedRadioButton.getText().toString().equals("CPF")){
+                    textInputLayoutFiscaCNPJ.setVisibility(View.GONE);
+                    textInputLayoutFiscaCPF.setVisibility(View.VISIBLE);
+                    buttonFiscaConsultaCPF.setVisibility(View.VISIBLE);
+                    textViewCPF.setVisibility(View.VISIBLE);
+                    radioGroupFiscaCpfConsultado.setVisibility(View.VISIBLE);
+                }else{
+                    textInputLayoutFiscaCNPJ.setVisibility(View.VISIBLE);
+                    textInputLayoutFiscaCPF.setVisibility(View.GONE);
+                    buttonFiscaConsultaCPF.setVisibility(View.GONE);
+                    textViewCPF.setVisibility(View.GONE);
+                    radioGroupFiscaCpfConsultado.setVisibility(View.GONE);
+                }
+            }
+        });
+
+
+
+        // MASKED EDIT TEXT
+        maskedEditTextFiscaNascimento = this.findViewById(R.id.maskedEditTextFiscaNascimento);
+        maskedEditTextFiscaNascimento.setKeepHint(false);
+        maskedEditTextFiscaNascimento.setOnFocusChangeListener(new View.OnFocusChangeListener() {
+            @Override
+            public void onFocusChange(View v, boolean hasFocus) {
+                if(hasFocus){
+                    maskedEditTextFiscaNascimento.setKeepHint(true);
+                    maskedEditTextFiscaNascimento.setHint("XXXX");
+                    maskedEditTextFiscaNascimento.setMask("##/##/####");
+                }else{
+                    maskedEditTextFiscaNascimento.setKeepHint(false);
+                    maskedEditTextFiscaNascimento.setHint(null);
+                }
+            }
+        });
+
+        maskedEditTextFiscaTelefone = this.findViewById(R.id.maskedEditTextFiscaTelefone);
+        maskedEditTextFiscaTelefone.setKeepHint(false);
+
+        maskedEditTextFiscaCelular = this.findViewById(R.id.maskedEditTextFiscaCelular);
+        maskedEditTextFiscaCelular.setKeepHint(false);
+
+
+
+        // VALIDATE
+        setValidateEmpty(textInputLayoutFiscaNome);
+        setValidateEmpty(textInputLayoutFiscaEndereco);
+        setValidateEmpty(textInputLayoutFiscaBairro);
+        setValidateEmpty(textInputLayoutFiscaCPF);
+        setValidateEmpty(textInputLayoutFiscaRG);
+        setValidateEmptyMasked(maskedEditTextFiscaNascimento);
+        setValidateEmpty(textInputLayoutFiscaMedidor1);
+        setValidateEmpty(textInputLayoutFiscaLatitude);
+        setValidateEmpty(textInputLayoutFiscaLongitude);
+        setValidateEmpty(textInputLayoutFiscaCNPJ);
+
     }
 
     private void fillForm(fiscaModel fisca) {
-        spinnerFiscaFuncionario.setSelection(spinnerFiscaFuncionarioAdapter.getPosition(fisca.getFuncionario()));
         textInputLayoutFiscaNome.getEditText().setText(fisca.getNome());
         textInputLayoutFiscaEndereco.getEditText().setText(fisca.getEndereco());
         textInputLayoutFiscaBairro.getEditText().setText(fisca.getBairro());
-        spinnerFiscaMunicipio.setSelection(spinnerFiscaMunicipioAdapter.getPosition(fisca.getMunicipio()));
         textInputLayoutFiscaCPF.getEditText().setText(fisca.getCpf());
+        textInputLayoutFiscaNIS.getEditText().setText(fisca.getNis());
+        textInputLayoutFiscaRG.getEditText().setText(fisca.getRg());
+        textInputLayoutFiscaMedidor1.getEditText().setText(fisca.getMedidor_vizinho_1());
+        textInputLayoutFiscaMedidor2.getEditText().setText(fisca.getMedidor_vizinho_2());
+        textInputLayoutFiscaEmail.getEditText().setText(fisca.getEmail());
+        textInputLayoutFiscaLatitude.getEditText().setText(fisca.getLatitude());
+        textInputLayoutFiscaLongitude.getEditText().setText(fisca.getLongitude());
+        textInputLayoutCPFIndicado.getEditText().setText(fisca.getCpf_pre_indicacao());
+        textInputLayoutFiscaOrdem.getEditText().setText(fisca.getNumero_ordem());
+        textInputLayoutFiscaCNPJ.getEditText().setText(fisca.getCnpj());
+
+        spinnerFiscaFuncionario.setSelection(spinnerFiscaFuncionarioAdapter.getPosition(fisca.getFuncionario()));
+        spinnerFiscaMunicipio.setSelection(spinnerFiscaMunicipioAdapter.getPosition(fisca.getMunicipio()));
+        spinnerFiscaFrente.setSelection(spinnerFiscaFrenteAdapter.getPosition(fisca.getFrente_trabalho()));
+
+        maskedEditTextFiscaNascimento.setText(fisca.getData_nascimento());
+        maskedEditTextFiscaTelefone.setText(fisca.getTelefone());
+        maskedEditTextFiscaCelular.setText(fisca.getCelular());
+
         for(int i=0; i<radioGroupFiscaCpfConsultado.getChildCount(); i++) {
             RadioButton btn = (RadioButton) radioGroupFiscaCpfConsultado.getChildAt(i);
             if (btn.getText().toString().equals(fisca.getCpf_status())) {
@@ -500,19 +525,6 @@ public class fiscalizacaoClandestinoFormActivity extends AppCompatActivity {
                 break;
             }
         }
-        textInputLayoutFiscaNIS.getEditText().setText(fisca.getNis());
-        textInputLayoutFiscaRG.getEditText().setText(fisca.getRg());
-//        textInputLayoutFiscaNascimento.getEditText().setText(fisca.getData_nascimento());
-        maskedEditTextFiscaNascimento.setText(formatData(fisca.getData_nascimento()));
-        textInputLayoutFiscaMedidor1.getEditText().setText(fisca.getMedidor_vizinho_1());
-        textInputLayoutFiscaMedidor2.getEditText().setText(fisca.getMedidor_vizinho_2());
-//        textInputLayoutFiscaTelefone.getEditText().setText(fisca.getTelefone());
-        maskedEditTextFiscaTelefone.setText(formatTelefone(fisca.getTelefone(), "tel"));
-//        textInputLayoutFiscaCelular.getEditText().setText(fisca.getCelular());
-        maskedEditTextFiscaCelular.setText(formatTelefone(fisca.getCelular(), "cel"));
-        textInputLayoutFiscaEmail.getEditText().setText(fisca.getEmail());
-        textInputLayoutFiscaLatitude.getEditText().setText(fisca.getLatitude());
-        textInputLayoutFiscaLongitude.getEditText().setText(fisca.getLongitude());
         for(int i=0; i<radioGroupFiscaAreaPreserva.getChildCount(); i++) {
             RadioButton btn = (RadioButton) radioGroupFiscaAreaPreserva.getChildAt(i);
             if (btn.getText().toString().equals(fisca.getPreservacao_ambiental())) {
@@ -562,7 +574,6 @@ public class fiscalizacaoClandestinoFormActivity extends AppCompatActivity {
                 break;
             }
         }
-        textInputLayoutCPFIndicado.getEditText().setText(fisca.getCpf_pre_indicacao());
         for(int i=0; i<radioGroupFiscaOrdemServico.getChildCount(); i++) {
             RadioButton btn = (RadioButton) radioGroupFiscaOrdemServico.getChildAt(i);
             if (btn.getText().toString().equals(fisca.getExiste_ordem())) {
@@ -570,7 +581,6 @@ public class fiscalizacaoClandestinoFormActivity extends AppCompatActivity {
                 break;
             }
         }
-        textInputLayoutFiscaOrdem.getEditText().setText(fisca.getNumero_ordem());
         for(int i=0; i<radioGroupFiscaEstadoOrdem.getChildCount(); i++) {
             RadioButton btn = (RadioButton) radioGroupFiscaEstadoOrdem.getChildAt(i);
             if (btn.getText().toString().equals(fisca.getEstado_ordem())) {
@@ -578,8 +588,6 @@ public class fiscalizacaoClandestinoFormActivity extends AppCompatActivity {
                 break;
             }
         }
-
-        spinnerFiscaFrente.setSelection(spinnerFiscaFrenteAdapter.getPosition(fisca.getFrente_trabalho()));
         for(int i=0; i<radioGroupFiscaServicoDirecionado.getChildCount(); i++) {
             RadioButton btn = (RadioButton) radioGroupFiscaServicoDirecionado.getChildAt(i);
             if (btn.getText().toString().equals(fisca.getServico_direcionado())) {
@@ -587,35 +595,47 @@ public class fiscalizacaoClandestinoFormActivity extends AppCompatActivity {
                 break;
             }
         }
+        for(int i=0; i<radioGroupFiscaCPFouCNPJ.getChildCount(); i++) {
+            RadioButton btn = (RadioButton) radioGroupFiscaCPFouCNPJ.getChildAt(i);
+            if (btn.getText().toString().equals(fisca.getCpf_ou_cnpj())) {
+                btn.setChecked(true);
+                break;
+            }
+        }
     }
 
     private fiscaModel getFiscaFromFields(fiscaModel fisca) {
-        fisca.setFuncionario(spinnerFiscaFuncionario.getSelectedItem().toString());
         fisca.setNome(textInputLayoutFiscaNome.getEditText().getText().toString());
         fisca.setEndereco(textInputLayoutFiscaEndereco.getEditText().getText().toString());
         fisca.setBairro(textInputLayoutFiscaBairro.getEditText().getText().toString());
-        fisca.setMunicipio(spinnerFiscaMunicipio.getSelectedItem().toString());
         fisca.setCpf(textInputLayoutFiscaCPF.getEditText().getText().toString());
-
-        if(radioGroupFiscaCpfConsultado.getCheckedRadioButtonId() != -1) {fisca.setCpf_status(((RadioButton)findViewById(radioGroupFiscaCpfConsultado.getCheckedRadioButtonId())).getText().toString());
-        }else{fisca.setCpf_status("");}
-
         fisca.setNis(textInputLayoutFiscaNIS.getEditText().getText().toString());
         fisca.setRg(textInputLayoutFiscaRG.getEditText().getText().toString());
-//        fisca.setData_nascimento(textInputLayoutFiscaNascimento.getEditText().getText().toString());
-        fisca.setData_nascimento(maskedEditTextFiscaNascimento.getRawText());
         fisca.setMedidor_vizinho_1(textInputLayoutFiscaMedidor1.getEditText().getText().toString());
         fisca.setMedidor_vizinho_2(textInputLayoutFiscaMedidor2.getEditText().getText().toString());
-//        fisca.setTelefone(textInputLayoutFiscaTelefone.getEditText().getText().toString());
-        if(maskedEditTextFiscaTelefone.getRawText().equals("(")){fisca.setTelefone("");}
-        else{fisca.setTelefone(maskedEditTextFiscaTelefone.getRawText());}
-//        fisca.setCelular(textInputLayoutFiscaCelular.getEditText().getText().toString());
-        if(maskedEditTextFiscaCelular.getRawText().equals("(")){fisca.setCelular("");}
-        else{fisca.setCelular(maskedEditTextFiscaCelular.getRawText());}
         fisca.setEmail(textInputLayoutFiscaEmail.getEditText().getText().toString());
         fisca.setLatitude(textInputLayoutFiscaLatitude.getEditText().getText().toString());
         fisca.setLongitude(textInputLayoutFiscaLongitude.getEditText().getText().toString());
+        fisca.setCpf_pre_indicacao(textInputLayoutCPFIndicado.getEditText().getText().toString());
+        fisca.setNumero_ordem(textInputLayoutFiscaOrdem.getEditText().getText().toString());
+        fisca.setCnpj(textInputLayoutFiscaCNPJ.getEditText().getText().toString());
 
+        fisca.setFuncionario(spinnerFiscaFuncionario.getSelectedItem().toString());
+        fisca.setMunicipio(spinnerFiscaMunicipio.getSelectedItem().toString());
+        if(spinnerFiscaFrente.getSelectedItem().toString().equals("Selecione")){
+            fisca.setFrente_trabalho("");
+        }else{
+            fisca.setFrente_trabalho(spinnerFiscaFrente.getSelectedItem().toString());
+        }
+
+        fisca.setData_nascimento(maskedEditTextFiscaNascimento.getRawText());
+        if(maskedEditTextFiscaTelefone.getRawText().equals("(")){fisca.setTelefone("");}
+        else{fisca.setTelefone(maskedEditTextFiscaTelefone.getRawText());}
+        if(maskedEditTextFiscaCelular.getRawText().equals("(")){fisca.setCelular("");}
+        else{fisca.setCelular(maskedEditTextFiscaCelular.getRawText());}
+
+        if(radioGroupFiscaCpfConsultado.getCheckedRadioButtonId() != -1) {fisca.setCpf_status(((RadioButton)findViewById(radioGroupFiscaCpfConsultado.getCheckedRadioButtonId())).getText().toString());
+        }else{fisca.setCpf_status("");}
         if(radioGroupFiscaAreaPreserva.getCheckedRadioButtonId() != -1) {fisca.setPreservacao_ambiental(((RadioButton) findViewById(radioGroupFiscaAreaPreserva.getCheckedRadioButtonId())).getText().toString());
         }else{fisca.setPreservacao_ambiental("");}
         if(radioGroupFiscaInvadida.getCheckedRadioButtonId() != -1) {fisca.setArea_invadida(((RadioButton)findViewById(radioGroupFiscaInvadida.getCheckedRadioButtonId())).getText().toString());
@@ -630,26 +650,24 @@ public class fiscalizacaoClandestinoFormActivity extends AppCompatActivity {
         }else{fisca.setFaixa_servidao("");}
         if(radioGroupFiscaIndicacao.getCheckedRadioButtonId() != -1) {fisca.setPre_indicacao(((RadioButton)findViewById(radioGroupFiscaIndicacao.getCheckedRadioButtonId())).getText().toString());
         }else{fisca.setPre_indicacao("");}
-
-        fisca.setCpf_pre_indicacao(textInputLayoutCPFIndicado.getEditText().getText().toString());
-
         if(radioGroupFiscaOrdemServico.getCheckedRadioButtonId() != -1) {fisca.setExiste_ordem(((RadioButton)findViewById(radioGroupFiscaOrdemServico.getCheckedRadioButtonId())).getText().toString());
         }else{fisca.setExiste_ordem("");}
-
-        fisca.setNumero_ordem(textInputLayoutFiscaOrdem.getEditText().getText().toString());
-
-        if(radioGroupFiscaOrdemServico.getCheckedRadioButtonId() == R.id.radioButtonFiscaOrdemServico1){fisca.setEstado_ordem(((RadioButton)findViewById(radioGroupFiscaEstadoOrdem.getCheckedRadioButtonId())).getText().toString());
+        if(radioGroupFiscaOrdemServico.getCheckedRadioButtonId() == R.id.radioButtonFiscaOrdemServico1){
+            fisca.setEstado_ordem(((RadioButton)findViewById(radioGroupFiscaEstadoOrdem.getCheckedRadioButtonId())).getText().toString());
         }else{
             fisca.setNumero_ordem("");
             fisca.setEstado_ordem("");
         }
-
         if(radioGroupFiscaServicoDirecionado.getCheckedRadioButtonId() != -1) {fisca.setServico_direcionado(((RadioButton)findViewById(radioGroupFiscaServicoDirecionado.getCheckedRadioButtonId())).getText().toString());
         }else{fisca.setServico_direcionado("");}
-        if(spinnerFiscaFrente.getSelectedItem().toString().equals("Selecione")){
-            fisca.setFrente_trabalho("");
+        if(radioGroupFiscaCPFouCNPJ.getCheckedRadioButtonId() != -1){
+            fisca.setCpf_ou_cnpj(((RadioButton)findViewById(radioGroupFiscaCPFouCNPJ.getCheckedRadioButtonId())).getText().toString());
+        }
+        if(radioGroupFiscaCPFouCNPJ.getCheckedRadioButtonId() == R.id.radioButtonFiscaCPFouCNPJ1){
+            fisca.setCnpj("");
         }else{
-            fisca.setFrente_trabalho(spinnerFiscaFrente.getSelectedItem().toString());
+            fisca.setCpf("");
+            fisca.setCpf_status("");
         }
 
         return fisca;
@@ -681,19 +699,12 @@ public class fiscalizacaoClandestinoFormActivity extends AppCompatActivity {
         if(fieldIsEmpty(textInputLayoutFiscaNome)){isValid = "false";}
         if(fieldIsEmpty(textInputLayoutFiscaEndereco)){isValid = "false";}
         if(fieldIsEmpty(textInputLayoutFiscaBairro)){isValid = "false";}
-        if(fieldIsEmpty(textInputLayoutFiscaCPF)){isValid = "false";}
-//        if(fieldIsEmpty(textInputLayoutFiscaNIS)){isValid = "false";}
         if(fieldIsEmpty(textInputLayoutFiscaRG)){isValid = "false";}
-//        if(fieldIsEmpty(textInputLayoutFiscaNascimento)){isValid = "false";}
-        if (fieldIsEmptyMasked(maskedEditTextFiscaNascimento)){isValid = "false";}
         if(fieldIsEmpty(textInputLayoutFiscaMedidor1)){isValid = "false";}
-//        if(fieldIsEmpty(textInputLayoutFiscaMedidor2)){isValid = "false";}
-//        if(fieldIsEmpty(textInputLayoutFiscaTelefone)){isValid = "false";}
-//        if(fieldIsEmpty(textInputLayoutFiscaCelular)){isValid = "false";}
-//        if(fieldIsEmpty(textInputLayoutFiscaEmail)){isValid = "false";}
         if(fieldIsEmpty(textInputLayoutFiscaLatitude)){isValid = "false";}
         if(fieldIsEmpty(textInputLayoutFiscaLongitude)){isValid = "false";}
 
+        if(fieldIsEmptyMasked(maskedEditTextFiscaNascimento)){isValid = "false";}
 
         switch(radioGroupFiscaOrdemServico.getCheckedRadioButtonId()){
             case -1:
@@ -716,37 +727,6 @@ public class fiscalizacaoClandestinoFormActivity extends AppCompatActivity {
                 if(fieldIsEmpty(textInputLayoutCPFIndicado)){isValid = "false";}
                 break;
         }
-        if (radioGroupFiscaServidao.getCheckedRadioButtonId() == -1) {
-            isValid = "Servidao";
-        }
-        if (radioGroupFiscaPadrao.getCheckedRadioButtonId() == -1) {
-            isValid = "Padrao";
-        }
-        if (radioGroupFiscaRede.getCheckedRadioButtonId() == -1) {
-            isValid = "Rede";
-        }
-        if (radioGroupFiscaLigacao.getCheckedRadioButtonId() == -1) {
-            isValid = "Ligacao";
-        }
-        if (radioGroupFiscaInvadida.getCheckedRadioButtonId() == -1) {
-            isValid = "Invadida";
-        }
-//        switch(radioGroupFiscaAreaPreserva.getCheckedRadioButtonId()){
-//            case -1:
-//                isValid = "AreaPreserva";
-//                break;
-//        }
-        if (radioGroupFiscaCpfConsultado.getCheckedRadioButtonId() == -1) {
-            isValid = "cpfConsultado";
-        }
-
-        if (spinnerFiscaMunicipio.getSelectedItemPosition() == 0) {
-            isValid = "municipio";
-        }
-        if (spinnerFiscaFuncionario.getSelectedItemPosition() == 0) {
-            isValid = "funcionario";
-        }
-
         switch(radioGroupFiscaServicoDirecionado.getCheckedRadioButtonId()){
             case -1:
                 isValid = "ServicoDirecionado";
@@ -757,8 +737,45 @@ public class fiscalizacaoClandestinoFormActivity extends AppCompatActivity {
                 }
                 break;
         }
+        switch(radioGroupFiscaCPFouCNPJ.getCheckedRadioButtonId()){
+            case -1:
+                isValid = "CPFouCNPJ";
+                break;
+            case R.id.radioButtonFiscaCPFouCNPJ1:
+                if(radioGroupFiscaCpfConsultado.getCheckedRadioButtonId() == -1) {
+                    isValid = "cpfConsultado";
+                }
+                if(fieldIsEmpty(textInputLayoutFiscaCPF)){isValid = "false";}
+                break;
+            case R.id.radioButtonFiscaCPFouCNPJ2:
+                if(fieldIsEmpty(textInputLayoutFiscaCNPJ)){isValid = "false";}
+                break;
+        }
+        if(radioGroupFiscaServidao.getCheckedRadioButtonId() == -1) {
+            isValid = "Servidao";
+        }
+        if(radioGroupFiscaPadrao.getCheckedRadioButtonId() == -1) {
+            isValid = "Padrao";
+        }
+        if(radioGroupFiscaRede.getCheckedRadioButtonId() == -1) {
+            isValid = "Rede";
+        }
+        if(radioGroupFiscaLigacao.getCheckedRadioButtonId() == -1) {
+            isValid = "Ligacao";
+        }
+        if(radioGroupFiscaInvadida.getCheckedRadioButtonId() == -1) {
+            isValid = "Invadida";
+        }
 
-        switch (isValid){
+        if(spinnerFiscaMunicipio.getSelectedItemPosition() == 0) {
+            isValid = "municipio";
+        }
+        if(spinnerFiscaFuncionario.getSelectedItemPosition() == 0) {
+            isValid = "funcionario";
+        }
+
+
+        switch(isValid){
             case "false":
                 Toast.makeText(this, "Favor preencher todos os campos obrigatórios!", Toast.LENGTH_SHORT).show();
                 break;
@@ -771,9 +788,6 @@ public class fiscalizacaoClandestinoFormActivity extends AppCompatActivity {
             case "cpfConsultado":
                 Toast.makeText(this, "Favor selecionar a opção CPF consultado!", Toast.LENGTH_SHORT).show();
                 break;
-//            case "AreaPreserva":
-//                Toast.makeText(this, "Favor selecionar a opção Área de preservação ambiental!", Toast.LENGTH_SHORT).show();
-//                break;
             case "Invadida":
                 Toast.makeText(this, "Favor selecionar a opção Área invadida !", Toast.LENGTH_SHORT).show();
                 break;
@@ -803,6 +817,9 @@ public class fiscalizacaoClandestinoFormActivity extends AppCompatActivity {
                 break;
             case "frente":
                 Toast.makeText(this, "Favor selecionar uma Frente de trabalho!", Toast.LENGTH_SHORT).show();
+                break;
+            case "CPFouCNPJ":
+                Toast.makeText(this, "Favor selecionar CPF ou CNPJ para preenchimento!", Toast.LENGTH_SHORT).show();
                 break;
         }
 
@@ -924,13 +941,10 @@ public class fiscalizacaoClandestinoFormActivity extends AppCompatActivity {
 
     // HELPERS
     private void disableAll() {
-        disableSpinner(spinnerFiscaFuncionario);
         disableEditText(textInputLayoutFiscaNome.getEditText());
         disableEditText(textInputLayoutFiscaEndereco.getEditText());
         disableEditText(textInputLayoutFiscaBairro.getEditText());
-        disableSpinner(spinnerFiscaMunicipio);
         disableEditText(textInputLayoutFiscaCPF.getEditText());
-        disableRadioGroup(radioGroupFiscaCpfConsultado);
         disableEditText(textInputLayoutFiscaNIS.getEditText());
         disableEditText(textInputLayoutFiscaRG.getEditText());
         disableEditText(textInputLayoutFiscaNascimento.getEditText());
@@ -941,6 +955,15 @@ public class fiscalizacaoClandestinoFormActivity extends AppCompatActivity {
         disableEditText(textInputLayoutFiscaEmail.getEditText());
         disableEditText(textInputLayoutFiscaLatitude.getEditText());
         disableEditText(textInputLayoutFiscaLongitude.getEditText());
+        disableEditText(textInputLayoutCPFIndicado.getEditText());
+        disableEditText(textInputLayoutFiscaOrdem.getEditText());
+        disableEditText(textInputLayoutFiscaCNPJ.getEditText());
+
+        disableSpinner(spinnerFiscaMunicipio);
+        disableSpinner(spinnerFiscaFuncionario);
+        disableSpinner(spinnerFiscaFrente);
+
+        disableRadioGroup(radioGroupFiscaCpfConsultado);
         disableRadioGroup(radioGroupFiscaAreaPreserva);
         disableRadioGroup(radioGroupFiscaInvadida);
         disableRadioGroup(radioGroupFiscaLigacao);
@@ -948,13 +971,10 @@ public class fiscalizacaoClandestinoFormActivity extends AppCompatActivity {
         disableRadioGroup(radioGroupFiscaPadrao);
         disableRadioGroup(radioGroupFiscaServidao);
         disableRadioGroup(radioGroupFiscaIndicacao);
-        disableEditText(textInputLayoutCPFIndicado.getEditText());
         disableRadioGroup(radioGroupFiscaOrdemServico);
-        disableEditText(textInputLayoutFiscaOrdem.getEditText());
         disableRadioGroup(radioGroupFiscaEstadoOrdem);
-
         disableRadioGroup(radioGroupFiscaServicoDirecionado);
-        disableSpinner(spinnerFiscaFrente);
+        disableRadioGroup(radioGroupFiscaCPFouCNPJ);
     }
 
     private void disableEditText(EditText editText) {
@@ -980,53 +1000,53 @@ public class fiscalizacaoClandestinoFormActivity extends AppCompatActivity {
         }
     }
 
-    private String formatTelefone(String number, String type) {
-        if(number!=null){
-            if(!number.equals("")){
-
-                String ddd = number.substring(0, 1);
-                String middle = "";
-                String end = "";
-                if(type.equals("cel")){
-                    middle = number.substring(2, 6);
-                    end = number.substring(7, 10);
-                }else{
-                    middle = number.substring(2, 5);
-                    end = number.substring(6, 9);
-                }
-
-                return "("+ ddd +")"+ middle +"-"+end;
-            }
-        }
-        return "";
-    }
-    private String formatData(String data) {
-        if(data!=null){
-            if(!data.equals("")){
-
-                String dia = "";
-                String mes = "";
-                String ano = "";
-
-                if(data.length() == 2){
-                    dia = data.substring(0, 2);
-                }else if(data.length() == 4){
-                    dia = data.substring(0, 2);
-                    mes = data.substring(2, 4);
-                }else if(data.length() == 6){
-                    dia = data.substring(0, 2);
-                    mes = data.substring(2, 4);
-                    ano = data.substring(4, 6);
-                }else if(data.length() == 8){
-                    dia = data.substring(0, 2);
-                    mes = data.substring(2, 4);
-                    ano = data.substring(4, 8);
-                }
-
-                return dia +"/"+ mes +"/"+ano;
-            }
-        }
-        return "";
-    }
+//    private String formatTelefone(String number, String type) {
+//        if(number!=null){
+//            if(!number.equals("")){
+//
+//                String ddd = number.substring(0, 1);
+//                String middle = "";
+//                String end = "";
+//                if(type.equals("cel")){
+//                    middle = number.substring(2, 6);
+//                    end = number.substring(7, 10);
+//                }else{
+//                    middle = number.substring(2, 5);
+//                    end = number.substring(6, 9);
+//                }
+//
+//                return "("+ ddd +")"+ middle +"-"+end;
+//            }
+//        }
+//        return "";
+//    }
+//    private String formatData(String data) {
+//        if(data!=null){
+//            if(!data.equals("")){
+//
+//                String dia = "";
+//                String mes = "";
+//                String ano = "";
+//
+//                if(data.length() == 2){
+//                    dia = data.substring(0, 2);
+//                }else if(data.length() == 4){
+//                    dia = data.substring(0, 2);
+//                    mes = data.substring(2, 4);
+//                }else if(data.length() == 6){
+//                    dia = data.substring(0, 2);
+//                    mes = data.substring(2, 4);
+//                    ano = data.substring(4, 6);
+//                }else if(data.length() == 8){
+//                    dia = data.substring(0, 2);
+//                    mes = data.substring(2, 4);
+//                    ano = data.substring(4, 8);
+//                }
+//
+//                return dia +"/"+ mes +"/"+ano;
+//            }
+//        }
+//        return "";
+//    }
 
 }

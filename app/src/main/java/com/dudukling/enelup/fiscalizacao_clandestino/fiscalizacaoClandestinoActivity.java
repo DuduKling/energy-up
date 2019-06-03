@@ -153,209 +153,6 @@ public class fiscalizacaoClandestinoActivity extends AppCompatActivity {
     }
 
 
-    // EXPORT
-    @RequiresApi(api = Build.VERSION_CODES.M)
-    private void checkPermissionBeforeExport() {
-        if (this.checkSelfPermission(Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
-            ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE}, EXPORT_WRITE_PERMISSION_CODE);
-        } else {
-            exportDB("");
-        }
-    }
-
-    private void exportDB(String type) {
-        fiscalizaDAO dao = new fiscalizaDAO(this);
-
-        SQLiteDatabase db = dao.getReadableDatabase();
-        long qtdCSV = DatabaseUtils.queryNumEntries(db, "fiscaTable",null);
-        if (qtdCSV != 0) {
-            exportFiscalizacoes(type, db);
-        } else if (!type.equals("backup")) {
-            Toast.makeText(this, "Não há Fiscalizações cadastradas para exportar.", Toast.LENGTH_SHORT).show();
-        }
-
-        dao.close();
-    }
-
-    private void exportFiscalizacoes(String type, SQLiteDatabase db) {
-        File exportDir = new File(Environment.getExternalStorageDirectory(), "");
-        if (!exportDir.exists()) {
-            boolean dirCreated = exportDir.mkdirs();
-            Log.d("TAG1", "exportDB() called: " + dirCreated);
-        }
-
-        @SuppressLint("SimpleDateFormat") String timeStamp = new SimpleDateFormat("ddMMyyyy_HHmmss").format(new Date());
-        File file;
-        if (type.equals("backup")) {
-            file = new File(exportDir, "EnelBackupFiscalizacaoClandestino_" + timeStamp + ".csv");
-        } else {
-            file = new File(exportDir, "EnelExportFiscalizacaoClandestino_" + timeStamp + ".csv");
-        }
-
-
-        try {
-            boolean fileCreated = file.createNewFile();
-            Log.d("TAG2", "createNewFile() called: " + fileCreated);
-            CSVWriter csvWrite = new CSVWriter(new FileWriter(file));
-
-
-            Cursor curCSV = db.rawQuery("SELECT" +
-                        " id,"+
-                        " funcionario,"+
-                        " nome,"+
-                        " endereco,"+
-                        " bairro,"+
-                        " municipio,"+
-                        " cpf,"+
-                        " cpf_status,"+
-                        " nis,"+
-                        " rg,"+
-                        " data_nascimento,"+
-                        " medidor_vizinho_1,"+
-                        " medidor_vizinho_2,"+
-                        " telefone,"+
-                        " celular,"+
-                        " email,"+
-                        " latitude,"+
-                        " longitude,"+
-                        " preservacao_ambiental,"+
-                        " area_invadida,"+
-                        " tipo_ligacao,"+
-                        " rede_local,"+
-                        " padrao_montado,"+
-                        " faixa_servidao,"+
-                        " pre_indicacao,"+
-                        " cpf_pre_indicacao,"+
-                        " existe_ordem,"+
-                        " numero_ordem,"+
-                        " estado_ordem,"+
-                        " servico_direcionado,"+
-                        " frente_trabalho"+
-                    " FROM fiscaTable "
-                    , null);
-
-            String[] str = {"id",
-                    "funcionario",
-                    "nome",
-                    "endereco",
-                    "bairro",
-                    "municipio",
-                    "cpf",
-                    "cpf_status",
-                    "nis",
-                    "rg",
-                    "data_nascimento",
-                    "medidor_vizinho_1",
-                    "medidor_vizinho_2",
-                    "telefone",
-                    "celular",
-                    "email",
-                    "latitude",
-                    "longitude",
-                    "preservacao_ambiental",
-                    "area_invadida",
-                    "tipo_ligacao",
-                    "rede_local",
-                    "padrao_montado",
-                    "faixa_servidao",
-                    "pre_indicacao",
-                    "cpf_pre_indicacao",
-                    "existe_ordem",
-                    "numero_ordem",
-                    "estado_ordem",
-                    "servico_direcionado",
-                    "frente_trabalho"
-            };
-
-            csvWrite.writeNext(str);
-
-            while (curCSV.moveToNext()) {
-                String id = stripAccents(curCSV.getString(0));
-                String funcionario = stripAccents(curCSV.getString(1));
-                String nome = stripAccents(curCSV.getString(2));
-                String endereco = stripAccents(curCSV.getString(3));
-                String bairro = stripAccents(curCSV.getString(4));
-                String municipio = stripAccents(curCSV.getString(5));
-                String cpf = stripAccents(curCSV.getString(6));
-                String cpf_status = stripAccents(curCSV.getString(7));
-                String nis = stripAccents(curCSV.getString(8));
-                String rg = stripAccents(curCSV.getString(9));
-                String data_nascimento = stripAccents(curCSV.getString(10));
-                String medidor_vizinho_1 = stripAccents(curCSV.getString(11));
-                String medidor_vizinho_2 = stripAccents(curCSV.getString(12));
-                String telefone = stripAccents(curCSV.getString(13));
-                String celular = stripAccents(curCSV.getString(14));
-                String email = stripAccents(curCSV.getString(15));
-                String latitude = stripAccents(curCSV.getString(16));
-                String longitude = stripAccents(curCSV.getString(17));
-                String preservacao_ambiental = stripAccents(curCSV.getString(18));
-                String area_invadida = stripAccents(curCSV.getString(19));
-                String tipo_ligacao = stripAccents(curCSV.getString(20));
-                String rede_local = stripAccents(curCSV.getString(21));
-                String padrao_montado = stripAccents(curCSV.getString(22));
-                String faixa_servidao = stripAccents(curCSV.getString(23));
-                String pre_indicacao = stripAccents(curCSV.getString(24));
-                String cpf_pre_indicacao = stripAccents(curCSV.getString(25));
-                String existe_ordem = stripAccents(curCSV.getString(26));
-                String numero_ordem = stripAccents(curCSV.getString(27));
-                String estado_ordem = stripAccents(curCSV.getString(28));
-                String servico_direcionado = stripAccents(curCSV.getString(29));
-                String frente_trabalho = stripAccents(curCSV.getString(30));
-
-                String arrStr[] = {
-                        id,
-                        funcionario,
-                        nome,
-                        endereco,
-                        bairro,
-                        municipio,
-                        cpf,
-                        cpf_status,
-                        nis,
-                        rg,
-                        data_nascimento,
-                        medidor_vizinho_1,
-                        medidor_vizinho_2,
-                        telefone,
-                        celular,
-                        email,
-                        latitude,
-                        longitude,
-                        preservacao_ambiental,
-                        area_invadida,
-                        tipo_ligacao,
-                        rede_local,
-                        padrao_montado,
-                        faixa_servidao,
-                        pre_indicacao,
-                        cpf_pre_indicacao,
-                        existe_ordem,
-                        numero_ordem,
-                        estado_ordem,
-                        servico_direcionado,
-                        frente_trabalho
-                };
-
-                csvWrite.writeNext(arrStr);
-            }
-            csvWrite.close();
-            curCSV.close();
-
-            if (!type.equals("backup")) {
-                Toast.makeText(this, "Fiscalizações Exportadas!", Toast.LENGTH_SHORT).show();
-            }
-
-            Intent intent =
-                    new Intent(Intent.ACTION_MEDIA_SCANNER_SCAN_FILE);
-            intent.setData(Uri.fromFile(file));
-            sendBroadcast(intent);
-
-        } catch (Exception sqlEx) {
-            Log.e("MainActivity", sqlEx.getMessage(), sqlEx);
-        }
-    }
-
-
     // DELETE
     private void deleteAll() {
         DialogInterface.OnClickListener dialogClickListener = new DialogInterface.OnClickListener() {
@@ -420,6 +217,213 @@ public class fiscalizacaoClandestinoActivity extends AppCompatActivity {
         s = Normalizer.normalize(s, Normalizer.Form.NFD);
         s = s.replaceAll("[\\p{InCombiningDiacriticalMarks}]", "");
         return s;
+    }
+
+
+    // EXPORT
+    @RequiresApi(api = Build.VERSION_CODES.M)
+    private void checkPermissionBeforeExport() {
+        if (this.checkSelfPermission(Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
+            ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE}, EXPORT_WRITE_PERMISSION_CODE);
+        } else {
+            exportDB("");
+        }
+    }
+
+    private void exportDB(String type) {
+        fiscalizaDAO dao = new fiscalizaDAO(this);
+
+        SQLiteDatabase db = dao.getReadableDatabase();
+        long qtdCSV = DatabaseUtils.queryNumEntries(db, "fiscaTable",null);
+        if (qtdCSV != 0) {
+            exportFiscalizacoes(type, db);
+        } else if (!type.equals("backup")) {
+            Toast.makeText(this, "Não há Fiscalizações cadastradas para exportar.", Toast.LENGTH_SHORT).show();
+        }
+
+        dao.close();
+    }
+
+    private void exportFiscalizacoes(String type, SQLiteDatabase db) {
+        File exportDir = new File(Environment.getExternalStorageDirectory(), "");
+        if (!exportDir.exists()) {
+            boolean dirCreated = exportDir.mkdirs();
+            Log.d("TAG1", "exportDB() called: " + dirCreated);
+        }
+
+        @SuppressLint("SimpleDateFormat") String timeStamp = new SimpleDateFormat("ddMMyyyy_HHmmss").format(new Date());
+        File file;
+        if (type.equals("backup")) {
+            file = new File(exportDir, "EnelBackupFiscalizacaoClandestino_" + timeStamp + ".csv");
+        } else {
+            file = new File(exportDir, "EnelExportFiscalizacaoClandestino_" + timeStamp + ".csv");
+        }
+
+
+        try {
+            boolean fileCreated = file.createNewFile();
+            Log.d("TAG2", "createNewFile() called: " + fileCreated);
+            CSVWriter csvWrite = new CSVWriter(new FileWriter(file));
+
+
+            Cursor curCSV = db.rawQuery("SELECT" +
+                        " id,"+
+                        " funcionario,"+
+                        " nome,"+
+                        " endereco,"+
+                        " bairro,"+
+                        " municipio,"+
+                        " cpf,"+
+                        " cpf_status,"+
+                        "cnpj,"+
+                        " nis,"+
+                        " rg,"+
+                        " data_nascimento,"+
+                        " medidor_vizinho_1,"+
+                        " medidor_vizinho_2,"+
+                        " telefone,"+
+                        " celular,"+
+                        " email,"+
+                        " latitude,"+
+                        " longitude,"+
+                        " preservacao_ambiental,"+
+                        " area_invadida,"+
+                        " tipo_ligacao,"+
+                        " rede_local,"+
+                        " padrao_montado,"+
+                        " faixa_servidao,"+
+                        " pre_indicacao,"+
+                        " cpf_pre_indicacao,"+
+                        " existe_ordem,"+
+                        " numero_ordem,"+
+                        " estado_ordem,"+
+                        " servico_direcionado,"+
+                        " frente_trabalho" +
+                    " FROM fiscaTable "
+                    , null);
+
+            String[] str = {"id",
+                    "funcionario",
+                    "nome",
+                    "endereco",
+                    "bairro",
+                    "municipio",
+                    "cpf",
+                    "cpf_status",
+                    "cnpj",
+                    "nis",
+                    "rg",
+                    "data_nascimento",
+                    "medidor_vizinho_1",
+                    "medidor_vizinho_2",
+                    "telefone",
+                    "celular",
+                    "email",
+                    "latitude",
+                    "longitude",
+                    "preservacao_ambiental",
+                    "area_invadida",
+                    "tipo_ligacao",
+                    "rede_local",
+                    "padrao_montado",
+                    "faixa_servidao",
+                    "pre_indicacao",
+                    "cpf_pre_indicacao",
+                    "existe_ordem",
+                    "numero_ordem",
+                    "estado_ordem",
+                    "servico_direcionado",
+                    "frente_trabalho"
+            };
+
+            csvWrite.writeNext(str);
+
+            while (curCSV.moveToNext()) {
+                String id = stripAccents(curCSV.getString(0));
+                String funcionario = stripAccents(curCSV.getString(1));
+                String nome = stripAccents(curCSV.getString(2));
+                String endereco = stripAccents(curCSV.getString(3));
+                String bairro = stripAccents(curCSV.getString(4));
+                String municipio = stripAccents(curCSV.getString(5));
+                String cpf = stripAccents(curCSV.getString(6));
+                String cpf_status = stripAccents(curCSV.getString(7));
+                String cnpj = stripAccents(curCSV.getString(8));
+                String nis = stripAccents(curCSV.getString(9));
+                String rg = stripAccents(curCSV.getString(10));
+                String data_nascimento = stripAccents(curCSV.getString(11));
+                String medidor_vizinho_1 = stripAccents(curCSV.getString(12));
+                String medidor_vizinho_2 = stripAccents(curCSV.getString(13));
+                String telefone = stripAccents(curCSV.getString(14));
+                String celular = stripAccents(curCSV.getString(15));
+                String email = stripAccents(curCSV.getString(16));
+                String latitude = stripAccents(curCSV.getString(17));
+                String longitude = stripAccents(curCSV.getString(18));
+                String preservacao_ambiental = stripAccents(curCSV.getString(19));
+                String area_invadida = stripAccents(curCSV.getString(20));
+                String tipo_ligacao = stripAccents(curCSV.getString(21));
+                String rede_local = stripAccents(curCSV.getString(22));
+                String padrao_montado = stripAccents(curCSV.getString(23));
+                String faixa_servidao = stripAccents(curCSV.getString(24));
+                String pre_indicacao = stripAccents(curCSV.getString(25));
+                String cpf_pre_indicacao = stripAccents(curCSV.getString(26));
+                String existe_ordem = stripAccents(curCSV.getString(27));
+                String numero_ordem = stripAccents(curCSV.getString(28));
+                String estado_ordem = stripAccents(curCSV.getString(29));
+                String servico_direcionado = stripAccents(curCSV.getString(30));
+                String frente_trabalho = stripAccents(curCSV.getString(31));
+
+                String arrStr[] = {
+                        id,
+                        funcionario,
+                        nome,
+                        endereco,
+                        bairro,
+                        municipio,
+                        cpf,
+                        cpf_status,
+                        cnpj,
+                        nis,
+                        rg,
+                        data_nascimento,
+                        medidor_vizinho_1,
+                        medidor_vizinho_2,
+                        telefone,
+                        celular,
+                        email,
+                        latitude,
+                        longitude,
+                        preservacao_ambiental,
+                        area_invadida,
+                        tipo_ligacao,
+                        rede_local,
+                        padrao_montado,
+                        faixa_servidao,
+                        pre_indicacao,
+                        cpf_pre_indicacao,
+                        existe_ordem,
+                        numero_ordem,
+                        estado_ordem,
+                        servico_direcionado,
+                        frente_trabalho
+                };
+
+                csvWrite.writeNext(arrStr);
+            }
+            csvWrite.close();
+            curCSV.close();
+
+            if (!type.equals("backup")) {
+                Toast.makeText(this, "Fiscalizações Exportadas!", Toast.LENGTH_SHORT).show();
+            }
+
+            Intent intent =
+                    new Intent(Intent.ACTION_MEDIA_SCANNER_SCAN_FILE);
+            intent.setData(Uri.fromFile(file));
+            sendBroadcast(intent);
+
+        } catch (Exception sqlEx) {
+            Log.e("MainActivity", sqlEx.getMessage(), sqlEx);
+        }
     }
 
 

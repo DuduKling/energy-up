@@ -48,6 +48,8 @@ public class fiscalizaDAO extends SQLiteOpenHelper {
     private String FIELD_FLAG_GOOGLE_SHEETS = "flag_google_sheets";     // '' - new, 0 - editado, 1 - enviado
     private String FIELD_SERVICO_DIRECIONADO = "servico_direcionado";
     private String FIELD_FRENTE_TRABALHO = "frente_trabalho";
+    private String FIELD_CPF_OU_CNPJ = "cpf_ou_cnpj";
+    private String FIELD_CNPJ = "cnpj";
 
     public fiscalizaDAO(Context context) {
         super(context, "fiscaTable", null, 2);
@@ -88,7 +90,9 @@ public class fiscalizaDAO extends SQLiteOpenHelper {
                 FIELD_DATA_ENVIO_GOOGLE_SHEETS + " TEXT NOT NULL," +
                 FIELD_FLAG_GOOGLE_SHEETS + " TEXT NOT NULL," +
                 FIELD_SERVICO_DIRECIONADO + " TEXT NOT NULL," +
-                FIELD_FRENTE_TRABALHO + " TEXT NOT NULL" +
+                FIELD_FRENTE_TRABALHO + " TEXT NOT NULL," +
+                FIELD_CPF_OU_CNPJ + " TEXT NOT NULL," +
+                FIELD_CNPJ + " TEXT NOT NULL" +
                 ");";
         db.execSQL(sql);
 
@@ -112,8 +116,17 @@ public class fiscalizaDAO extends SQLiteOpenHelper {
 
         onCreate(db);
     }
+    @Override
+    public void onDowngrade(SQLiteDatabase db, int oldVersion, int newVersion) {
+        String sql = "DROP TABLE IF EXISTS fiscaTable";
+        db.execSQL(sql);
 
+        String sql2 = "DROP TABLE IF EXISTS fiscaImages";
+        db.execSQL(sql2);
 
+        onCreate(db);
+        super.onDowngrade(db, oldVersion, newVersion);
+    }
 
 
     // PRIMARY FEATURES
@@ -196,14 +209,8 @@ public class fiscalizaDAO extends SQLiteOpenHelper {
 
 
     // GETS
-    public List<fiscaModel> getFiscaList() {
-        SQLiteDatabase db = getReadableDatabase();
-
-        String sql = "SELECT * FROM "+ TABLE_NAME +" ORDER BY "+ FIELD_ID +" DESC";
-
-        Cursor c = db.rawQuery(sql, null);
+    private List<fiscaModel> getAllFromFiscaTable(Cursor c) {
         List<fiscaModel> fiscaList = new ArrayList<>();
-
         while (c.moveToNext()) {
             fiscaModel fisca = new fiscaModel();
 
@@ -242,6 +249,8 @@ public class fiscalizaDAO extends SQLiteOpenHelper {
             fisca.setFlag_google_sheets(c.getString(c.getColumnIndex(FIELD_FLAG_GOOGLE_SHEETS)));
             fisca.setServico_direcionado(c.getString(c.getColumnIndex(FIELD_SERVICO_DIRECIONADO)));
             fisca.setFrente_trabalho(c.getString(c.getColumnIndex(FIELD_FRENTE_TRABALHO)));
+            fisca.setCpf_ou_cnpj(c.getString(c.getColumnIndex(FIELD_CPF_OU_CNPJ)));
+            fisca.setCnpj(c.getString(c.getColumnIndex(FIELD_CNPJ)));
 
             // Imagens:
             List<String> imagesList = getImagesDB(dbFiscaList);
@@ -250,6 +259,16 @@ public class fiscalizaDAO extends SQLiteOpenHelper {
             fiscaList.add(fisca);
         }
 
+        return fiscaList;
+    }
+
+    public List<fiscaModel> getFiscaList() {
+        SQLiteDatabase db = getReadableDatabase();
+
+        String sql = "SELECT * FROM "+ TABLE_NAME +" ORDER BY "+ FIELD_ID +" DESC";
+
+        Cursor c = db.rawQuery(sql, null);
+        List<fiscaModel> fiscaList = getAllFromFiscaTable(c);
         c.close();
 
         return fiscaList;
@@ -275,54 +294,7 @@ public class fiscalizaDAO extends SQLiteOpenHelper {
         String sql = "SELECT * FROM "+ TABLE_NAME +" WHERE "+ FIELD_FLAG_GOOGLE_SHEETS +"<>'1' ORDER BY "+ FIELD_ID +" DESC";
 
         Cursor c = db.rawQuery(sql, null);
-        List<fiscaModel> fiscaList = new ArrayList<>();
-
-        while (c.moveToNext()) {
-            fiscaModel fisca = new fiscaModel();
-
-            int dbFiscaList = c.getInt(c.getColumnIndex(FIELD_ID));
-            fisca.setId(dbFiscaList);
-
-            fisca.setFuncionario(c.getString(c.getColumnIndex(FIELD_FUNCIONARIO)));
-            fisca.setNome(c.getString(c.getColumnIndex(FIELD_NOME)));
-            fisca.setEndereco(c.getString(c.getColumnIndex(FIELD_ENDERECO)));
-            fisca.setBairro(c.getString(c.getColumnIndex(FIELD_BAIRRO)));
-            fisca.setMunicipio(c.getString(c.getColumnIndex(FIELD_MUNICIPIO)));
-            fisca.setCpf(c.getString(c.getColumnIndex(FIELD_CPF)));
-            fisca.setCpf_status(c.getString(c.getColumnIndex(FIELD_CPF_STATUS)));
-            fisca.setNis(c.getString(c.getColumnIndex(FIELD_NIS)));
-            fisca.setRg(c.getString(c.getColumnIndex(FIELD_RG)));
-            fisca.setData_nascimento(c.getString(c.getColumnIndex(FIELD_DATA_NASCIMENTO)));
-            fisca.setMedidor_vizinho_1(c.getString(c.getColumnIndex(FIELD_MEDIDOR_1)));
-            fisca.setMedidor_vizinho_2(c.getString(c.getColumnIndex(FIELD_MEDIDOR_2)));
-            fisca.setTelefone(c.getString(c.getColumnIndex(FIELD_TELEFONE)));
-            fisca.setCelular(c.getString(c.getColumnIndex(FIELD_CELULAR)));
-            fisca.setEmail(c.getString(c.getColumnIndex(FIELD_EMAIL)));
-            fisca.setLatitude(c.getString(c.getColumnIndex(FIELD_LATITUDE)));
-            fisca.setLongitude(c.getString(c.getColumnIndex(FIELD_LONGITUDE)));
-            fisca.setPreservacao_ambiental(c.getString(c.getColumnIndex(FIELD_PRESERVACAO_AMBIENTAL)));
-            fisca.setArea_invadida(c.getString(c.getColumnIndex(FIELD_AREA_INVADIDA)));
-            fisca.setTipo_ligacao(c.getString(c.getColumnIndex(FIELD_TIPO_LIGACAO)));
-            fisca.setRede_local(c.getString(c.getColumnIndex(FIELD_REDE_LOCAL)));
-            fisca.setPadrao_montado(c.getString(c.getColumnIndex(FIELD_AREA_MONTADO)));
-            fisca.setFaixa_servidao(c.getString(c.getColumnIndex(FIELD_FAIXA_SERVIDAO)));
-            fisca.setPre_indicacao(c.getString(c.getColumnIndex(FIELD_PRE_INDICADO)));
-            fisca.setCpf_pre_indicacao(c.getString(c.getColumnIndex(FIELD_CPF_PRE_INDICADO)));
-            fisca.setExiste_ordem(c.getString(c.getColumnIndex(FIELD_EXISTE_ORDEM)));
-            fisca.setNumero_ordem(c.getString(c.getColumnIndex(FIELD_ORDEM)));
-            fisca.setEstado_ordem(c.getString(c.getColumnIndex(FIELD_ESTADO_ORDEM)));
-            fisca.setData_google_sheets(c.getString(c.getColumnIndex(FIELD_DATA_ENVIO_GOOGLE_SHEETS)));
-            fisca.setFlag_google_sheets(c.getString(c.getColumnIndex(FIELD_FLAG_GOOGLE_SHEETS)));
-            fisca.setServico_direcionado(c.getString(c.getColumnIndex(FIELD_SERVICO_DIRECIONADO)));
-            fisca.setFrente_trabalho(c.getString(c.getColumnIndex(FIELD_FRENTE_TRABALHO)));
-
-            // Imagens:
-            List<String> imagesList = getImagesDB(dbFiscaList);
-            fisca.setImagesList(imagesList);
-
-            fiscaList.add(fisca);
-        }
-
+        List<fiscaModel> fiscaList = getAllFromFiscaTable(c);
         c.close();
 
         return fiscaList;
@@ -341,63 +313,34 @@ public class fiscalizaDAO extends SQLiteOpenHelper {
         queryData.put(FIELD_MUNICIPIO, fisca.getMunicipio());
         queryData.put(FIELD_CPF, fisca.getCpf());
         queryData.put(FIELD_CPF_STATUS, fisca.getCpf_status());
-
+        queryData.put(FIELD_NIS, fisca.getNis());
         queryData.put(FIELD_RG, fisca.getRg());
         queryData.put(FIELD_DATA_NASCIMENTO, fisca.getData_nascimento());
         queryData.put(FIELD_MEDIDOR_1, fisca.getMedidor_vizinho_1());
-
+        queryData.put(FIELD_MEDIDOR_2, fisca.getMedidor_vizinho_2());
+        queryData.put(FIELD_TELEFONE, fisca.getTelefone());
+        queryData.put(FIELD_CELULAR, fisca.getCelular());
+        queryData.put(FIELD_EMAIL, fisca.getEmail());
         queryData.put(FIELD_LATITUDE, fisca.getLatitude());
         queryData.put(FIELD_LONGITUDE, fisca.getLongitude());
-
+        queryData.put(FIELD_PRESERVACAO_AMBIENTAL, fisca.getPreservacao_ambiental());
         queryData.put(FIELD_AREA_INVADIDA, fisca.getArea_invadida());
         queryData.put(FIELD_TIPO_LIGACAO, fisca.getTipo_ligacao());
         queryData.put(FIELD_REDE_LOCAL, fisca.getRede_local());
         queryData.put(FIELD_AREA_MONTADO, fisca.getPadrao_montado());
         queryData.put(FIELD_FAIXA_SERVIDAO, fisca.getFaixa_servidao());
         queryData.put(FIELD_PRE_INDICADO, fisca.getPre_indicacao());
+        queryData.put(FIELD_CPF_PRE_INDICADO, fisca.getCpf_pre_indicacao());
         queryData.put(FIELD_EXISTE_ORDEM, fisca.getExiste_ordem());
         queryData.put(FIELD_ORDEM, fisca.getNumero_ordem());
         queryData.put(FIELD_ESTADO_ORDEM, fisca.getEstado_ordem());
+        queryData.put(FIELD_DATA_ENVIO_GOOGLE_SHEETS, fisca.getData_google_sheets());
+        queryData.put(FIELD_FLAG_GOOGLE_SHEETS, fisca.getFlag_google_sheets());
+        queryData.put(FIELD_SERVICO_DIRECIONADO, fisca.getServico_direcionado());
+        queryData.put(FIELD_FRENTE_TRABALHO, fisca.getFrente_trabalho());
 
-        if(fisca.getNis().isEmpty()){queryData.put(FIELD_NIS, "");}
-        else{queryData.put(FIELD_NIS, fisca.getNis());}
-
-        if(fisca.getMedidor_vizinho_2().isEmpty()){queryData.put(FIELD_MEDIDOR_2, "");}
-        else{queryData.put(FIELD_MEDIDOR_2, fisca.getMedidor_vizinho_2());}
-
-        if(fisca.getTelefone().isEmpty()){queryData.put(FIELD_TELEFONE, "");}
-        else{queryData.put(FIELD_TELEFONE, fisca.getTelefone());}
-
-        if(fisca.getCelular().isEmpty()){queryData.put(FIELD_CELULAR, "");}
-        else{queryData.put(FIELD_CELULAR, fisca.getCelular());}
-
-        if(fisca.getEmail().isEmpty()){queryData.put(FIELD_EMAIL, "");}
-        else{queryData.put(FIELD_EMAIL, fisca.getEmail());}
-
-        if(fisca.getPreservacao_ambiental().isEmpty()){queryData.put(FIELD_PRESERVACAO_AMBIENTAL, "");}
-        else{queryData.put(FIELD_PRESERVACAO_AMBIENTAL, fisca.getPreservacao_ambiental());}
-
-        if(fisca.getCpf_pre_indicacao().isEmpty()){queryData.put(FIELD_CPF_PRE_INDICADO, "");}
-        else{queryData.put(FIELD_CPF_PRE_INDICADO, fisca.getCpf_pre_indicacao());}
-
-        if(fisca.getData_google_sheets()==null){queryData.put(FIELD_DATA_ENVIO_GOOGLE_SHEETS, "");}
-        else if(fisca.getData_google_sheets().isEmpty()){queryData.put(FIELD_DATA_ENVIO_GOOGLE_SHEETS, "");}
-        else{queryData.put(FIELD_DATA_ENVIO_GOOGLE_SHEETS, fisca.getData_google_sheets());}
-
-        if(fisca.getFlag_google_sheets()==null){queryData.put(FIELD_FLAG_GOOGLE_SHEETS, "");}
-        else if(fisca.getFlag_google_sheets().isEmpty()){queryData.put(FIELD_FLAG_GOOGLE_SHEETS, "");}
-        else{queryData.put(FIELD_FLAG_GOOGLE_SHEETS, fisca.getFlag_google_sheets());}
-
-
-
-
-        if(fisca.getServico_direcionado()==null){queryData.put(FIELD_SERVICO_DIRECIONADO, "");}
-        else if(fisca.getServico_direcionado().isEmpty()){queryData.put(FIELD_SERVICO_DIRECIONADO, "");}
-        else{queryData.put(FIELD_SERVICO_DIRECIONADO, fisca.getServico_direcionado());}
-
-        if(fisca.getFrente_trabalho()==null){queryData.put(FIELD_FRENTE_TRABALHO, "");}
-        else if(fisca.getFrente_trabalho().isEmpty()){queryData.put(FIELD_FRENTE_TRABALHO, "");}
-        else{queryData.put(FIELD_FRENTE_TRABALHO, fisca.getFrente_trabalho());}
+        queryData.put(FIELD_CPF_OU_CNPJ, fisca.getCpf_ou_cnpj());
+        queryData.put(FIELD_CNPJ, fisca.getCnpj());
 
         return queryData;
     }

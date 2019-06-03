@@ -153,6 +153,70 @@
             app:layout_constraintStart_toEndOf="@+id/textView28"
             app:layout_constraintTop_toBottomOf="@+id/textInputLayoutFiscaBairro" />
 
+        <TextView
+            android:id="@+id/textView62"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
+            android:layout_marginLeft="8dp"
+            android:layout_marginTop="8dp"
+            android:layout_marginBottom="8dp"
+            android:text="CPF / CNPJ *"
+            app:layout_constraintBottom_toBottomOf="@+id/radioGroupFiscaCpfConsultado"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/spinnerFiscaMunicipio"
+            app:layout_constraintVertical_bias="0.0" />
+        <RadioGroup
+            android:id="@+id/radioGroupFiscaCPFouCNPJ"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
+            android:layout_marginLeft="8dp"
+            android:layout_marginTop="8dp"
+            android:layout_marginEnd="8dp"
+            android:layout_marginRight="8dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@+id/textView62"
+            app:layout_constraintTop_toBottomOf="@+id/spinnerFiscaMunicipio">
+
+            <RadioButton
+                android:id="@+id/radioButtonFiscaCPFouCNPJ1"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="CPF" />
+
+            <RadioButton
+                android:id="@+id/radioButtonFiscaCPFouCNPJ2"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="CNPJ" />
+
+        </RadioGroup>
+
+        <android.support.design.widget.TextInputLayout
+            android:id="@+id/textInputLayoutFiscaCNPJ"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
+            android:layout_marginLeft="8dp"
+            android:layout_marginTop="8dp"
+            android:layout_marginEnd="8dp"
+            android:layout_marginRight="8dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/radioGroupFiscaCPFouCNPJ">
+
+            <android.support.design.widget.TextInputEditText
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:digits="0123456789"
+                android:hint="CNPJ *"
+                android:inputType="number"
+                android:maxLength="14" />
+        </android.support.design.widget.TextInputLayout>
+
         <android.support.design.widget.TextInputLayout
             android:id="@+id/textInputLayoutFiscaCPF"
             android:layout_width="0dp"
@@ -162,18 +226,19 @@
             android:layout_marginTop="8dp"
             android:layout_marginEnd="8dp"
             android:layout_marginRight="8dp"
+            android:visibility="visible"
             app:layout_constraintEnd_toStartOf="@+id/buttonFiscaConsultaCPF"
             app:layout_constraintHorizontal_bias="1.0"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/spinnerFiscaMunicipio">
+            app:layout_constraintTop_toBottomOf="@+id/textInputLayoutFiscaCNPJ">
 
             <android.support.design.widget.TextInputEditText
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:digits="0123456789"
                 android:hint="CPF *"
                 android:inputType="number"
-                android:digits="0123456789"
-                android:maxLength="11"/>
+                android:maxLength="11" />
         </android.support.design.widget.TextInputLayout>
         <Button
             android:id="@+id/buttonFiscaConsultaCPF"
@@ -242,18 +307,16 @@
             android:layout_margin="8dp"
             android:layout_marginStart="8dp"
             android:layout_marginLeft="8dp"
-            android:layout_marginTop="8dp"
             android:layout_marginEnd="8dp"
             android:layout_marginRight="8dp"
             android:clickable="true"
             android:focusable="true"
             app:backgroundTint="@color/colorPrimary"
             app:fabSize="mini"
-            app:layout_constraintBottom_toTopOf="@+id/partForm1"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="1.0"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/radioGroupFiscaCpfConsultado"
+            app:layout_constraintTop_toTopOf="@+id/partForm1"
             app:srcCompat="@drawable/ic_album" />
 
         <!-- Cadastramento clandestino -->

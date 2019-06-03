@@ -41,6 +41,9 @@ public class fiscaModel implements Serializable {
     private String servico_direcionado = "";
     private String frente_trabalho = "";
 
+    private String cpf_ou_cnpj = "";
+    private String cnpj = "";
+
     private List<String> imagesList  = new ArrayList<>();
 
 
@@ -282,4 +285,17 @@ public class fiscaModel implements Serializable {
         this.frente_trabalho = frente_trabalho;
     }
 
+    public String getCpf_ou_cnpj() {
+        return cpf_ou_cnpj;
+    }
+    public void setCpf_ou_cnpj(String cpf_ou_cnpj) {
+        this.cpf_ou_cnpj = cpf_ou_cnpj;
+    }
+
+    public String getCnpj() {
+        return cnpj;
+    }
+    public void setCnpj(String cnpj) {
+        this.cnpj = cnpj;
+    }
 }
