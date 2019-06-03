@@ -26,7 +26,7 @@ import android.view.MenuItem;
 import android.widget.Toast;
 
 import com.dudukling.enelup.R;
-import com.dudukling.enelup.dao.lpDAO;
+import com.dudukling.enelup.dao.ligProvDAO;
 import com.opencsv.CSVWriter;
 
 import java.io.File;
@@ -36,8 +36,8 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Objects;
 
-//public class clandestinoActivity extends AppCompatActivity implements clandestinoFrag.OnItemSelectedListener {
-public class clandestinoActivity extends AppCompatActivity {
+//public class ligClandActivity extends AppCompatActivity implements ligClandFrag.OnItemSelectedListener {
+public class ligClandActivity extends AppCompatActivity {
     private static final int EXPORT_WRITE_PERMISSION_CODE = 222;
 
     private FragmentManager fragmentManager;
@@ -47,14 +47,14 @@ public class clandestinoActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.clandestino_activity);
+        setContentView(R.layout.lig_cland_activity);
         Objects.requireNonNull(getSupportActionBar()).setDisplayHomeAsUpEnabled(true);
         setTitle("Provisórias Clandestinas");
 
 
         fragmentManager = getSupportFragmentManager();
         FragmentTransaction tx = fragmentManager.beginTransaction();
-        tx.replace(R.id.fragmentClandestino, new clandestinoFrag());
+        tx.replace(R.id.fragmentClandestino, new ligClandFrag());
         tx.commit();
      }
 
@@ -67,9 +67,9 @@ public class clandestinoActivity extends AppCompatActivity {
                 break;
 
             case R.id.menu_delete:
-                lpDAO dao = new lpDAO(this);
+                ligProvDAO dao = new ligProvDAO(this);
                 SQLiteDatabase db = dao.getReadableDatabase();
-                long qtdCSVClandest = DatabaseUtils.queryNumEntries(db, "lpClandestinoModel");
+                long qtdCSVClandest = DatabaseUtils.queryNumEntries(db, "ligClandModel");
 
                 if (qtdCSVClandest != 0) {
                     deleteAll();
@@ -111,12 +111,12 @@ public class clandestinoActivity extends AppCompatActivity {
                     case DialogInterface.BUTTON_POSITIVE:
                         exportDB("backup");
 
-                        lpDAO dao = new lpDAO(clandestinoActivity.this);
+                        ligProvDAO dao = new ligProvDAO(ligClandActivity.this);
                         dao.truncateClandests();
                         dao.close();
 
                         FragmentTransaction tx = fragmentManager.beginTransaction();
-                        tx.replace(R.id.fragmentClandestino, new clandestinoFrag());
+                        tx.replace(R.id.fragmentClandestino, new ligClandFrag());
                         tx.commit();
 
                         break;
@@ -134,10 +134,10 @@ public class clandestinoActivity extends AppCompatActivity {
     }
 
     private void exportDB(String type) {
-        lpDAO dao = new lpDAO(this);
+        ligProvDAO dao = new ligProvDAO(this);
 
         SQLiteDatabase db = dao.getReadableDatabase();
-        long qtdCSVClandest = DatabaseUtils.queryNumEntries(db, "lpClandestinoModel");
+        long qtdCSVClandest = DatabaseUtils.queryNumEntries(db, "ligClandModel");
         if (qtdCSVClandest != 0) {
             exportClandests(type, db);
         } else if (!type.equals("backup")) {
@@ -227,7 +227,7 @@ public class clandestinoActivity extends AppCompatActivity {
     }
 
 //    @Override
-//    public void onItemSelected(lpClandestinoModel clandest, int lpID, String type) {
+//    public void onItemSelected(ligClandModel clandest, int lpID, String type) {
 //        FragmentTransaction tx = fragmentManager.beginTransaction();
 //        tx.replace(R.id.fragmentClandestino, clandestinoFragFormNewInstance(clandest, lpID, type));
 //        tx.commit();
@@ -235,8 +235,8 @@ public class clandestinoActivity extends AppCompatActivity {
 //        setTitle("Ponto clandestino");
 //    }
 
-//    public static clandestinoFormActivity clandestinoFragFormNewInstance(lpClandestinoModel clandest, int lpID, String type) {
-//        clandestinoFormActivity f = new clandestinoFormActivity();
+//    public static ligClandFormActivity clandestinoFragFormNewInstance(ligClandModel clandest, int lpID, String type) {
+//        ligClandFormActivity f = new ligClandFormActivity();
 //        Bundle args = new Bundle();
 //        args.putSerializable("clandest", clandest);
 //        args.putSerializable("lpID", lpID);

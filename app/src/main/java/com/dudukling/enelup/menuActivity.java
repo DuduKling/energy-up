@@ -6,9 +6,9 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.CardView;
 import android.view.View;
 
-import com.dudukling.enelup.fiscalizacao_clandestino.fiscalizacaoMenuActivity;
+import com.dudukling.enelup.fiscalizacao_clandestino.fiscaClandMenuActivity;
 import com.dudukling.enelup.ligacaoes_provisorias.ligProvActivity;
-import com.dudukling.enelup.ligacoes_clandestinas.clandestinoActivity;
+import com.dudukling.enelup.ligacoes_clandestinas.ligClandActivity;
 
 public class menuActivity extends AppCompatActivity {
     private CardView cardViewLP;
@@ -46,7 +46,7 @@ public class menuActivity extends AppCompatActivity {
         cardViewMenuClandestino.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(menuActivity.this, clandestinoActivity.class);
+                Intent intent = new Intent(menuActivity.this, ligClandActivity.class);
                 startActivity(intent);
             }
         });
@@ -65,7 +65,7 @@ public class menuActivity extends AppCompatActivity {
         cardViewFiscal.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(menuActivity.this, fiscalizacaoMenuActivity.class);
+                Intent intent = new Intent(menuActivity.this, fiscaClandMenuActivity.class);
                 startActivity(intent);
             }
         });

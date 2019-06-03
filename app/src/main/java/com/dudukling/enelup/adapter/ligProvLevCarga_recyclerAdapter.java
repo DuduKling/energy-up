@@ -12,19 +12,19 @@ import android.widget.TextView;
 
 import com.dudukling.enelup.ligacaoes_provisorias.ligProvLevCargaActivity;
 import com.dudukling.enelup.R;
-import com.dudukling.enelup.dao.lpDAO;
-import com.dudukling.enelup.model.lpPotenciaModel;
+import com.dudukling.enelup.dao.ligProvDAO;
+import com.dudukling.enelup.model.ligProvPotenciaModel;
 
 import java.util.List;
 
-public class levCarga_recyclerAdapter extends RecyclerView.Adapter {
+public class ligProvLevCarga_recyclerAdapter extends RecyclerView.Adapter {
     private final int lpID;
     private final String typeofForm;
     private Context context;
-    private List<lpPotenciaModel> lpPotenciaModel;
+    private List<ligProvPotenciaModel> ligProvPotenciaModel;
 
-    public levCarga_recyclerAdapter(List<lpPotenciaModel> lpPotenciaModel, ligProvLevCargaActivity context, int lpID, String typeofForm) {
-        this.lpPotenciaModel = lpPotenciaModel;
+    public ligProvLevCarga_recyclerAdapter(List<ligProvPotenciaModel> ligProvPotenciaModel, ligProvLevCargaActivity context, int lpID, String typeofForm) {
+        this.ligProvPotenciaModel = ligProvPotenciaModel;
         this.context = context;
         this.lpID = lpID;
         this.typeofForm = typeofForm;
@@ -41,7 +41,7 @@ public class levCarga_recyclerAdapter extends RecyclerView.Adapter {
     @Override
     public void onBindViewHolder(@NonNull RecyclerView.ViewHolder viewHolder, int position) {
         aViewHolder holder = (aViewHolder) viewHolder;
-        lpPotenciaModel pot  = lpPotenciaModel.get(position);
+        ligProvPotenciaModel pot  = ligProvPotenciaModel.get(position);
 
         holder.textViewLevCargaQuantidade.setText(pot.getQuantidade());
         holder.textViewLevCargaDescricao.setText(pot.getDescricao());
@@ -73,12 +73,12 @@ public class levCarga_recyclerAdapter extends RecyclerView.Adapter {
                 @Override
                 public void onClick(View v) {
                     int position = getAdapterPosition();
-                    lpPotenciaModel oPotencia = lpPotenciaModel.get(position);
+                    ligProvPotenciaModel oPotencia = ligProvPotenciaModel.get(position);
                     int oPotenciaID = oPotencia.getId();
 
-                    lpDAO dao = new lpDAO(context);
+                    ligProvDAO dao = new ligProvDAO(context);
                     dao.deletePotencia(oPotenciaID);
-                    lpPotenciaModel = dao.getLPPotenciaList(lpID);
+                    ligProvPotenciaModel = dao.getLPPotenciaList(lpID);
                     dao.close();
 
                     notifyDataSetChanged();
@@ -95,7 +95,7 @@ public class levCarga_recyclerAdapter extends RecyclerView.Adapter {
 
     @Override
     public int getItemCount() {
-        return lpPotenciaModel.size();
+        return ligProvPotenciaModel.size();
     }
 
 }

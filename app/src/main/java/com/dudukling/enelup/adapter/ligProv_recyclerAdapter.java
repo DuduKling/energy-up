@@ -15,9 +15,9 @@ import android.widget.Spinner;
 import android.widget.TextView;
 
 import com.dudukling.enelup.R;
-import com.dudukling.enelup.dao.lpDAO;
+import com.dudukling.enelup.dao.ligProvDAO;
 import com.dudukling.enelup.ligacaoes_provisorias.ligProvFormActivity;
-import com.dudukling.enelup.model.lpModel;
+import com.dudukling.enelup.model.ligProvModel;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -25,13 +25,13 @@ import java.util.List;
 
 public class ligProv_recyclerAdapter extends RecyclerView.Adapter {
     private Context context;
-    private List<lpModel> lpList;
-    private List<lpModel> lpListFiltered = new ArrayList<>();
+    private List<ligProvModel> lpList;
+    private List<ligProvModel> lpListFiltered = new ArrayList<>();
 
     private String[] listaFiltros = new String[4];
 
     public ligProv_recyclerAdapter(Context context) {
-        lpDAO dao = new lpDAO(context);
+        ligProvDAO dao = new ligProvDAO(context);
         this.lpList = dao.getLPList();
         dao.close();
 
@@ -58,7 +58,7 @@ public class ligProv_recyclerAdapter extends RecyclerView.Adapter {
     @Override
     public void onBindViewHolder(@NonNull RecyclerView.ViewHolder viewHolder, int position) {
         aViewHolder holder = (aViewHolder) viewHolder;
-        lpModel lp  = lpListFiltered.get(position);
+        ligProvModel lp  = lpListFiltered.get(position);
 
         holder.viewOrdem.setText(lp.getOrdem());
         holder.viewCliente.setText(lp.getCliente());
@@ -91,7 +91,7 @@ public class ligProv_recyclerAdapter extends RecyclerView.Adapter {
                 @Override
                 public void onClick(View v) {
                     int position = getAdapterPosition();
-                    lpModel lp  = lpListFiltered.get(position);
+                    ligProvModel lp  = lpListFiltered.get(position);
 
                     Intent goToFormActivity = new Intent(context, ligProvFormActivity.class);
                     goToFormActivity
@@ -109,7 +109,7 @@ public class ligProv_recyclerAdapter extends RecyclerView.Adapter {
                 @Override
                 public boolean onMenuItemClick(MenuItem item) {
                     int position = getAdapterPosition();
-                    lpModel lp  = lpListFiltered.get(position);
+                    ligProvModel lp  = lpListFiltered.get(position);
 
                     Intent goToFormActivity = new Intent(context, ligProvFormActivity.class);
                     goToFormActivity
@@ -135,12 +135,12 @@ public class ligProv_recyclerAdapter extends RecyclerView.Adapter {
 //            protected FilterResults performFiltering(CharSequence charSequence) {
 //                String query = charSequence.toString();
 //
-//                List<lpModel> filtered = new ArrayList<>();
+//                List<ligProvModel> filtered = new ArrayList<>();
 //
 //                if (query.isEmpty()) {
 //                    filtered = lpList;
 //                } else {
-//                    for (lpModel lp : lpList) {
+//                    for (ligProvModel lp : lpList) {
 //                        if (lp.getOrdem().toLowerCase().contains(query.toLowerCase()) ||
 //                                lp.getCliente().toLowerCase().contains(query.toLowerCase()) ||
 //                                lp.getEndereco().toLowerCase().contains(query.toLowerCase())
@@ -159,7 +159,7 @@ public class ligProv_recyclerAdapter extends RecyclerView.Adapter {
 //            @Override
 //            protected void publishResults(CharSequence charSequence, FilterResults results) {
 //
-//                lpListFiltered = (List<lpModel>) results.values;
+//                lpListFiltered = (List<ligProvModel>) results.values;
 //                notifyDataSetChanged();
 //            }
 //        };
@@ -205,13 +205,13 @@ public class ligProv_recyclerAdapter extends RecyclerView.Adapter {
 
     private void makeFilter() {
         lpListFiltered = new ArrayList<>();
-        List<lpModel> filtered = new ArrayList<>();
+        List<ligProvModel> filtered = new ArrayList<>();
 
         if(listaFiltros[1]==null && listaFiltros[2]==null && listaFiltros[3]==null && listaFiltros[0]==null) {
             filtered = lpList;
         }
         else if(listaFiltros[1]!=null && listaFiltros[2]==null && listaFiltros[3]==null && listaFiltros[0]==null){
-            for(lpModel lp : lpList) {
+            for(ligProvModel lp : lpList) {
                 if(
                     lp.getLocalidade().toLowerCase().equals(listaFiltros[1])
                 ){
@@ -220,7 +220,7 @@ public class ligProv_recyclerAdapter extends RecyclerView.Adapter {
             }
         }
         else if(listaFiltros[1]==null && listaFiltros[2]!=null && listaFiltros[3]==null && listaFiltros[0]==null){
-            for (lpModel lp : lpList) {
+            for (ligProvModel lp : lpList) {
                 if(
                     lp.getTipoOrdem().toLowerCase().contains(listaFiltros[2])
                 ){
@@ -229,7 +229,7 @@ public class ligProv_recyclerAdapter extends RecyclerView.Adapter {
             }
         }
         else if(listaFiltros[1]==null && listaFiltros[2]==null && listaFiltros[3]!=null && listaFiltros[0]==null){
-            for (lpModel lp : lpList) {
+            for (ligProvModel lp : lpList) {
                 if(
                    lp.getEtapa().toLowerCase().equals(listaFiltros[3])
                 ){
@@ -238,7 +238,7 @@ public class ligProv_recyclerAdapter extends RecyclerView.Adapter {
             }
         }
         else if(listaFiltros[1]==null && listaFiltros[2]==null && listaFiltros[3]==null && listaFiltros[0]!=null){
-            for (lpModel lp : lpList) {
+            for (ligProvModel lp : lpList) {
                 if(
                     lp.getOrdem().toLowerCase().contains(listaFiltros[0]) ||
                     lp.getCliente().toLowerCase().contains(listaFiltros[0]) ||
@@ -249,7 +249,7 @@ public class ligProv_recyclerAdapter extends RecyclerView.Adapter {
             }
         }
         else if(listaFiltros[1]!=null && listaFiltros[2]!=null && listaFiltros[3]==null && listaFiltros[0]==null){
-            for (lpModel lp : lpList) {
+            for (ligProvModel lp : lpList) {
                 if(
                     lp.getLocalidade().toLowerCase().equals(listaFiltros[1]) &&
                     lp.getTipoOrdem().toLowerCase().contains(listaFiltros[2])
@@ -259,7 +259,7 @@ public class ligProv_recyclerAdapter extends RecyclerView.Adapter {
             }
         }
         else if(listaFiltros[1]!=null && listaFiltros[2]==null && listaFiltros[3]!=null && listaFiltros[0]==null){
-            for (lpModel lp : lpList) {
+            for (ligProvModel lp : lpList) {
                 if(
                     lp.getLocalidade().toLowerCase().equals(listaFiltros[1]) &&
                     lp.getEtapa().toLowerCase().equals(listaFiltros[3])
@@ -269,7 +269,7 @@ public class ligProv_recyclerAdapter extends RecyclerView.Adapter {
             }
         }
         else if(listaFiltros[1]!=null && listaFiltros[2]==null && listaFiltros[3]==null && listaFiltros[0]!=null){
-            for (lpModel lp : lpList) {
+            for (ligProvModel lp : lpList) {
                 if(
                     lp.getLocalidade().toLowerCase().equals(listaFiltros[1]) &&
                     (
@@ -283,7 +283,7 @@ public class ligProv_recyclerAdapter extends RecyclerView.Adapter {
             }
         }
         else if(listaFiltros[1]==null && listaFiltros[2]!=null && listaFiltros[3]!=null && listaFiltros[0]==null){
-            for (lpModel lp : lpList) {
+            for (ligProvModel lp : lpList) {
                 if(
                     lp.getTipoOrdem().toLowerCase().contains(listaFiltros[2]) &&
                     lp.getEtapa().toLowerCase().equals(listaFiltros[3])
@@ -293,7 +293,7 @@ public class ligProv_recyclerAdapter extends RecyclerView.Adapter {
             }
         }
         else if(listaFiltros[1]==null && listaFiltros[2]!=null && listaFiltros[3]==null && listaFiltros[0]!=null){
-            for (lpModel lp : lpList) {
+            for (ligProvModel lp : lpList) {
                 if(
                     lp.getTipoOrdem().toLowerCase().contains(listaFiltros[2]) &&
                     (
@@ -307,7 +307,7 @@ public class ligProv_recyclerAdapter extends RecyclerView.Adapter {
             }
         }
         else if(listaFiltros[1]==null && listaFiltros[2]==null && listaFiltros[3]!=null && listaFiltros[0]!=null){
-            for (lpModel lp : lpList) {
+            for (ligProvModel lp : lpList) {
                 if(
                     lp.getEtapa().toLowerCase().equals(listaFiltros[3]) &&
                     (
@@ -321,7 +321,7 @@ public class ligProv_recyclerAdapter extends RecyclerView.Adapter {
             }
         }
         else if(listaFiltros[1]!=null && listaFiltros[2]!=null && listaFiltros[3]!=null && listaFiltros[0]==null){
-            for (lpModel lp : lpList) {
+            for (ligProvModel lp : lpList) {
                 if(
                     lp.getLocalidade().toLowerCase().equals(listaFiltros[1]) &&
                     lp.getTipoOrdem().toLowerCase().contains(listaFiltros[2]) &&
@@ -332,7 +332,7 @@ public class ligProv_recyclerAdapter extends RecyclerView.Adapter {
             }
         }
         else if(listaFiltros[1]!=null && listaFiltros[2]!=null && listaFiltros[3]==null && listaFiltros[0]!=null){
-            for (lpModel lp : lpList) {
+            for (ligProvModel lp : lpList) {
                 if(
                     lp.getLocalidade().toLowerCase().equals(listaFiltros[1]) &&
                     lp.getTipoOrdem().toLowerCase().contains(listaFiltros[2]) &&
@@ -347,7 +347,7 @@ public class ligProv_recyclerAdapter extends RecyclerView.Adapter {
             }
         }
         else if(listaFiltros[1]!=null && listaFiltros[2]==null && listaFiltros[3]!=null && listaFiltros[0]!=null){
-            for (lpModel lp : lpList) {
+            for (ligProvModel lp : lpList) {
                 if(
                     lp.getLocalidade().toLowerCase().equals(listaFiltros[1]) &&
                     lp.getEtapa().toLowerCase().equals(listaFiltros[3]) &&
@@ -362,7 +362,7 @@ public class ligProv_recyclerAdapter extends RecyclerView.Adapter {
             }
         }
         else if(listaFiltros[1]==null && listaFiltros[2]!=null && listaFiltros[3]!=null && listaFiltros[0]!=null){
-            for (lpModel lp : lpList) {
+            for (ligProvModel lp : lpList) {
                 if(
                     lp.getTipoOrdem().toLowerCase().contains(listaFiltros[2]) &&
                     lp.getEtapa().toLowerCase().equals(listaFiltros[3]) &&
@@ -377,7 +377,7 @@ public class ligProv_recyclerAdapter extends RecyclerView.Adapter {
             }
         }
         else if(listaFiltros[1]!=null && listaFiltros[2]!=null && listaFiltros[3]!=null && listaFiltros[0]!=null){
-            for (lpModel lp : lpList) {
+            for (ligProvModel lp : lpList) {
                 if(
                     lp.getLocalidade().toLowerCase().equals(listaFiltros[1]) &&
                     lp.getTipoOrdem().toLowerCase().contains(listaFiltros[2]) &&
@@ -401,7 +401,7 @@ public class ligProv_recyclerAdapter extends RecyclerView.Adapter {
     }
 
     public void refreshList() {
-        lpDAO dao = new lpDAO(context);
+        ligProvDAO dao = new ligProvDAO(context);
         lpList = dao.getLPList();
         dao.close();
         notifyDataSetChanged();

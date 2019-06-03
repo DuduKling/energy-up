@@ -20,22 +20,22 @@ import android.view.View;
 import android.widget.TextView;
 
 import com.dudukling.enelup.R;
-import com.dudukling.enelup.adapter.fiscalizacaoAlbum_recyclerAdapter;
-import com.dudukling.enelup.dao.fiscalizaDAO;
-import com.dudukling.enelup.model.fiscaModel;
-import com.dudukling.enelup.util.cameraFiscaController;
+import com.dudukling.enelup.adapter.fiscaClandAlbum_recyclerAdapter;
+import com.dudukling.enelup.dao.fiscaClandDAO;
+import com.dudukling.enelup.model.fiscaClandModel;
+import com.dudukling.enelup.fiscalizacao_clandestino.util.fiscaClandCameraController;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
-public class fiscalizacaoClandestinoAlbumActivity extends AppCompatActivity {
+public class fiscaClandAlbumActivity extends AppCompatActivity {
     public static final int CAMERA_PERMISSION_CODE = 333;
     public static final int CAMERA_REQUEST_CODE = 444;
 
     private RecyclerView recyclerView;
-    private fiscaModel fisca;
-    private cameraFiscaController cameraControl;
+    private fiscaClandModel fisca;
+    private fiscaClandCameraController cameraControl;
     public List<String> imagesList = new ArrayList<>();
     
     @TargetApi(Build.VERSION_CODES.KITKAT)
@@ -43,23 +43,23 @@ public class fiscalizacaoClandestinoAlbumActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.fisc_clandest_activity_album);
+        setContentView(R.layout.fisca_cland_activity_album);
         Objects.requireNonNull(getSupportActionBar()).setDisplayHomeAsUpEnabled(true);
         recyclerView = findViewById(R.id.recyclerViewFiscaAlbum);
 
         Intent intent = getIntent();
-        fisca = (fiscaModel) intent.getSerializableExtra("fisca");
+        fisca = (fiscaClandModel) intent.getSerializableExtra("fisca");
 
         setTitle("Album " + fisca.getId());
     }
 
     @Override
     protected void onResume() {
-        recyclerView.setAdapter(new fiscalizacaoAlbum_recyclerAdapter(fisca, this));
+        recyclerView.setAdapter(new fiscaClandAlbum_recyclerAdapter(fisca, this));
         RecyclerView.LayoutManager layout = new GridLayoutManager(this, 2);
         recyclerView.setLayoutManager(layout);
 
-        fiscalizaDAO dao = new fiscalizaDAO(this);
+        fiscaClandDAO dao = new fiscaClandDAO(this);
         imagesList = dao.getImagesDB(fisca.getId());
         dao.close();
 
@@ -83,7 +83,7 @@ public class fiscalizacaoClandestinoAlbumActivity extends AppCompatActivity {
                 if (this.checkSelfPermission(Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
                     ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE}, CAMERA_PERMISSION_CODE);
                 } else {
-                    cameraControl = new cameraFiscaController(fiscalizacaoClandestinoAlbumActivity.this, fisca);
+                    cameraControl = new fiscaClandCameraController(fiscaClandAlbumActivity.this, fisca);
                     cameraControl.setCameraActions();
                 }
                 break;
@@ -95,7 +95,7 @@ public class fiscalizacaoClandestinoAlbumActivity extends AppCompatActivity {
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         if (resultCode == Activity.RESULT_OK) {
             if (requestCode == CAMERA_REQUEST_CODE) {
-                fiscalizaDAO dao = new fiscalizaDAO(this);
+                fiscaClandDAO dao = new fiscaClandDAO(this);
                 dao.insertImage(fisca, cameraControl.getPhotoPath());
                 imagesList = dao.getImagesDB(fisca.getId());
                 dao.close();
@@ -121,7 +121,7 @@ public class fiscalizacaoClandestinoAlbumActivity extends AppCompatActivity {
 
         if (requestCode == CAMERA_PERMISSION_CODE) {
             if (grantResults.length > 0 && grantResults[0] != PackageManager.PERMISSION_DENIED) {
-                cameraControl = new cameraFiscaController(fiscalizacaoClandestinoAlbumActivity.this, fisca);
+                cameraControl = new fiscaClandCameraController(fiscaClandAlbumActivity.this, fisca);
                 cameraControl.startCamera();
             }
         }

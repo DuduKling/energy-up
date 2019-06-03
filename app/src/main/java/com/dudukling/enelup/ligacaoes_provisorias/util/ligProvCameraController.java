@@ -1,4 +1,4 @@
-package com.dudukling.enelup.util;
+package com.dudukling.enelup.ligacaoes_provisorias.util;
 
 import android.annotation.SuppressLint;
 import android.content.Intent;
@@ -12,7 +12,7 @@ import android.support.v4.content.FileProvider;
 import android.util.Log;
 
 import com.dudukling.enelup.ligacaoes_provisorias.ligProvAlbumActivity;
-import com.dudukling.enelup.model.lpModel;
+import com.dudukling.enelup.model.ligProvModel;
 
 import java.io.File;
 import java.io.IOException;
@@ -21,14 +21,14 @@ import java.util.Date;
 
 import static com.dudukling.enelup.ligacaoes_provisorias.ligProvAlbumActivity.CAMERA_REQUEST_CODE;
 
-public class cameraController {
-    private final lpModel lp;
+public class ligProvCameraController {
+    private final ligProvModel lp;
     private File photoFile = null;
     private String photoPath;
     private final ligProvAlbumActivity formActivity;
     public File storageDir;
 
-    public cameraController(ligProvAlbumActivity formActivity, lpModel lp) {
+    public ligProvCameraController(ligProvAlbumActivity formActivity, ligProvModel lp) {
         this.formActivity = formActivity;
         this.lp = lp;
     }

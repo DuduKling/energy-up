@@ -1,4 +1,4 @@
-package com.dudukling.enelup.util;
+package com.dudukling.enelup.ligacaoes_provisorias.util;
 
 import android.content.Intent;
 import android.graphics.Color;
@@ -21,10 +21,10 @@ import android.widget.Toast;
 
 import com.dudukling.enelup.ligacaoes_provisorias.ligProvLevCargaActivity;
 import com.dudukling.enelup.R;
-import com.dudukling.enelup.dao.lpDAO;
+import com.dudukling.enelup.dao.ligProvDAO;
 import com.dudukling.enelup.ligacaoes_provisorias.ligProvFormActivity;
-import com.dudukling.enelup.model.lpModel;
-import com.dudukling.enelup.model.lpPotenciaModel;
+import com.dudukling.enelup.model.ligProvModel;
+import com.dudukling.enelup.model.ligProvPotenciaModel;
 
 import java.io.File;
 import java.math.BigDecimal;
@@ -35,11 +35,11 @@ import br.com.sapereaude.maskedEditText.MaskedEditText;
 
 import static java.lang.Float.parseFloat;
 
-public class lpFormHelper {
+public class ligProvFormHelper {
     private static final String REQUIRED_FIELD_ERROR_MSG = "Campo obrigatório!";
 
     private static ligProvFormActivity activity;
-    private final lpModel lp;
+    private final ligProvModel lp;
     private final String formType;
 
     private TextView TextViewOrdem;
@@ -90,7 +90,7 @@ public class lpFormHelper {
     private FloatingActionButton floatingActionButtonInfoSendEmail;
 
 
-    public lpFormHelper(final ligProvFormActivity activity1, String formType, lpModel lp1) {
+    public ligProvFormHelper(final ligProvFormActivity activity1, String formType, ligProvModel lp1) {
         activity = activity1;
         lp = lp1;
         this.formType = formType;
@@ -158,7 +158,7 @@ public class lpFormHelper {
         }
     }
 
-    public void fillForm(lpModel lp) {
+    public void fillForm(ligProvModel lp) {
         TextViewOrdem.setText(lp.getOrdem());
         TextViewCliente.setText(lp.getCliente());
         TextViewEndereco.setText(lp.getEndereco());
@@ -191,7 +191,7 @@ public class lpFormHelper {
         fillCalcInfoForm();
     }
 
-    public lpModel getLPFromForm(lpModel lp) {
+    public ligProvModel getLPFromForm(ligProvModel lp) {
 
         lp.setUserObservacao(fieldObs.getText().toString());
 
@@ -216,7 +216,7 @@ public class lpFormHelper {
         spinner.setClickable(false);
     }
 
-    public static void deleteImagesFromPhoneMemory(lpModel lp) {
+    public static void deleteImagesFromPhoneMemory(ligProvModel lp) {
         List<String> imagesListToDelete = lp.getImagesList();
         for(int i = 0; i < imagesListToDelete.size(); i++){
             File file = new File(imagesListToDelete.get(i));
@@ -269,7 +269,7 @@ public class lpFormHelper {
         });
     }
 
-    public String validateForm(lpModel lp) {
+    public String validateForm(ligProvModel lp) {
         if(fieldIsEmpty(textInputObs)){return "false";}
 
         if(fieldIsEmpty(textInputLayoutCalcDecPeriodo)){return "false";}
@@ -1075,7 +1075,7 @@ public class lpFormHelper {
         // Levantamento:
         float totalLevCarga = 0;
 
-        lpDAO dao = new lpDAO(activity);
+        ligProvDAO dao = new ligProvDAO(activity);
         potenciaTotalLevCarga = dao.getLPPotenciaTotal(lp.getId());
         dao.close();
 
@@ -1138,8 +1138,8 @@ public class lpFormHelper {
         }
 
         if(checkBoxCalcEncLevCarga.isChecked()){
-            lpDAO dao = new lpDAO(activity);
-            List<lpPotenciaModel> potlist = dao.getLPPotenciaList(lp.getId());
+            ligProvDAO dao = new ligProvDAO(activity);
+            List<ligProvPotenciaModel> potlist = dao.getLPPotenciaList(lp.getId());
             dao.close();
             if(potlist.size()<1){
                 Toast.makeText(activity, "Favor preencher a área de Levantamento de Carga!", Toast.LENGTH_SHORT).show();
@@ -1167,8 +1167,8 @@ public class lpFormHelper {
 
         }
 
-        lpDAO dao = new lpDAO(activity);
-        List<lpPotenciaModel> potlist = dao.getLPPotenciaList(lp.getId());
+        ligProvDAO dao = new ligProvDAO(activity);
+        List<ligProvPotenciaModel> potlist = dao.getLPPotenciaList(lp.getId());
         dao.close();
         if(potlist.size()>0){
             checkBoxCalcEncLevCarga.setChecked(true);
@@ -1193,7 +1193,7 @@ public class lpFormHelper {
             @Override
             public void onClick(View v) {
 //                Toast.makeText(activity, "aaaa", Toast.LENGTH_SHORT).show();
-                lpDAO dao = new lpDAO(activity);
+                ligProvDAO dao = new ligProvDAO(activity);
                 List<String> imagesList = dao.getImagesDB(lp.getId());
                 dao.close();
 

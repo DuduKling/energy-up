@@ -1,13 +1,11 @@
 package com.dudukling.enelup.util;
 
 import android.content.Context;
-import android.content.Intent;
 import android.os.Build;
 import android.support.annotation.RequiresApi;
-import android.widget.Toast;
 
-import com.dudukling.enelup.dao.lpDAO;
-import com.dudukling.enelup.model.lpModel;
+import com.dudukling.enelup.dao.ligProvDAO;
+import com.dudukling.enelup.model.ligProvModel;
 import com.opencsv.CSVParser;
 import com.opencsv.CSVParserBuilder;
 import com.opencsv.CSVReader;
@@ -18,8 +16,6 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStreamReader;
-import java.nio.file.Path;
-import java.nio.file.Paths;
 import java.text.Normalizer;
 
 
@@ -56,10 +52,10 @@ public class openCSVReader {
                 CSVReader csvReader = new CSVReaderBuilder(br).withSkipLines(1).withCSVParser(parser).build()
         ){
             String[] nextRecord;
-            lpDAO dao = new lpDAO(context);
+            ligProvDAO dao = new ligProvDAO(context);
 
             while ((nextRecord = csvReader.readNext()) != null) {
-                lpModel lp = new lpModel();
+                ligProvModel lp = new ligProvModel();
 
                 try {
 //                    lp.setOrdem(stripAccents(nextRecord[1]));

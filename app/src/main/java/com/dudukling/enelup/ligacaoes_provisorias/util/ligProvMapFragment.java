@@ -1,10 +1,10 @@
-package com.dudukling.enelup.util;
+package com.dudukling.enelup.ligacaoes_provisorias.util;
 
 import android.os.Bundle;
 
-import com.dudukling.enelup.dao.lpDAO;
+import com.dudukling.enelup.dao.ligProvDAO;
 import com.dudukling.enelup.ligacaoes_provisorias.ligProvFormActivity;
-import com.dudukling.enelup.model.lpModel;
+import com.dudukling.enelup.model.ligProvModel;
 import com.google.android.gms.maps.CameraUpdate;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
@@ -16,12 +16,12 @@ import com.google.android.gms.maps.model.MarkerOptions;
 
 import java.util.List;
 
-public class mapFragment extends SupportMapFragment implements OnMapReadyCallback {
+public class ligProvMapFragment extends SupportMapFragment implements OnMapReadyCallback {
 
     private static ligProvFormActivity activity;
     private static double[] latitude = {0};
     private static double[] longitude = {0};
-    private lpModel lp;
+    private ligProvModel lp;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -47,7 +47,7 @@ public class mapFragment extends SupportMapFragment implements OnMapReadyCallbac
 
     public void onMapReady(GoogleMap googleMap) {
 
-        lp = mapsController.lp;
+        lp = ligProvMapsController.lp;
         String lat = lp.getLatitude();
         String lng = lp.getLongitude();
         if(!lat.equals("") && !lng.equals("")){
@@ -91,8 +91,8 @@ public class mapFragment extends SupportMapFragment implements OnMapReadyCallbac
     }
 
     private void showAllOtherMarkers(GoogleMap googleMap) {
-        lpDAO dao = new lpDAO(activity);
-        List<lpModel> lpList = dao.getGPSList(lp.getId());
+        ligProvDAO dao = new ligProvDAO(activity);
+        List<ligProvModel> lpList = dao.getGPSList(lp.getId());
         dao.close();
 
         for(int i=0; i<lpList.size(); i++) {

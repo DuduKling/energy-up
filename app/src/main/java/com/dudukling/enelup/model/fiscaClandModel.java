@@ -4,7 +4,7 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
-public class fiscaModel implements Serializable {
+public class fiscaClandModel implements Serializable {
     private int id;
     private String funcionario = "";
     private String nome = "";

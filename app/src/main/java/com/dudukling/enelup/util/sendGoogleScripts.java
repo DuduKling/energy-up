@@ -4,7 +4,6 @@ import android.app.ProgressDialog;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
-import android.provider.MediaStore;
 import android.util.Base64;
 import android.util.Log;
 import android.widget.Toast;
@@ -22,11 +21,10 @@ import com.android.volley.ServerError;
 import com.android.volley.TimeoutError;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
-import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
-import com.dudukling.enelup.adapter.fiscalizacao_recyclerAdapter;
-import com.dudukling.enelup.dao.fiscalizaDAO;
-import com.dudukling.enelup.model.fiscaModel;
+import com.dudukling.enelup.adapter.fiscaCland_recyclerAdapter;
+import com.dudukling.enelup.dao.fiscaClandDAO;
+import com.dudukling.enelup.model.fiscaClandModel;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -45,13 +43,13 @@ public class sendGoogleScripts {
         this.context = context;
     }
 
-    public void sendFiscalizacaoClandestinoExternal(List<fiscaModel> fiscaList, final ProgressDialog dialog) {
+    public void sendFiscalizacaoClandestinoExternal(List<fiscaClandModel> fiscaList, final ProgressDialog dialog) {
 
         // Preparar JSON com o fiscaList
         JSONObject finalJSON = new JSONObject();
         JSONArray jsonArr = new JSONArray();
         try {
-            for (fiscaModel list : fiscaList) {
+            for (fiscaClandModel list : fiscaList) {
                 JSONObject fiscaJSON = new JSONObject();
 
                 fiscaJSON.put("id", list.getId());
@@ -90,7 +88,7 @@ public class sendGoogleScripts {
                 if(list.getImagesList().size() > 0){
                     JSONArray imagesArrJSON = new JSONArray();
                     for (String imagePath : list.getImagesList()){
-                        fiscalizaDAO dao = new fiscalizaDAO(context);
+                        fiscaClandDAO dao = new fiscaClandDAO(context);
                         if(dao.isNotEnviadoYet(imagePath)){
                             Bitmap bitmap = BitmapFactory.decodeFile(imagePath);
                             Bitmap rbitmap = getResizedBitmap(bitmap, 1500);    // maxSize de 1500 eh aproximadamente 1 MB..
@@ -121,11 +119,11 @@ public class sendGoogleScripts {
                         e.printStackTrace();
                     }
                     if(resp.equals("foi")){
-                        fiscalizaDAO dao = new fiscalizaDAO(context);
+                        fiscaClandDAO dao = new fiscaClandDAO(context);
                         dao.updateToEnviadoFiscasFlag();
                         dao.updateToEnviadoImages();
-                        fiscalizacao_recyclerAdapter.fiscaList = dao.getFiscaList();
-                        fiscalizacao_recyclerAdapter.context2.notifyDataSetChanged();
+                        fiscaCland_recyclerAdapter.fiscaList = dao.getFiscaList();
+                        fiscaCland_recyclerAdapter.context2.notifyDataSetChanged();
                         dao.close();
 
                         dialog.dismiss();

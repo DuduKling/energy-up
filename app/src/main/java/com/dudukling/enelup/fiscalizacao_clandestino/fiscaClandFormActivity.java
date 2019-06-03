@@ -18,7 +18,6 @@ import android.os.Environment;
 import android.provider.Settings;
 import android.support.annotation.RequiresApi;
 import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.TextInputEditText;
 import android.support.design.widget.TextInputLayout;
 import android.support.v4.app.ActivityCompat;
 import android.support.v7.app.AppCompatActivity;
@@ -39,8 +38,8 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.dudukling.enelup.R;
-import com.dudukling.enelup.dao.fiscalizaDAO;
-import com.dudukling.enelup.model.fiscaModel;
+import com.dudukling.enelup.dao.fiscaClandDAO;
+import com.dudukling.enelup.model.fiscaClandModel;
 
 import java.io.File;
 import java.util.List;
@@ -48,11 +47,11 @@ import java.util.Objects;
 
 import br.com.sapereaude.maskedEditText.MaskedEditText;
 
-public class fiscalizacaoClandestinoFormActivity extends AppCompatActivity {
+public class fiscaClandFormActivity extends AppCompatActivity {
     private static final String REQUIRED_FIELD_ERROR_MSG = "Campo obrigatório!";
     private static final int GPS_REQUEST_CODE = 999;
 
-    private fiscaModel fisca;
+    private fiscaClandModel fisca;
     private String formType;
 
     private TextInputLayout textInputLayoutFiscaNome;
@@ -113,11 +112,11 @@ public class fiscalizacaoClandestinoFormActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         Objects.requireNonNull(getSupportActionBar()).setDisplayHomeAsUpEnabled(true);
-        setContentView(R.layout.fisc_clandest_activity_form);
+        setContentView(R.layout.fisca_cland_activity_form);
         setTitle("Cadastramento Clandestino");
 
         Intent intent = getIntent();
-        fisca = (fiscaModel) intent.getSerializableExtra("fisca");
+        fisca = (fiscaClandModel) intent.getSerializableExtra("fisca");
         formType = (String) intent.getSerializableExtra("type");
 
         setFields();
@@ -155,9 +154,9 @@ public class fiscalizacaoClandestinoFormActivity extends AppCompatActivity {
                 this.finish();
                 break;
             case R.id.menu_save_button:
-                fiscalizaDAO dao = new fiscalizaDAO(this);
+                fiscaClandDAO dao = new fiscaClandDAO(this);
                 if(validadeFields()){
-                    fiscaModel fiscaToSave = getFiscaFromFields(fisca);
+                    fiscaClandModel fiscaToSave = getFiscaFromFields(fisca);
                     if(formType.equals("new")){
                         dao.insert(fiscaToSave);
                     }else{
@@ -200,14 +199,14 @@ public class fiscalizacaoClandestinoFormActivity extends AppCompatActivity {
     @Override
     protected void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
-        fiscaModel fiscaSaved = getFiscaFromFields(fisca);
+        fiscaClandModel fiscaSaved = getFiscaFromFields(fisca);
         outState.putSerializable("fisca", fiscaSaved);
     }
 
     @Override
     protected void onRestoreInstanceState(Bundle savedInstanceState) {
         super.onRestoreInstanceState(savedInstanceState);
-        fiscaModel fiscaSaved = (fiscaModel) savedInstanceState.getSerializable("fisca");
+        fiscaClandModel fiscaSaved = (fiscaClandModel) savedInstanceState.getSerializable("fisca");
         fillForm(fiscaSaved);
     }
 
@@ -220,7 +219,7 @@ public class fiscalizacaoClandestinoFormActivity extends AppCompatActivity {
         }
 
         if(formType.equals("new")){
-            fiscalizaDAO dao = new fiscalizaDAO(fiscalizacaoClandestinoFormActivity.this);
+            fiscaClandDAO dao = new fiscaClandDAO(fiscaClandFormActivity.this);
             int fiscaID = dao.getNextID();
             fisca.setImagesList(dao.getImagesDB(fiscaID));
             deleteImagesFromPhoneMemory(fisca);
@@ -274,11 +273,11 @@ public class fiscalizacaoClandestinoFormActivity extends AppCompatActivity {
             @RequiresApi(api = Build.VERSION_CODES.M)
             @Override
             public void onClick(View v) {
-                Intent goToAlbum = new Intent(fiscalizacaoClandestinoFormActivity.this, fiscalizacaoClandestinoAlbumActivity.class);
+                Intent goToAlbum = new Intent(fiscaClandFormActivity.this, fiscaClandAlbumActivity.class);
 
-                fiscaModel fiscaAlbum = new fiscaModel();
+                fiscaClandModel fiscaAlbum = new fiscaClandModel();
                 if(formType.equals("new")){
-                    fiscalizaDAO dao = new fiscalizaDAO(fiscalizacaoClandestinoFormActivity.this);
+                    fiscaClandDAO dao = new fiscaClandDAO(fiscaClandFormActivity.this);
                     int newID = dao.getNextID();
                     dao.close();
                     fiscaAlbum.setId(newID);
@@ -303,7 +302,7 @@ public class fiscalizacaoClandestinoFormActivity extends AppCompatActivity {
                     ClipData clip = ClipData.newPlainText("cpf copiado", CPF);
                     clipboard.setPrimaryClip(clip);
 
-                    Toast.makeText(fiscalizacaoClandestinoFormActivity.this, "CPF "+CPF+" copiado para a área de transferência!", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(fiscaClandFormActivity.this, "CPF "+CPF+" copiado para a área de transferência!", Toast.LENGTH_SHORT).show();
 
                     String url = "https://www.situacaocadastral.com.br";
                     Intent i = new Intent(Intent.ACTION_VIEW);
@@ -494,7 +493,7 @@ public class fiscalizacaoClandestinoFormActivity extends AppCompatActivity {
 
     }
 
-    private void fillForm(fiscaModel fisca) {
+    private void fillForm(fiscaClandModel fisca) {
         textInputLayoutFiscaNome.getEditText().setText(fisca.getNome());
         textInputLayoutFiscaEndereco.getEditText().setText(fisca.getEndereco());
         textInputLayoutFiscaBairro.getEditText().setText(fisca.getBairro());
@@ -604,7 +603,7 @@ public class fiscalizacaoClandestinoFormActivity extends AppCompatActivity {
         }
     }
 
-    private fiscaModel getFiscaFromFields(fiscaModel fisca) {
+    private fiscaClandModel getFiscaFromFields(fiscaClandModel fisca) {
         fisca.setNome(textInputLayoutFiscaNome.getEditText().getText().toString());
         fisca.setEndereco(textInputLayoutFiscaEndereco.getEditText().getText().toString());
         fisca.setBairro(textInputLayoutFiscaBairro.getEditText().getText().toString());
@@ -673,7 +672,7 @@ public class fiscalizacaoClandestinoFormActivity extends AppCompatActivity {
         return fisca;
     }
 
-    public void deleteImagesFromPhoneMemory(fiscaModel fisca) {
+    public void deleteImagesFromPhoneMemory(fiscaClandModel fisca) {
         List<String> imagesListToDelete = fisca.getImagesList();
         for (int i = 0; i < imagesListToDelete.size(); i++) {
             File file = new File(imagesListToDelete.get(i));
@@ -926,9 +925,9 @@ public class fiscalizacaoClandestinoFormActivity extends AppCompatActivity {
                 public void onProviderDisabled(String provider) {
                     if (provider.equals(LocationManager.GPS_PROVIDER)) {
                         progressBarFiscaGPS.setVisibility(View.GONE);
-                        Toast.makeText(fiscalizacaoClandestinoFormActivity.this, "Favor, habilitar o GPS!", Toast.LENGTH_LONG).show();
+                        Toast.makeText(fiscaClandFormActivity.this, "Favor, habilitar o GPS!", Toast.LENGTH_LONG).show();
                         Intent startGPSIntent = new Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS);
-                        fiscalizacaoClandestinoFormActivity.this.startActivity(startGPSIntent);
+                        fiscaClandFormActivity.this.startActivity(startGPSIntent);
                     }
                 }
             };

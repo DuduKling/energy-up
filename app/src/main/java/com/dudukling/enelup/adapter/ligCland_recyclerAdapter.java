@@ -12,19 +12,19 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.dudukling.enelup.R;
-import com.dudukling.enelup.ligacoes_clandestinas.clandestinoFormActivity;
-import com.dudukling.enelup.dao.lpDAO;
-import com.dudukling.enelup.model.lpClandestinoModel;
+import com.dudukling.enelup.ligacoes_clandestinas.ligClandFormActivity;
+import com.dudukling.enelup.dao.ligProvDAO;
+import com.dudukling.enelup.model.ligClandModel;
 
 import java.util.List;
 
-public class clandestino_recyclerAdapter extends RecyclerView.Adapter {
-//    private final clandestinoFrag.OnItemSelectedListener listener;
+public class ligCland_recyclerAdapter extends RecyclerView.Adapter {
+//    private final ligClandFrag.OnItemSelectedListener listener;
     private Context context;
 
-    private List<lpClandestinoModel> lpClandest;
+    private List<ligClandModel> lpClandest;
 
-    public clandestino_recyclerAdapter(List<lpClandestinoModel> lpClandest, Context context) {
+    public ligCland_recyclerAdapter(List<ligClandModel> lpClandest, Context context) {
         this.lpClandest = lpClandest;
         this.context = context;
 //        this.listener = listener;
@@ -41,7 +41,7 @@ public class clandestino_recyclerAdapter extends RecyclerView.Adapter {
     @Override
     public void onBindViewHolder(@NonNull RecyclerView.ViewHolder viewHolder, int position) {
         aViewHolder holder = (aViewHolder) viewHolder;
-        lpClandestinoModel clandest  = lpClandest.get(position);
+        ligClandModel clandest  = lpClandest.get(position);
 
         holder.viewClandestNome.setText("Clandestino #"+clandest.getId());
         holder.viewClandestEndereco.setText(clandest.getEndereco());
@@ -65,9 +65,9 @@ public class clandestino_recyclerAdapter extends RecyclerView.Adapter {
                 @Override
                 public void onClick(View v) {
                     int position = getAdapterPosition();
-                    lpClandestinoModel clandest  = lpClandest.get(position);
+                    ligClandModel clandest  = lpClandest.get(position);
 
-                    Intent goToFormActivity = new Intent(context, clandestinoFormActivity.class);
+                    Intent goToFormActivity = new Intent(context, ligClandFormActivity.class);
                     goToFormActivity
                             .putExtra("clandest", clandest)
                             .putExtra("lpOrdem", "")
@@ -86,9 +86,9 @@ public class clandestino_recyclerAdapter extends RecyclerView.Adapter {
                 @Override
                 public boolean onMenuItemClick(MenuItem item) {
                     int position = getAdapterPosition();
-                    lpClandestinoModel clandest  = lpClandest.get(position);
+                    ligClandModel clandest  = lpClandest.get(position);
 
-                    Intent goToFormActivity = new Intent(context, clandestinoFormActivity.class);
+                    Intent goToFormActivity = new Intent(context, ligClandFormActivity.class);
                     goToFormActivity
                             .putExtra("clandest", clandest)
                             .putExtra("lpOrdem", "")
@@ -106,9 +106,9 @@ public class clandestino_recyclerAdapter extends RecyclerView.Adapter {
             @Override
             public boolean onMenuItemClick(MenuItem item) {
                 int position = getAdapterPosition();
-                lpClandestinoModel clandest  = lpClandest.get(position);
+                ligClandModel clandest  = lpClandest.get(position);
 
-                lpDAO dao = new lpDAO(context);
+                ligProvDAO dao = new ligProvDAO(context);
                 dao.deleteClandestino(clandest);
                 lpClandest = dao.getClandestinoList();
                 dao.close();

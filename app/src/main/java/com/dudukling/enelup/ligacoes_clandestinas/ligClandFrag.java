@@ -13,16 +13,16 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.dudukling.enelup.R;
-import com.dudukling.enelup.adapter.clandestino_recyclerAdapter;
-import com.dudukling.enelup.dao.lpDAO;
-import com.dudukling.enelup.model.lpClandestinoModel;
+import com.dudukling.enelup.adapter.ligCland_recyclerAdapter;
+import com.dudukling.enelup.dao.ligProvDAO;
+import com.dudukling.enelup.model.ligClandModel;
 
 import java.util.List;
 
-public class clandestinoFrag extends Fragment {
+public class ligClandFrag extends Fragment {
     private RecyclerView recyclerView;
-    private clandestino_recyclerAdapter RecyclerAdapter;
-    private List<lpClandestinoModel> lpClandest;
+    private ligCland_recyclerAdapter RecyclerAdapter;
+    private List<ligClandModel> lpClandest;
     private View view;
 
 //    private OnItemSelectedListener listener;
@@ -31,7 +31,7 @@ public class clandestinoFrag extends Fragment {
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
 
-        view = inflater.inflate(R.layout.clandestino_frag_main, container,false);
+        view = inflater.inflate(R.layout.lig_cland_frag_main, container,false);
 
 
         recyclerView = view.findViewById(R.id.recyclerViewClandest);
@@ -45,11 +45,11 @@ public class clandestinoFrag extends Fragment {
     @Override
     public void onResume() {
         super.onResume();
-        lpDAO dao = new lpDAO(getContext());
+        ligProvDAO dao = new ligProvDAO(getContext());
         lpClandest = dao.getClandestinoList();
 
-//        RecyclerAdapter = new clandestino_recyclerAdapter(lpClandest, getContext(), listener);
-        RecyclerAdapter = new clandestino_recyclerAdapter(lpClandest, getContext());
+//        RecyclerAdapter = new ligCland_recyclerAdapter(lpClandest, getContext(), listener);
+        RecyclerAdapter = new ligCland_recyclerAdapter(lpClandest, getContext());
         recyclerView.setAdapter(RecyclerAdapter);
         RecyclerView.LayoutManager layout = new LinearLayoutManager(getContext(), LinearLayoutManager.VERTICAL, false);
         recyclerView.setLayoutManager(layout);
@@ -72,7 +72,7 @@ public class clandestinoFrag extends Fragment {
 
 
 //    public interface OnItemSelectedListener {
-//        void onItemSelected(lpClandestinoModel clandest, int lpID, String type);
+//        void onItemSelected(ligClandModel clandest, int lpID, String type);
 //    }
 
 //    @Override

@@ -14,23 +14,23 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 
 import com.dudukling.enelup.R;
-import com.dudukling.enelup.dao.lpDAO;
+import com.dudukling.enelup.dao.ligProvDAO;
 import com.dudukling.enelup.imageActivity;
-import com.dudukling.enelup.model.lpModel;
-import com.dudukling.enelup.util.lpFormHelper;
+import com.dudukling.enelup.model.ligProvModel;
+import com.dudukling.enelup.ligacaoes_provisorias.util.ligProvFormHelper;
 
 import java.util.ArrayList;
 import java.util.List;
 
 
 public class ligProvAlbum_recyclerAdapter extends RecyclerView.Adapter {
-    private final lpModel lp;
+    private final ligProvModel lp;
     private static List<String> imagesList;
     private Context context;
 
-    public ligProvAlbum_recyclerAdapter(lpModel lp, Context context) {
+    public ligProvAlbum_recyclerAdapter(ligProvModel lp, Context context) {
         this.context = context;
-        lpDAO dao = new lpDAO(context);
+        ligProvDAO dao = new ligProvDAO(context);
         imagesList = dao.getImagesDB(lp.getId());
         dao.close();
         this.lp = lp;
@@ -94,7 +94,7 @@ public class ligProvAlbum_recyclerAdapter extends RecyclerView.Adapter {
                     List<String> imageToDelete = new ArrayList<>();
                     imageToDelete.add(lp.getImagesList().get(position));
 
-                    lpDAO dao = new lpDAO(context);
+                    ligProvDAO dao = new ligProvDAO(context);
                     int imageID = dao.getImageIdDB(imagesList.get(position));
                     dao.deleteImage(lpID, imageID);
 
@@ -103,9 +103,9 @@ public class ligProvAlbum_recyclerAdapter extends RecyclerView.Adapter {
 
                     notifyDataSetChanged();
 
-                    lpModel lpToDelete = new lpModel();
+                    ligProvModel lpToDelete = new ligProvModel();
                     lpToDelete.setImagesList(imageToDelete);
-                    lpFormHelper.deleteImagesFromPhoneMemory(lpToDelete);
+                    ligProvFormHelper.deleteImagesFromPhoneMemory(lpToDelete);
 
                     return false;
                 }

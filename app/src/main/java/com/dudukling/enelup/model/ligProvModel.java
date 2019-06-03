@@ -4,7 +4,7 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
-public class lpModel implements Serializable {
+public class ligProvModel implements Serializable {
     private int id;
 
     private String ordem = "";

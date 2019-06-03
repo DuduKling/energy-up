@@ -15,23 +15,23 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 
 import com.dudukling.enelup.R;
-import com.dudukling.enelup.dao.fiscalizaDAO;
-import com.dudukling.enelup.fiscalizacao_clandestino.fiscalizacaoClandestinoAlbumActivity;
+import com.dudukling.enelup.dao.fiscaClandDAO;
+import com.dudukling.enelup.fiscalizacao_clandestino.fiscaClandAlbumActivity;
 import com.dudukling.enelup.imageActivity;
-import com.dudukling.enelup.model.fiscaModel;
+import com.dudukling.enelup.model.fiscaClandModel;
 
 import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
-public class fiscalizacaoAlbum_recyclerAdapter extends RecyclerView.Adapter {
-    private final fiscaModel fisca;
+public class fiscaClandAlbum_recyclerAdapter extends RecyclerView.Adapter {
+    private final fiscaClandModel fisca;
     private static List<String> imagesList;
     private Context context;
 
-    public fiscalizacaoAlbum_recyclerAdapter(fiscaModel fisca, fiscalizacaoClandestinoAlbumActivity context) {
+    public fiscaClandAlbum_recyclerAdapter(fiscaClandModel fisca, fiscaClandAlbumActivity context) {
         this.context = context;
-        fiscalizaDAO dao = new fiscalizaDAO(context);
+        fiscaClandDAO dao = new fiscaClandDAO(context);
         imagesList = dao.getImagesDB(fisca.getId());
         dao.close();
         this.fisca = fisca;
@@ -95,7 +95,7 @@ public class fiscalizacaoAlbum_recyclerAdapter extends RecyclerView.Adapter {
                     List<String> imageToDelete = new ArrayList<>();
                     imageToDelete.add(imagesList.get(position));
 
-                    fiscalizaDAO dao = new fiscalizaDAO(context);
+                    fiscaClandDAO dao = new fiscaClandDAO(context);
                     int imageID = dao.getImageIdDB(imagesList.get(position));
                     dao.deleteImage(fiscaID, imageID);
 
@@ -104,7 +104,7 @@ public class fiscalizacaoAlbum_recyclerAdapter extends RecyclerView.Adapter {
 
                     notifyDataSetChanged();
 
-                    fiscaModel fiscaToDelete = new fiscaModel();
+                    fiscaClandModel fiscaToDelete = new fiscaClandModel();
                     fiscaToDelete.setImagesList(imageToDelete);
                     deleteImagesFromPhoneMemory(fiscaToDelete);
 
@@ -136,7 +136,7 @@ public class fiscalizacaoAlbum_recyclerAdapter extends RecyclerView.Adapter {
         }
     }
 
-    private static void deleteImagesFromPhoneMemory(fiscaModel fisca) {
+    private static void deleteImagesFromPhoneMemory(fiscaClandModel fisca) {
         List<String> imagesListToDelete = fisca.getImagesList();
         for(int i = 0; i < imagesListToDelete.size(); i++){
             File file = new File(imagesListToDelete.get(i));

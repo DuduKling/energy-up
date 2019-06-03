@@ -20,9 +20,9 @@ import android.widget.TextView;
 
 import com.dudukling.enelup.R;
 import com.dudukling.enelup.adapter.ligProvAlbum_recyclerAdapter;
-import com.dudukling.enelup.dao.lpDAO;
-import com.dudukling.enelup.model.lpModel;
-import com.dudukling.enelup.util.cameraController;
+import com.dudukling.enelup.dao.ligProvDAO;
+import com.dudukling.enelup.model.ligProvModel;
+import com.dudukling.enelup.ligacaoes_provisorias.util.ligProvCameraController;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -34,8 +34,8 @@ public class ligProvAlbumActivity extends AppCompatActivity {
     public static final int CAMERA_REQUEST_CODE = 444;
 
     private RecyclerView recyclerView;
-    private lpModel lp;
-    private cameraController cameraControl;
+    private ligProvModel lp;
+    private ligProvCameraController cameraControl;
     public List<String> imagesList = new ArrayList<>();
 
     @Override
@@ -48,7 +48,7 @@ public class ligProvAlbumActivity extends AppCompatActivity {
         }
 
         Intent intent = getIntent();
-        lp = (lpModel) intent.getSerializableExtra("lp");
+        lp = (ligProvModel) intent.getSerializableExtra("lp");
 
         setTitle("Album " + lp.getOrdem());
     }
@@ -59,7 +59,7 @@ public class ligProvAlbumActivity extends AppCompatActivity {
         RecyclerView.LayoutManager layout = new GridLayoutManager(this, 2);
         recyclerView.setLayoutManager(layout);
 
-        lpDAO dao = new lpDAO(this);
+        ligProvDAO dao = new ligProvDAO(this);
         imagesList = dao.getImagesDB(lp.getId());
         dao.close();
 
@@ -84,7 +84,7 @@ public class ligProvAlbumActivity extends AppCompatActivity {
                 if (this.checkSelfPermission(Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
                     ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE}, CAMERA_PERMISSION_CODE);
                 } else {
-                    cameraControl = new cameraController(ligProvAlbumActivity.this, lp);
+                    cameraControl = new ligProvCameraController(ligProvAlbumActivity.this, lp);
                     cameraControl.setCameraActions();
                 }
                 break;
@@ -96,7 +96,7 @@ public class ligProvAlbumActivity extends AppCompatActivity {
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         if (resultCode == Activity.RESULT_OK) {
             if (requestCode == CAMERA_REQUEST_CODE) {
-                lpDAO dao = new lpDAO(this);
+                ligProvDAO dao = new ligProvDAO(this);
                 dao.insertImage(lp, cameraControl.getPhotoPath());
                 imagesList = dao.getImagesDB(lp.getId());
                 dao.close();
@@ -125,7 +125,7 @@ public class ligProvAlbumActivity extends AppCompatActivity {
 
         if (requestCode == CAMERA_PERMISSION_CODE) {
             if (grantResults.length > 0 && grantResults[0] != PackageManager.PERMISSION_DENIED) {
-                cameraControl = new cameraController(ligProvAlbumActivity.this, lp);
+                cameraControl = new ligProvCameraController(ligProvAlbumActivity.this, lp);
                 cameraControl.startCamera();
             }
         }

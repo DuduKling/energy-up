@@ -30,23 +30,23 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.dudukling.enelup.R;
-import com.dudukling.enelup.ligacoes_clandestinas.clandestinoFormActivity;
-import com.dudukling.enelup.dao.lpDAO;
-import com.dudukling.enelup.model.lpClandestinoModel;
-import com.dudukling.enelup.model.lpModel;
-import com.dudukling.enelup.util.lpFormHelper;
-import com.dudukling.enelup.util.mapsController;
+import com.dudukling.enelup.ligacaoes_provisorias.util.ligProvFormHelper;
+import com.dudukling.enelup.ligacaoes_provisorias.util.ligProvMapsController;
+import com.dudukling.enelup.ligacoes_clandestinas.ligClandFormActivity;
+import com.dudukling.enelup.dao.ligProvDAO;
+import com.dudukling.enelup.model.ligClandModel;
+import com.dudukling.enelup.model.ligProvModel;
 
 import java.util.Objects;
 
 public class ligProvFormActivity extends AppCompatActivity {
     private static final int GPS_REQUEST_CODE = 999;
-    private lpFormHelper formHelper;
+    private ligProvFormHelper formHelper;
     private String formType;
 
-    private lpModel lp;
+    private ligProvModel lp;
 
-    private mapsController mapsControl;
+    private ligProvMapsController mapsControl;
 
     private FloatingActionButton buttonAlbum;
     private FloatingActionButton buttonClandestino;
@@ -63,11 +63,11 @@ public class ligProvFormActivity extends AppCompatActivity {
         Objects.requireNonNull(getSupportActionBar()).setDisplayHomeAsUpEnabled(true);
 
         Intent intent = getIntent();
-        lp = (lpModel) intent.getSerializableExtra("lp");
+        lp = (ligProvModel) intent.getSerializableExtra("lp");
         formType = (String) intent.getSerializableExtra("type");
 
         setTitle(lp.getOrdem());
-        formHelper = new lpFormHelper(this, "new", lp);
+        formHelper = new ligProvFormHelper(this, "new", lp);
 
 
         buttonClandestino = findViewById(R.id.buttonClandestino);
@@ -99,12 +99,12 @@ public class ligProvFormActivity extends AppCompatActivity {
         params.height = height - actionBarHeight - 214;
         map.setLayoutParams(params);
 
-        mapsControl = new mapsController(this);
+        mapsControl = new ligProvMapsController(this);
         mapsControl.startMaps(lp);
     }
 
     private void setFormEdit() {
-        formHelper = new lpFormHelper(this, "edit", lp);
+        formHelper = new ligProvFormHelper(this, "edit", lp);
         buttonAlbum.setVisibility(View.GONE);
         buttonClandestino.setVisibility(View.GONE);
 
@@ -184,7 +184,7 @@ public class ligProvFormActivity extends AppCompatActivity {
     }
 
     private void setFormReadOnly() {
-        formHelper = new lpFormHelper(this, "readOnly", lp);
+        formHelper = new ligProvFormHelper(this, "readOnly", lp);
 
         buttonAlbum.setVisibility(View.VISIBLE);
         buttonClandestino.setVisibility(View.VISIBLE);
@@ -203,9 +203,9 @@ public class ligProvFormActivity extends AppCompatActivity {
             @RequiresApi(api = Build.VERSION_CODES.M)
             @Override
             public void onClick(View v) {
-                Intent goToClandestino = new Intent(ligProvFormActivity.this, clandestinoFormActivity.class);
+                Intent goToClandestino = new Intent(ligProvFormActivity.this, ligClandFormActivity.class);
                 goToClandestino
-                        .putExtra("clandest", new lpClandestinoModel())
+                        .putExtra("clandest", new ligClandModel())
                         .putExtra("lpOrdem", lp.getOrdem())
                         .putExtra("type", "new");
                 startActivity(goToClandestino);
@@ -272,9 +272,9 @@ public class ligProvFormActivity extends AppCompatActivity {
     }
 
     private void salvaLP() {
-        lpModel lpSave = formHelper.getLPFromForm(lp);
+        ligProvModel lpSave = formHelper.getLPFromForm(lp);
 
-        lpDAO dao = new lpDAO(ligProvFormActivity.this);
+        ligProvDAO dao = new ligProvDAO(ligProvFormActivity.this);
         dao.updateLPInfo(lpSave);
         dao.close();
 
@@ -322,14 +322,14 @@ public class ligProvFormActivity extends AppCompatActivity {
     @Override
     protected void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
-        lpModel lpsaved = formHelper.getLPFromForm(lp);
+        ligProvModel lpsaved = formHelper.getLPFromForm(lp);
         outState.putSerializable("lp", lpsaved);
     }
 
     @Override
     protected void onRestoreInstanceState(Bundle savedInstanceState) {
         super.onRestoreInstanceState(savedInstanceState);
-        lpModel lpSaved = (lpModel) savedInstanceState.getSerializable("lp");
+        ligProvModel lpSaved = (ligProvModel) savedInstanceState.getSerializable("lp");
         formHelper.fillForm(lpSaved);
     }
 }

@@ -32,17 +32,17 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.dudukling.enelup.R;
-import com.dudukling.enelup.dao.lpDAO;
-import com.dudukling.enelup.model.lpClandestinoModel;
+import com.dudukling.enelup.dao.ligProvDAO;
+import com.dudukling.enelup.model.ligClandModel;
 
 import java.util.Objects;
 
-public class clandestinoFormActivity extends AppCompatActivity {
+public class ligClandFormActivity extends AppCompatActivity {
     private static final String REQUIRED_FIELD_ERROR_MSG = "Campo obrigatório!";
     private static final int GPS_REQUEST_CODE = 999;
 
     private String LPOrdem;
-    private lpClandestinoModel lpClandest = new lpClandestinoModel();
+    private ligClandModel lpClandest = new ligClandModel();
     private String tipoForm;
 
     private TextInputLayout textInputLayoutClandestEndereco;
@@ -68,14 +68,14 @@ public class clandestinoFormActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.clandestino_frag_form);
+        setContentView(R.layout.lig_cland_frag_form);
         Objects.requireNonNull(getSupportActionBar()).setDisplayHomeAsUpEnabled(true);
 
         setTitle("Ponto clandestino");
 
         Intent intent = getIntent();
         LPOrdem = (String) intent.getSerializableExtra("lpOrdem");
-        lpClandest = (lpClandestinoModel) intent.getSerializableExtra("clandest");
+        lpClandest = (ligClandModel) intent.getSerializableExtra("clandest");
         tipoForm = (String) intent.getSerializableExtra("type");
 
         textViewClandestNumero = this.findViewById(R.id.textViewClandestNumero);
@@ -93,7 +93,7 @@ public class clandestinoFormActivity extends AppCompatActivity {
             case "new":
                 setValidation();
 
-                lpDAO dao = new lpDAO(this);
+                ligProvDAO dao = new ligProvDAO(this);
                 int nextID = dao.getClandestinoLastID() + 1;
                 dao.close();
 
@@ -164,9 +164,9 @@ public class clandestinoFormActivity extends AppCompatActivity {
                 public void onProviderDisabled(String provider) {
                     if (provider.equals(LocationManager.GPS_PROVIDER)) {
                         progressBarClandestLatLong.setVisibility(View.GONE);
-                        Toast.makeText(clandestinoFormActivity.this, "Favor, habilitar o GPS!", Toast.LENGTH_LONG).show();
+                        Toast.makeText(ligClandFormActivity.this, "Favor, habilitar o GPS!", Toast.LENGTH_LONG).show();
                         Intent startGPSIntent = new Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS);
-                        clandestinoFormActivity.this.startActivity(startGPSIntent);
+                        ligClandFormActivity.this.startActivity(startGPSIntent);
                     }
                 }
             };
@@ -204,7 +204,7 @@ public class clandestinoFormActivity extends AppCompatActivity {
         editText.setTextColor(Color.parseColor("#616161"));
     }
 
-    private void fillForm(lpClandestinoModel lpClandest) {
+    private void fillForm(ligClandModel lpClandest) {
         textInputLayoutClandestEndereco.getEditText().setText(lpClandest.getEndereco());
         textInputLayoutClandestTransformador.getEditText().setText(lpClandest.getTransformador());
         textInputLayoutClandestTensao.getEditText().setText(lpClandest.getTensao());
@@ -359,7 +359,7 @@ public class clandestinoFormActivity extends AppCompatActivity {
                         salvaClandest();
                         break;
                     case "false":
-                        Toast.makeText(clandestinoFormActivity.this, "Favor preencher todos os campos obrigatórios!", Toast.LENGTH_LONG).show();
+                        Toast.makeText(ligClandFormActivity.this, "Favor preencher todos os campos obrigatórios!", Toast.LENGTH_LONG).show();
                         break;
                     case "gps":
                         if(tipoForm.equals("new")){
@@ -408,9 +408,9 @@ public class clandestinoFormActivity extends AppCompatActivity {
     }
 
     private void salvaClandest() {
-        lpDAO dao = new lpDAO(this);
+        ligProvDAO dao = new ligProvDAO(this);
 
-        lpClandestinoModel clandestSave = getClandestFromForm(lpClandest);
+        ligClandModel clandestSave = getClandestFromForm(lpClandest);
         if(tipoForm.equals("new")){
             dao.insertClandestino(clandestSave, LPOrdem);
         }else{
@@ -536,7 +536,7 @@ public class clandestinoFormActivity extends AppCompatActivity {
         return text.isEmpty();
     }
 
-    public lpClandestinoModel getClandestFromForm(lpClandestinoModel lpClandest) {
+    public ligClandModel getClandestFromForm(ligClandModel lpClandest) {
 
         lpClandest.setEndereco(textInputLayoutClandestEndereco.getEditText().getText().toString());
         lpClandest.setTransformador(textInputLayoutClandestTransformador.getEditText().getText().toString());
@@ -564,14 +564,14 @@ public class clandestinoFormActivity extends AppCompatActivity {
     @Override
     protected void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
-        lpClandestinoModel clandestSaved = getClandestFromForm(lpClandest);
+        ligClandModel clandestSaved = getClandestFromForm(lpClandest);
         outState.putSerializable("clandest", clandestSaved);
     }
 
     @Override
     protected void onRestoreInstanceState(Bundle savedInstanceState) {
         super.onRestoreInstanceState(savedInstanceState);
-        lpClandestinoModel clandestSaved = (lpClandestinoModel) savedInstanceState.getSerializable("clandest");
+        ligClandModel clandestSaved = (ligClandModel) savedInstanceState.getSerializable("clandest");
         fillForm(clandestSaved);
     }
 }

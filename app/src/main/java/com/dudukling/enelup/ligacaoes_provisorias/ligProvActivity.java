@@ -33,8 +33,8 @@ import android.widget.Toast;
 
 import com.dudukling.enelup.R;
 import com.dudukling.enelup.adapter.ligProv_recyclerAdapter;
-import com.dudukling.enelup.dao.lpDAO;
-import com.dudukling.enelup.model.lpModel;
+import com.dudukling.enelup.dao.ligProvDAO;
+import com.dudukling.enelup.model.ligProvModel;
 import com.opencsv.CSVWriter;
 
 import java.io.BufferedInputStream;
@@ -57,7 +57,7 @@ public class ligProvActivity extends AppCompatActivity {
 
     private RecyclerView recyclerView;
     private ligProv_recyclerAdapter RecyclerAdapter;
-    private List<lpModel> lpList;
+    private List<ligProvModel> lpList;
     private View textViewNoRecord;
 
     private Spinner spinnerLocalidade;
@@ -78,7 +78,7 @@ public class ligProvActivity extends AppCompatActivity {
         recyclerView.addItemDecoration(new DividerItemDecoration(recyclerView.getContext(), DividerItemDecoration.VERTICAL));
 
 
-        lpDAO dao = new lpDAO(this);
+        ligProvDAO dao = new ligProvDAO(this);
         textViewNoRecord = this.findViewById(R.id.textViewNoRecords);
 
         if (dao.lastLPID() > 0) {
@@ -167,7 +167,7 @@ public class ligProvActivity extends AppCompatActivity {
     protected void onResume() {
         super.onResume();
 
-        lpDAO dao = new lpDAO(this);
+        ligProvDAO dao = new ligProvDAO(this);
 
         if (dao.lastLPID() == 0) {
             textViewNoRecord.setVisibility(View.VISIBLE);
@@ -256,7 +256,7 @@ public class ligProvActivity extends AppCompatActivity {
 
                         if (!lpList.isEmpty()) {
                             for (int i = 0; i < lpList.size(); i++) {
-                                lpModel lp = lpList.get(i);
+                                ligProvModel lp = lpList.get(i);
                                 List<String> lpImages = lp.getImagesList();
                                 if (!lpImages.isEmpty()) {
                                     deleteImagesFromPhoneMemory(lp);
@@ -264,7 +264,7 @@ public class ligProvActivity extends AppCompatActivity {
                             }
                         }
 
-                        lpDAO dao = new lpDAO(ligProvActivity.this);
+                        ligProvDAO dao = new ligProvDAO(ligProvActivity.this);
                         dao.truncateLPs();
                         dao.close();
 
@@ -297,7 +297,7 @@ public class ligProvActivity extends AppCompatActivity {
     }
 
     private void exportDB(String type) {
-        lpDAO dao = new lpDAO(this);
+        ligProvDAO dao = new ligProvDAO(this);
 
         SQLiteDatabase db = dao.getReadableDatabase();
         long qtdCSV = DatabaseUtils.queryNumEntries(db, "lpTable", "userObservacao<>''");
@@ -388,7 +388,7 @@ public class ligProvActivity extends AppCompatActivity {
         return s;
     }
 
-    public void deleteImagesFromPhoneMemory(lpModel lp) {
+    public void deleteImagesFromPhoneMemory(ligProvModel lp) {
         List<String> imagesListToDelete = lp.getImagesList();
         for (int i = 0; i < imagesListToDelete.size(); i++) {
             File file = new File(imagesListToDelete.get(i));

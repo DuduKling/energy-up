@@ -22,7 +22,7 @@ import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.dudukling.enelup.dao.lpDAO;
+import com.dudukling.enelup.dao.ligProvDAO;
 import com.dudukling.enelup.util.openCSVReader;
 
 import java.io.IOException;
@@ -50,7 +50,7 @@ public class importActivity extends AppCompatActivity {
         buttonImportFileLP = this.findViewById(R.id.buttonImportFileLP);
         textViewImportFileLP2 = this.findViewById(R.id.textViewImportFileLP2);
 
-        lpDAO dao = new lpDAO(this);
+        ligProvDAO dao = new ligProvDAO(this);
         if (dao.lastLPID() == 0) {
             buttonImportFileLP.setOnClickListener(new View.OnClickListener() {
                 @RequiresApi(api = Build.VERSION_CODES.M)

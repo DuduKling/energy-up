@@ -14,9 +14,9 @@ import android.view.View;
 import android.widget.TextView;
 
 import com.dudukling.enelup.R;
-import com.dudukling.enelup.adapter.levCarga_recyclerAdapter;
-import com.dudukling.enelup.dao.lpDAO;
-import com.dudukling.enelup.model.lpPotenciaModel;
+import com.dudukling.enelup.adapter.ligProvLevCarga_recyclerAdapter;
+import com.dudukling.enelup.dao.ligProvDAO;
+import com.dudukling.enelup.model.ligProvPotenciaModel;
 
 import java.util.List;
 import java.util.Objects;
@@ -24,8 +24,8 @@ import java.util.Objects;
 public class ligProvLevCargaActivity extends AppCompatActivity {
 
     private RecyclerView recyclerViewLevCarga;
-    private List<lpPotenciaModel> lpPotenciaModel;
-    private levCarga_recyclerAdapter RecyclerAdapter;
+    private List<ligProvPotenciaModel> ligProvPotenciaModel;
+    private ligProvLevCarga_recyclerAdapter RecyclerAdapter;
     private int lpID;
     private String typeofForm;
     private int potenciaTotalLevCarga;
@@ -66,11 +66,11 @@ public class ligProvLevCargaActivity extends AppCompatActivity {
 
     @Override
     protected void onResume() {
-        lpDAO dao = new lpDAO(this);
-        lpPotenciaModel = dao.getLPPotenciaList(lpID);
+        ligProvDAO dao = new ligProvDAO(this);
+        ligProvPotenciaModel = dao.getLPPotenciaList(lpID);
         dao.close();
 
-        RecyclerAdapter = new levCarga_recyclerAdapter(lpPotenciaModel, this, lpID, typeofForm);
+        RecyclerAdapter = new ligProvLevCarga_recyclerAdapter(ligProvPotenciaModel, this, lpID, typeofForm);
 
         recyclerViewLevCarga.setAdapter(RecyclerAdapter);
         RecyclerView.LayoutManager layout = new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false);
@@ -78,7 +78,7 @@ public class ligProvLevCargaActivity extends AppCompatActivity {
 
 
         TextView textViewLevCargaNoRecords = findViewById(R.id.textViewLevCargaNoRecords);
-        if (lpPotenciaModel.size() > 0) {
+        if (ligProvPotenciaModel.size() > 0) {
             textViewLevCargaNoRecords.setVisibility(View.GONE);
         } else {
             textViewLevCargaNoRecords.setVisibility(View.VISIBLE);

@@ -1,6 +1,6 @@
 package com.dudukling.enelup.model;
 
-public class lpPotenciaModel {
+public class ligProvPotenciaModel {
     private int id;
 
     private String quantidade = "";

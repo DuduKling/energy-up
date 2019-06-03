@@ -34,10 +34,10 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.dudukling.enelup.R;
-import com.dudukling.enelup.adapter.fiscalizacao_recyclerAdapter;
+import com.dudukling.enelup.adapter.fiscaCland_recyclerAdapter;
 import com.dudukling.enelup.util.sendGoogleScripts;
-import com.dudukling.enelup.dao.fiscalizaDAO;
-import com.dudukling.enelup.model.fiscaModel;
+import com.dudukling.enelup.dao.fiscaClandDAO;
+import com.dudukling.enelup.model.fiscaClandModel;
 import com.opencsv.CSVWriter;
 
 import java.io.File;
@@ -49,13 +49,13 @@ import java.util.Date;
 import java.util.List;
 import java.util.Objects;
 
-public class fiscalizacaoClandestinoActivity extends AppCompatActivity {
+public class fiscaClandActivity extends AppCompatActivity {
     private static final int EXPORT_WRITE_PERMISSION_CODE = 222;
 
     private RecyclerView recyclerView;
     private TextView textViewNoRecord;
-    private List<fiscaModel> fiscaList;
-    private fiscalizacao_recyclerAdapter RecyclerAdapter;
+    private List<fiscaClandModel> fiscaList;
+    private fiscaCland_recyclerAdapter RecyclerAdapter;
 
     @TargetApi(Build.VERSION_CODES.KITKAT)
     @RequiresApi(api = Build.VERSION_CODES.KITKAT)
@@ -64,18 +64,18 @@ public class fiscalizacaoClandestinoActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         Objects.requireNonNull(getSupportActionBar()).setDisplayHomeAsUpEnabled(true);
         setTitle("Cadastro de Clandestinos");
-        setContentView(R.layout.fisc_clandest_activity_main);
+        setContentView(R.layout.fisca_cland_activity_main);
 
         FloatingActionButton floatingActionButtonFiscalizaClandestinoAdd = this.findViewById(R.id.floatingActionButtonFiscalizaClandestinoAdd);
         floatingActionButtonFiscalizaClandestinoAdd.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                fiscaModel fisca = new fiscaModel();
-                Intent goToFormActivity = new Intent(fiscalizacaoClandestinoActivity.this, fiscalizacaoClandestinoFormActivity.class);
+                fiscaClandModel fisca = new fiscaClandModel();
+                Intent goToFormActivity = new Intent(fiscaClandActivity.this, fiscaClandFormActivity.class);
                 goToFormActivity
                         .putExtra("fisca", fisca)
                         .putExtra("type", "new");
-                fiscalizacaoClandestinoActivity.this.startActivity(goToFormActivity);
+                fiscaClandActivity.this.startActivity(goToFormActivity);
             }
         });
 
@@ -117,12 +117,12 @@ public class fiscalizacaoClandestinoActivity extends AppCompatActivity {
     protected void onResume() {
         super.onResume();
 
-        fiscalizaDAO dao = new fiscalizaDAO(this);
+        fiscaClandDAO dao = new fiscaClandDAO(this);
         textViewNoRecord = this.findViewById(R.id.textViewFiscaNoRecords);
 
         fiscaList = dao.getFiscaList();
         if (fiscaList.size() > 0) {
-            RecyclerAdapter = new fiscalizacao_recyclerAdapter(this);
+            RecyclerAdapter = new fiscaCland_recyclerAdapter(this);
             recyclerView.setAdapter(RecyclerAdapter);
             RecyclerView.LayoutManager layout = new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false);
             recyclerView.setLayoutManager(layout);
@@ -164,7 +164,7 @@ public class fiscalizacaoClandestinoActivity extends AppCompatActivity {
 
                         if (!fiscaList.isEmpty()) {
                             for (int i = 0; i < fiscaList.size(); i++) {
-                                fiscaModel fisca = fiscaList.get(i);
+                                fiscaClandModel fisca = fiscaList.get(i);
                                 List<String> fiscaImages = fisca.getImagesList();
                                 if (!fiscaImages.isEmpty()) {
                                     deleteImagesFromPhoneMemory(fisca);
@@ -172,12 +172,12 @@ public class fiscalizacaoClandestinoActivity extends AppCompatActivity {
                             }
                         }
 
-                        fiscalizaDAO dao = new fiscalizaDAO(fiscalizacaoClandestinoActivity.this);
+                        fiscaClandDAO dao = new fiscaClandDAO(fiscaClandActivity.this);
                         dao.truncateFiscalizacoes();
                         dao.close();
 
                         fiscaList.clear();
-                        RecyclerAdapter = new fiscalizacao_recyclerAdapter(fiscalizacaoClandestinoActivity.this);
+                        RecyclerAdapter = new fiscaCland_recyclerAdapter(fiscaClandActivity.this);
                         recyclerView.setAdapter(RecyclerAdapter);
 
                         textViewNoRecord.setVisibility(View.VISIBLE);
@@ -194,7 +194,7 @@ public class fiscalizacaoClandestinoActivity extends AppCompatActivity {
                 .setNegativeButton("Cancelar", dialogClickListener).show();
     }
 
-    public void deleteImagesFromPhoneMemory(fiscaModel fisca) {
+    public void deleteImagesFromPhoneMemory(fiscaClandModel fisca) {
         List<String> imagesListToDelete = fisca.getImagesList();
         for (int i = 0; i < imagesListToDelete.size(); i++) {
             File file = new File(imagesListToDelete.get(i));
@@ -231,7 +231,7 @@ public class fiscalizacaoClandestinoActivity extends AppCompatActivity {
     }
 
     private void exportDB(String type) {
-        fiscalizaDAO dao = new fiscalizaDAO(this);
+        fiscaClandDAO dao = new fiscaClandDAO(this);
 
         SQLiteDatabase db = dao.getReadableDatabase();
         long qtdCSV = DatabaseUtils.queryNumEntries(db, "fiscaTable",null);
@@ -452,10 +452,10 @@ public class fiscalizacaoClandestinoActivity extends AppCompatActivity {
     }
 
     private void uploadToCloud() {
-        fiscalizaDAO dao = new fiscalizaDAO(this);
+        fiscaClandDAO dao = new fiscaClandDAO(this);
         sendGoogleScripts extDao = new sendGoogleScripts(this);
 
-        List<fiscaModel> list = dao.getFiscaListNotUploadedYet();
+        List<fiscaClandModel> list = dao.getFiscaListNotUploadedYet();
         dao.close();
 
         if(list.size() > 0){

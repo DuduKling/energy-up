@@ -10,7 +10,7 @@
     <android.support.constraint.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        tools:context=".ligacoes_clandestinas.clandestinoFormActivity">
+        tools:context=".ligacoes_clandestinas.ligClandFormActivity">
 
         <TextView
             android:id="@+id/textViewClandestNumero"

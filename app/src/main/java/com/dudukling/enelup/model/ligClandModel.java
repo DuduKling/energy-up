@@ -2,7 +2,7 @@ package com.dudukling.enelup.model;
 
 import java.io.Serializable;
 
-public class lpClandestinoModel implements Serializable {
+public class ligClandModel implements Serializable {
 
     private int id;
 

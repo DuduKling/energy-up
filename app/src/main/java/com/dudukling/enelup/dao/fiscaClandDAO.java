@@ -6,13 +6,13 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 
-import com.dudukling.enelup.adapter.fiscalizacao_recyclerAdapter;
-import com.dudukling.enelup.model.fiscaModel;
+import com.dudukling.enelup.adapter.fiscaCland_recyclerAdapter;
+import com.dudukling.enelup.model.fiscaClandModel;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public class fiscalizaDAO extends SQLiteOpenHelper {
+public class fiscaClandDAO extends SQLiteOpenHelper {
     private String TABLE_NAME = "fiscaTable";
 
     private String FIELD_ID = "id";
@@ -51,7 +51,7 @@ public class fiscalizaDAO extends SQLiteOpenHelper {
     private String FIELD_CPF_OU_CNPJ = "cpf_ou_cnpj";
     private String FIELD_CNPJ = "cnpj";
 
-    public fiscalizaDAO(Context context) {
+    public fiscaClandDAO(Context context) {
         super(context, "fiscaTable", null, 2);
     }
 
@@ -130,7 +130,7 @@ public class fiscalizaDAO extends SQLiteOpenHelper {
 
 
     // PRIMARY FEATURES
-    public void insert(fiscaModel fisca) {
+    public void insert(fiscaClandModel fisca) {
         SQLiteDatabase db = getWritableDatabase();
         ContentValues queryData = getContentValues(fisca);
         db.insert(TABLE_NAME, null, queryData);
@@ -148,7 +148,7 @@ public class fiscalizaDAO extends SQLiteOpenHelper {
         db.delete("fiscaImages","fiscaID = ?", params);
     }
 
-    public void insertImage(fiscaModel fisca, String path) {
+    public void insertImage(fiscaClandModel fisca, String path) {
         SQLiteDatabase db = getWritableDatabase();
 
         ContentValues queryData = new ContentValues();
@@ -161,20 +161,20 @@ public class fiscalizaDAO extends SQLiteOpenHelper {
         if(fisca.getFlag_google_sheets()!=null){
             if(fisca.getFlag_google_sheets().equals("1")) {
                 updateToEditFiscaFlag(fisca.getId());
-                fiscalizacao_recyclerAdapter.fiscaList = getFiscaList();
-                fiscalizacao_recyclerAdapter.context2.notifyDataSetChanged();
+                fiscaCland_recyclerAdapter.fiscaList = getFiscaList();
+                fiscaCland_recyclerAdapter.context2.notifyDataSetChanged();
             }
         }
     }
 
-    public void delete(fiscaModel fisca) {
+    public void delete(fiscaClandModel fisca) {
         SQLiteDatabase db = getWritableDatabase();
         String[] params = {String.valueOf(fisca.getId())};
         db.delete(TABLE_NAME, "id=?", params);
         deleteImages(fisca.getId());
     }
 
-    public void update(fiscaModel fisca) {
+    public void update(fiscaClandModel fisca) {
         SQLiteDatabase db = getWritableDatabase();
         ContentValues queryData = getContentValues(fisca);
         String[] params = {String.valueOf(fisca.getId())};
@@ -209,10 +209,10 @@ public class fiscalizaDAO extends SQLiteOpenHelper {
 
 
     // GETS
-    private List<fiscaModel> getAllFromFiscaTable(Cursor c) {
-        List<fiscaModel> fiscaList = new ArrayList<>();
+    private List<fiscaClandModel> getAllFromFiscaTable(Cursor c) {
+        List<fiscaClandModel> fiscaList = new ArrayList<>();
         while (c.moveToNext()) {
-            fiscaModel fisca = new fiscaModel();
+            fiscaClandModel fisca = new fiscaClandModel();
 
             int dbFiscaList = c.getInt(c.getColumnIndex(FIELD_ID));
             fisca.setId(dbFiscaList);
@@ -262,13 +262,13 @@ public class fiscalizaDAO extends SQLiteOpenHelper {
         return fiscaList;
     }
 
-    public List<fiscaModel> getFiscaList() {
+    public List<fiscaClandModel> getFiscaList() {
         SQLiteDatabase db = getReadableDatabase();
 
         String sql = "SELECT * FROM "+ TABLE_NAME +" ORDER BY "+ FIELD_ID +" DESC";
 
         Cursor c = db.rawQuery(sql, null);
-        List<fiscaModel> fiscaList = getAllFromFiscaTable(c);
+        List<fiscaClandModel> fiscaList = getAllFromFiscaTable(c);
         c.close();
 
         return fiscaList;
@@ -288,13 +288,13 @@ public class fiscalizaDAO extends SQLiteOpenHelper {
         return imagesList;
     }
 
-    public List<fiscaModel> getFiscaListNotUploadedYet() {
+    public List<fiscaClandModel> getFiscaListNotUploadedYet() {
         SQLiteDatabase db = getReadableDatabase();
 
         String sql = "SELECT * FROM "+ TABLE_NAME +" WHERE "+ FIELD_FLAG_GOOGLE_SHEETS +"<>'1' ORDER BY "+ FIELD_ID +" DESC";
 
         Cursor c = db.rawQuery(sql, null);
-        List<fiscaModel> fiscaList = getAllFromFiscaTable(c);
+        List<fiscaClandModel> fiscaList = getAllFromFiscaTable(c);
         c.close();
 
         return fiscaList;
@@ -303,7 +303,7 @@ public class fiscalizaDAO extends SQLiteOpenHelper {
 
 
     // HELPERS
-    private ContentValues getContentValues(fiscaModel fisca) {
+    private ContentValues getContentValues(fiscaClandModel fisca) {
         ContentValues queryData = new ContentValues();
 
         queryData.put(FIELD_FUNCIONARIO, fisca.getFuncionario());

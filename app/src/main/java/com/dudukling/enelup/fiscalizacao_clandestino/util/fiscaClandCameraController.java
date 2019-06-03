@@ -1,4 +1,4 @@
-package com.dudukling.enelup.util;
+package com.dudukling.enelup.fiscalizacao_clandestino.util;
 
 
 import android.annotation.SuppressLint;
@@ -12,24 +12,24 @@ import android.support.annotation.RequiresApi;
 import android.support.v4.content.FileProvider;
 import android.util.Log;
 
-import com.dudukling.enelup.fiscalizacao_clandestino.fiscalizacaoClandestinoAlbumActivity;
-import com.dudukling.enelup.model.fiscaModel;
+import com.dudukling.enelup.fiscalizacao_clandestino.fiscaClandAlbumActivity;
+import com.dudukling.enelup.model.fiscaClandModel;
 
 import java.io.File;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
-import static com.dudukling.enelup.fiscalizacao_clandestino.fiscalizacaoClandestinoAlbumActivity.CAMERA_REQUEST_CODE;
+import static com.dudukling.enelup.fiscalizacao_clandestino.fiscaClandAlbumActivity.CAMERA_REQUEST_CODE;
 
-public class cameraFiscaController {
-    private final fiscaModel fisca;
+public class fiscaClandCameraController {
+    private final fiscaClandModel fisca;
     private File photoFile = null;
     private String photoPath;
-    private final fiscalizacaoClandestinoAlbumActivity formActivity;
+    private final fiscaClandAlbumActivity formActivity;
     public File storageDir;
 
-    public cameraFiscaController(fiscalizacaoClandestinoAlbumActivity formActivity, fiscaModel fisca) {
+    public fiscaClandCameraController(fiscaClandAlbumActivity formActivity, fiscaClandModel fisca) {
         this.formActivity = formActivity;
         this.fisca = fisca;
     }

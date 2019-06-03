@@ -1,4 +1,4 @@
-package com.dudukling.enelup.util;
+package com.dudukling.enelup.ligacaoes_provisorias.util;
 
 import android.annotation.SuppressLint;
 import android.support.v4.app.FragmentManager;
@@ -10,14 +10,14 @@ import android.widget.ScrollView;
 
 import com.dudukling.enelup.R;
 import com.dudukling.enelup.ligacaoes_provisorias.ligProvFormActivity;
-import com.dudukling.enelup.model.lpModel;
+import com.dudukling.enelup.model.ligProvModel;
 
-public class mapsController {
+public class ligProvMapsController {
     private static ligProvFormActivity activity;
-    public static lpModel lp;
+    public static ligProvModel lp;
 
-    public mapsController(ligProvFormActivity activity) {
-        mapsController.activity = activity;
+    public ligProvMapsController(ligProvFormActivity activity) {
+        ligProvMapsController.activity = activity;
     }
 
 //    public void getCurrentPlace(double latitude, double longitude) throws IOException {
@@ -70,14 +70,14 @@ public class mapsController {
 //        //editTextNumber.setText(knownName);
 //    }
 
-    public void startMaps(lpModel lp) {
-        mapsController.lp = lp;
+    public void startMaps(ligProvModel lp) {
+        ligProvMapsController.lp = lp;
 
         fixScrollForMaps();
 
         FragmentManager fragManager = activity.getSupportFragmentManager();
         FragmentTransaction tx = fragManager.beginTransaction();
-        tx.replace(R.id.mapFrame, new mapFragment());
+        tx.replace(R.id.mapFrame, new ligProvMapFragment());
         //tx.commit();
         tx.commitAllowingStateLoss();
     }

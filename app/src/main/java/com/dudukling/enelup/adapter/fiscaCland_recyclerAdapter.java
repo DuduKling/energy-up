@@ -14,21 +14,21 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.dudukling.enelup.R;
-import com.dudukling.enelup.dao.fiscalizaDAO;
-import com.dudukling.enelup.fiscalizacao_clandestino.fiscalizacaoClandestinoFormActivity;
-import com.dudukling.enelup.model.fiscaModel;
+import com.dudukling.enelup.dao.fiscaClandDAO;
+import com.dudukling.enelup.fiscalizacao_clandestino.fiscaClandFormActivity;
+import com.dudukling.enelup.model.fiscaClandModel;
 
 import java.io.File;
 import java.util.List;
 
 
-public class fiscalizacao_recyclerAdapter extends RecyclerView.Adapter {
+public class fiscaCland_recyclerAdapter extends RecyclerView.Adapter {
     private Context context;
-    public static fiscalizacao_recyclerAdapter context2;
-    public static List<fiscaModel> fiscaList;
+    public static fiscaCland_recyclerAdapter context2;
+    public static List<fiscaClandModel> fiscaList;
 
-    public fiscalizacao_recyclerAdapter(Context context) {
-        fiscalizaDAO dao = new fiscalizaDAO(context);
+    public fiscaCland_recyclerAdapter(Context context) {
+        fiscaClandDAO dao = new fiscaClandDAO(context);
         this.fiscaList = dao.getFiscaList();
         dao.close();
 
@@ -47,7 +47,7 @@ public class fiscalizacao_recyclerAdapter extends RecyclerView.Adapter {
     @Override
     public void onBindViewHolder(@NonNull RecyclerView.ViewHolder viewHolder, int position) {
         aViewHolder holder = (aViewHolder) viewHolder;
-        fiscaModel fisca  = fiscaList.get(position);
+        fiscaClandModel fisca  = fiscaList.get(position);
 
         holder.textViewFiscalizaClandestinoNome.setText(fisca.getNome());
         holder.textViewFiscalizaClandestinoEndereco.setText(fisca.getEndereco());
@@ -77,9 +77,9 @@ public class fiscalizacao_recyclerAdapter extends RecyclerView.Adapter {
                 @Override
                 public void onClick(View v) {
                     int position = getAdapterPosition();
-                    fiscaModel fisca  = fiscaList.get(position);
+                    fiscaClandModel fisca  = fiscaList.get(position);
 
-                    Intent goToFormActivity = new Intent(context, fiscalizacaoClandestinoFormActivity.class);
+                    Intent goToFormActivity = new Intent(context, fiscaClandFormActivity.class);
                     goToFormActivity
                             .putExtra("fisca", fisca)
                             .putExtra("type", "readOnly");
@@ -95,9 +95,9 @@ public class fiscalizacao_recyclerAdapter extends RecyclerView.Adapter {
                 @Override
                 public boolean onMenuItemClick(MenuItem item) {
                     int position = getAdapterPosition();
-                    fiscaModel fisca  = fiscaList.get(position);
+                    fiscaClandModel fisca  = fiscaList.get(position);
 
-                    Intent goToFormActivity = new Intent(context, fiscalizacaoClandestinoFormActivity.class);
+                    Intent goToFormActivity = new Intent(context, fiscaClandFormActivity.class);
                     goToFormActivity
                             .putExtra("fisca", fisca)
                             .putExtra("type", "edit");
@@ -112,14 +112,14 @@ public class fiscalizacao_recyclerAdapter extends RecyclerView.Adapter {
                 @Override
                 public boolean onMenuItemClick(MenuItem item) {
                     int position = getAdapterPosition();
-                    fiscaModel fisca  = fiscaList.get(position);
+                    fiscaClandModel fisca  = fiscaList.get(position);
 
-                    fiscalizaDAO dao = new fiscalizaDAO(context);
+                    fiscaClandDAO dao = new fiscaClandDAO(context);
                     dao.delete(fisca);
                     dao.close();
 
                     if (!fiscaList.isEmpty()) {
-                        fiscaModel fisca1 = fiscaList.get(position);
+                        fiscaClandModel fisca1 = fiscaList.get(position);
                         List<String> fiscaImages = fisca1.getImagesList();
                         if (!fiscaImages.isEmpty()) {
                             deleteImagesFromPhoneMemory(fisca1);
@@ -141,7 +141,7 @@ public class fiscalizacao_recyclerAdapter extends RecyclerView.Adapter {
         return fiscaList.size();
     }
 
-    private void deleteImagesFromPhoneMemory(fiscaModel fisca) {
+    private void deleteImagesFromPhoneMemory(fiscaClandModel fisca) {
         List<String> imagesListToDelete = fisca.getImagesList();
         for (int i = 0; i < imagesListToDelete.size(); i++) {
             File file = new File(imagesListToDelete.get(i));

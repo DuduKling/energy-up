@@ -15,7 +15,7 @@ import com.dudukling.enelup.R;
 
 import java.util.Objects;
 
-public class fiscalizacaoMenuActivity extends AppCompatActivity {
+public class fiscaClandMenuActivity extends AppCompatActivity {
 
     @TargetApi(Build.VERSION_CODES.KITKAT)
     @RequiresApi(api = Build.VERSION_CODES.KITKAT)
@@ -24,14 +24,14 @@ public class fiscalizacaoMenuActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         Objects.requireNonNull(getSupportActionBar()).setDisplayHomeAsUpEnabled(true);
         setTitle("Fiscalizações");
-        setContentView(R.layout.fisc_clandest_activity_menu);
+        setContentView(R.layout.fisca_cland_activity_menu);
 
 
         CardView cardViewFiscalizaMenuClandestino = this.findViewById(R.id.cardViewFiscalizaMenuClandestino);
         cardViewFiscalizaMenuClandestino.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(fiscalizacaoMenuActivity.this, fiscalizacaoClandestinoActivity.class);
+                Intent intent = new Intent(fiscaClandMenuActivity.this, fiscaClandActivity.class);
                 startActivity(intent);
             }
         });
@@ -40,7 +40,7 @@ public class fiscalizacaoMenuActivity extends AppCompatActivity {
         cardViewFiscalizaMenuQualidade.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Toast.makeText(fiscalizacaoMenuActivity.this, "Indisponível", Toast.LENGTH_SHORT).show();
+                Toast.makeText(fiscaClandMenuActivity.this, "Indisponível", Toast.LENGTH_SHORT).show();
             }
         });
     }
