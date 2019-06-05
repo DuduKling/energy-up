@@ -108,24 +108,28 @@ public class fiscaClandDAO extends SQLiteOpenHelper {
 
     @Override
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
-        String sql = "DROP TABLE IF EXISTS fiscaTable";
-        db.execSQL(sql);
+        switch(oldVersion) {
+            case 1:
+                //upgrade logic from version 1 to 2
+//                db.execSQL("ALTER TABLE " +TABLE_NAME+ " ADD Column "+ FIELD_FRENTE_TRABALHO);
+                db.execSQL("ALTER TABLE " +TABLE_NAME+ " ADD Column "+ FIELD_CPF_OU_CNPJ);
+                db.execSQL("ALTER TABLE " +TABLE_NAME+ " ADD Column "+ FIELD_CNPJ);
+            case 2:
+                //upgrade logic from version 2 to 3
+            case 3:
+                //upgrade logic from version 3 to 4
+                break;
+            default:
+                throw new IllegalStateException("onUpgrade() with unknown oldVersion" + oldVersion);
+        }
 
-        String sql2 = "DROP TABLE IF EXISTS fiscaImages";
-        db.execSQL(sql2);
-
-        onCreate(db);
-    }
-    @Override
-    public void onDowngrade(SQLiteDatabase db, int oldVersion, int newVersion) {
-        String sql = "DROP TABLE IF EXISTS fiscaTable";
-        db.execSQL(sql);
-
-        String sql2 = "DROP TABLE IF EXISTS fiscaImages";
-        db.execSQL(sql2);
-
-        onCreate(db);
-        super.onDowngrade(db, oldVersion, newVersion);
+//        String sql = "DROP TABLE IF EXISTS fiscaTable";
+//        db.execSQL(sql);
+//
+//        String sql2 = "DROP TABLE IF EXISTS fiscaImages";
+//        db.execSQL(sql2);
+//
+//        onCreate(db);
     }
 
 

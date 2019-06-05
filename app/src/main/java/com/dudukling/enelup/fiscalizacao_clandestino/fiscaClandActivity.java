@@ -107,7 +107,6 @@ public class fiscaClandActivity extends AppCompatActivity {
 
             case R.id.menu_upload:
                 uploadToCloud();
-//                uploadImagesToCloud();
                 break;
         }
         return super.onOptionsItemSelected(item);
@@ -453,8 +452,6 @@ public class fiscaClandActivity extends AppCompatActivity {
 
     private void uploadToCloud() {
         fiscaClandDAO dao = new fiscaClandDAO(this);
-        sendGoogleScripts extDao = new sendGoogleScripts(this);
-
         List<fiscaClandModel> list = dao.getFiscaListNotUploadedYet();
         dao.close();
 
@@ -464,9 +461,11 @@ public class fiscaClandActivity extends AppCompatActivity {
             boolean internetTest2 = checkOnlineState();
 
             if(internetTest1 || internetTest2){
+                Toast.makeText(this, "Conexão existente, preparando para enviar os dados..", Toast.LENGTH_SHORT).show();
                 ProgressDialog dialog = ProgressDialog.show(this, "Enviar dados",
                         "Enviando. Favor aguarde...", true);
 
+                sendGoogleScripts extDao = new sendGoogleScripts(this);
                 extDao.sendFiscalizacaoClandestinoExternal(list, dialog);
 
             }else{
