@@ -28,7 +28,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        tools:listitem="@layout/item_calc_lev_carga"
+        tools:listitem="@layout/lig_prov_item_lev_carga"
         />
 
     <android.support.design.widget.FloatingActionButton

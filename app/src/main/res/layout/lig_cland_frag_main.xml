@@ -30,7 +30,7 @@
         app:layout_constraintHorizontal_bias="1.0"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        tools:listitem="@layout/item_clandestino">
+        tools:listitem="@layout/lig_cland_item">
 
     </android.support.v7.widget.RecyclerView>
 

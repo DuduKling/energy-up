@@ -33,7 +33,7 @@ public class ligProvLevCarga_recyclerAdapter extends RecyclerView.Adapter {
     @NonNull
     @Override
     public RecyclerView.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        View view = LayoutInflater.from(context).inflate(R.layout.item_calc_lev_carga, parent, false);
+        View view = LayoutInflater.from(context).inflate(R.layout.lig_prov_item_lev_carga, parent, false);
 
         return new aViewHolder(view);
     }

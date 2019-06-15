@@ -45,7 +45,7 @@
         app:layout_constraintHorizontal_bias="1.0"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/includeLigProvFilter"
-        tools:listitem="@layout/item_lig_prov">
+        tools:listitem="@layout/lig_prov_item">
 
     </android.support.v7.widget.RecyclerView>
 

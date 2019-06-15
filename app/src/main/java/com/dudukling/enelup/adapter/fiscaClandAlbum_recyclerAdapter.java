@@ -40,7 +40,7 @@ public class fiscaClandAlbum_recyclerAdapter extends RecyclerView.Adapter {
     @NonNull
     @Override
     public RecyclerView.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        View view = LayoutInflater.from(context).inflate(R.layout.item_album_lig_prov, parent, false);
+        View view = LayoutInflater.from(context).inflate(R.layout.activity_item_album, parent, false);
 
         return new albumViewHolder(view);
     }
