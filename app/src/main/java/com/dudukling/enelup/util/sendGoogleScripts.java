@@ -84,6 +84,7 @@ public class sendGoogleScripts {
                 fiscaJSON.put("estado_ordem", list.getEstado_ordem());
                 fiscaJSON.put("servico_direcionado", list.getServico_direcionado());
                 fiscaJSON.put("frente_trabalho", list.getFrente_trabalho());
+                fiscaJSON.put("energia_emprestada", list.getEnergia_emprestada());
 
                 if(list.getImagesList().size() > 0){
                     JSONArray imagesArrJSON = new JSONArray();

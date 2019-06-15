@@ -297,7 +297,8 @@ public class fiscaClandActivity extends AppCompatActivity {
                         " numero_ordem,"+
                         " estado_ordem,"+
                         " servico_direcionado,"+
-                        " frente_trabalho" +
+                        " frente_trabalho," +
+                        " energia_emprestada" +
                     " FROM fiscaTable "
                     , null);
 
@@ -332,7 +333,8 @@ public class fiscaClandActivity extends AppCompatActivity {
                     "numero_ordem",
                     "estado_ordem",
                     "servico_direcionado",
-                    "frente_trabalho"
+                    "frente_trabalho",
+                    "energia_emprestada"
             };
 
             csvWrite.writeNext(str);
@@ -370,6 +372,7 @@ public class fiscaClandActivity extends AppCompatActivity {
                 String estado_ordem = stripAccents(curCSV.getString(29));
                 String servico_direcionado = stripAccents(curCSV.getString(30));
                 String frente_trabalho = stripAccents(curCSV.getString(31));
+                String energia_emprestada = stripAccents(curCSV.getString(32));
 
                 String arrStr[] = {
                         id,
@@ -403,7 +406,8 @@ public class fiscaClandActivity extends AppCompatActivity {
                         numero_ordem,
                         estado_ordem,
                         servico_direcionado,
-                        frente_trabalho
+                        frente_trabalho,
+                        energia_emprestada
                 };
 
                 csvWrite.writeNext(arrStr);

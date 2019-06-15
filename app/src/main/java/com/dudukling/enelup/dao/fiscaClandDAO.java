@@ -50,9 +50,10 @@ public class fiscaClandDAO extends SQLiteOpenHelper {
     private String FIELD_FRENTE_TRABALHO = "frente_trabalho";
     private String FIELD_CPF_OU_CNPJ = "cpf_ou_cnpj";
     private String FIELD_CNPJ = "cnpj";
+    private String FIELD_ENERGIA_EMPRESTADA = "energia_emprestada";
 
     public fiscaClandDAO(Context context) {
-        super(context, "fiscaTable", null, 2);
+        super(context, "fiscaTable", null, 3);
     }
 
     @Override
@@ -92,7 +93,8 @@ public class fiscaClandDAO extends SQLiteOpenHelper {
                 FIELD_SERVICO_DIRECIONADO + " TEXT NOT NULL," +
                 FIELD_FRENTE_TRABALHO + " TEXT NOT NULL," +
                 FIELD_CPF_OU_CNPJ + " TEXT NOT NULL," +
-                FIELD_CNPJ + " TEXT NOT NULL" +
+                FIELD_CNPJ + " TEXT NOT NULL," +
+                FIELD_ENERGIA_EMPRESTADA + " TEXT NOT NULL" +
                 ");";
         db.execSQL(sql);
 
@@ -110,12 +112,10 @@ public class fiscaClandDAO extends SQLiteOpenHelper {
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
         switch(oldVersion) {
             case 1:
-                //upgrade logic from version 1 to 2
-//                db.execSQL("ALTER TABLE " +TABLE_NAME+ " ADD Column "+ FIELD_FRENTE_TRABALHO);
                 db.execSQL("ALTER TABLE " +TABLE_NAME+ " ADD Column "+ FIELD_CPF_OU_CNPJ);
                 db.execSQL("ALTER TABLE " +TABLE_NAME+ " ADD Column "+ FIELD_CNPJ);
             case 2:
-                //upgrade logic from version 2 to 3
+                db.execSQL("ALTER TABLE " +TABLE_NAME+ " ADD Column "+ FIELD_ENERGIA_EMPRESTADA);
             case 3:
                 //upgrade logic from version 3 to 4
                 break;
@@ -123,13 +123,13 @@ public class fiscaClandDAO extends SQLiteOpenHelper {
                 throw new IllegalStateException("onUpgrade() with unknown oldVersion" + oldVersion);
         }
 
-//        String sql = "DROP TABLE IF EXISTS fiscaTable";
-//        db.execSQL(sql);
-//
-//        String sql2 = "DROP TABLE IF EXISTS fiscaImages";
-//        db.execSQL(sql2);
-//
-//        onCreate(db);
+        //        String sql = "DROP TABLE IF EXISTS fiscaTable";
+        //        db.execSQL(sql);
+        //
+        //        String sql2 = "DROP TABLE IF EXISTS fiscaImages";
+        //        db.execSQL(sql2);
+        //
+        //        onCreate(db);
     }
 
 
@@ -255,6 +255,7 @@ public class fiscaClandDAO extends SQLiteOpenHelper {
             fisca.setFrente_trabalho(c.getString(c.getColumnIndex(FIELD_FRENTE_TRABALHO)));
             fisca.setCpf_ou_cnpj(c.getString(c.getColumnIndex(FIELD_CPF_OU_CNPJ)));
             fisca.setCnpj(c.getString(c.getColumnIndex(FIELD_CNPJ)));
+            fisca.setEnergia_emprestada(c.getString(c.getColumnIndex(FIELD_ENERGIA_EMPRESTADA)));
 
             // Imagens:
             List<String> imagesList = getImagesDB(dbFiscaList);
@@ -342,9 +343,9 @@ public class fiscaClandDAO extends SQLiteOpenHelper {
         queryData.put(FIELD_FLAG_GOOGLE_SHEETS, fisca.getFlag_google_sheets());
         queryData.put(FIELD_SERVICO_DIRECIONADO, fisca.getServico_direcionado());
         queryData.put(FIELD_FRENTE_TRABALHO, fisca.getFrente_trabalho());
-
         queryData.put(FIELD_CPF_OU_CNPJ, fisca.getCpf_ou_cnpj());
         queryData.put(FIELD_CNPJ, fisca.getCnpj());
+        queryData.put(FIELD_ENERGIA_EMPRESTADA, fisca.getEnergia_emprestada());
 
         return queryData;
     }

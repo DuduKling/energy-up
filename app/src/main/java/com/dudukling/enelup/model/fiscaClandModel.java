@@ -44,6 +44,8 @@ public class fiscaClandModel implements Serializable {
     private String cpf_ou_cnpj = "";
     private String cnpj = "";
 
+    private String energia_emprestada = "";
+
     private List<String> imagesList  = new ArrayList<>();
 
 
@@ -297,5 +299,12 @@ public class fiscaClandModel implements Serializable {
     }
     public void setCnpj(String cnpj) {
         this.cnpj = cnpj;
+    }
+
+    public String getEnergia_emprestada() {
+        return energia_emprestada;
+    }
+    public void setEnergia_emprestada(String energia_emprestada) {
+        this.energia_emprestada = energia_emprestada;
     }
 }

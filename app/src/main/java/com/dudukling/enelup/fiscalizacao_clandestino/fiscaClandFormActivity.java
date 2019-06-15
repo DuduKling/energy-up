@@ -95,6 +95,7 @@ public class fiscaClandFormActivity extends AppCompatActivity {
     private RadioGroup radioGroupFiscaEstadoOrdem;
     private RadioGroup radioGroupFiscaServicoDirecionado;
     private RadioGroup radioGroupFiscaCPFouCNPJ;
+    private RadioGroup radioGroupFiscaEnergiaEmprestada;
 
     private FloatingActionButton floatingActionButtonFiscaGPS;
     private ProgressBar progressBarFiscaGPS;
@@ -369,6 +370,7 @@ public class fiscaClandFormActivity extends AppCompatActivity {
         radioGroupFiscaRede = findViewById(R.id.radioGroupFiscaRede);
         radioGroupFiscaPadrao = findViewById(R.id.radioGroupFiscaPadrao);
         radioGroupFiscaServidao = findViewById(R.id.radioGroupFiscaServidao);
+        radioGroupFiscaEnergiaEmprestada = findViewById(R.id.radioGroupFiscaEnergiaEmprestada);
 
         radioGroupFiscaEstadoOrdem = findViewById(R.id.radioGroupFiscaEstadoOrdem);
         radioGroupFiscaEstadoOrdem.setVisibility(View.GONE);
@@ -451,6 +453,8 @@ public class fiscaClandFormActivity extends AppCompatActivity {
                 }
             }
         });
+
+
 
 
 
@@ -601,6 +605,14 @@ public class fiscaClandFormActivity extends AppCompatActivity {
                 break;
             }
         }
+        for(int i=0; i<radioGroupFiscaEnergiaEmprestada.getChildCount(); i++) {
+            RadioButton btn = (RadioButton) radioGroupFiscaEnergiaEmprestada.getChildAt(i);
+            if (btn.getText().toString().equals(fisca.getEnergia_emprestada())) {
+                btn.setChecked(true);
+                break;
+            }
+        }
+
     }
 
     private fiscaClandModel getFiscaFromFields(fiscaClandModel fisca) {
@@ -668,6 +680,9 @@ public class fiscaClandFormActivity extends AppCompatActivity {
             fisca.setCpf("");
             fisca.setCpf_status("");
         }
+        if(radioGroupFiscaEnergiaEmprestada.getCheckedRadioButtonId() != -1) {fisca.setEnergia_emprestada(((RadioButton)findViewById(radioGroupFiscaEnergiaEmprestada.getCheckedRadioButtonId())).getText().toString());
+        }else{fisca.setEnergia_emprestada("");}
+
 
         return fisca;
     }
@@ -765,6 +780,10 @@ public class fiscaClandFormActivity extends AppCompatActivity {
         if(radioGroupFiscaInvadida.getCheckedRadioButtonId() == -1) {
             isValid = "Invadida";
         }
+        if(radioGroupFiscaEnergiaEmprestada.getCheckedRadioButtonId() == -1) {
+            isValid = "EnergiaEmprestada";
+        }
+
 
         if(spinnerFiscaMunicipio.getSelectedItemPosition() == 0) {
             isValid = "municipio";
@@ -819,6 +838,9 @@ public class fiscaClandFormActivity extends AppCompatActivity {
                 break;
             case "CPFouCNPJ":
                 Toast.makeText(this, "Favor selecionar CPF ou CNPJ para preenchimento!", Toast.LENGTH_SHORT).show();
+                break;
+            case "EnergiaEmprestada":
+                Toast.makeText(this, "Favor selecionar a opção Energia Emprestada!", Toast.LENGTH_SHORT).show();
                 break;
         }
 
@@ -974,6 +996,7 @@ public class fiscaClandFormActivity extends AppCompatActivity {
         disableRadioGroup(radioGroupFiscaEstadoOrdem);
         disableRadioGroup(radioGroupFiscaServicoDirecionado);
         disableRadioGroup(radioGroupFiscaCPFouCNPJ);
+        disableRadioGroup(radioGroupFiscaEnergiaEmprestada);
     }
 
     private void disableEditText(EditText editText) {
@@ -998,54 +1021,5 @@ public class fiscaClandFormActivity extends AppCompatActivity {
             radioGroup.getChildAt(i).setClickable(false);
         }
     }
-
-//    private String formatTelefone(String number, String type) {
-//        if(number!=null){
-//            if(!number.equals("")){
-//
-//                String ddd = number.substring(0, 1);
-//                String middle = "";
-//                String end = "";
-//                if(type.equals("cel")){
-//                    middle = number.substring(2, 6);
-//                    end = number.substring(7, 10);
-//                }else{
-//                    middle = number.substring(2, 5);
-//                    end = number.substring(6, 9);
-//                }
-//
-//                return "("+ ddd +")"+ middle +"-"+end;
-//            }
-//        }
-//        return "";
-//    }
-//    private String formatData(String data) {
-//        if(data!=null){
-//            if(!data.equals("")){
-//
-//                String dia = "";
-//                String mes = "";
-//                String ano = "";
-//
-//                if(data.length() == 2){
-//                    dia = data.substring(0, 2);
-//                }else if(data.length() == 4){
-//                    dia = data.substring(0, 2);
-//                    mes = data.substring(2, 4);
-//                }else if(data.length() == 6){
-//                    dia = data.substring(0, 2);
-//                    mes = data.substring(2, 4);
-//                    ano = data.substring(4, 6);
-//                }else if(data.length() == 8){
-//                    dia = data.substring(0, 2);
-//                    mes = data.substring(2, 4);
-//                    ano = data.substring(4, 8);
-//                }
-//
-//                return dia +"/"+ mes +"/"+ano;
-//            }
-//        }
-//        return "";
-//    }
 
 }
