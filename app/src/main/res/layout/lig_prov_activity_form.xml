@@ -75,6 +75,7 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="@+id/TextViewLP1"
             app:srcCompat="@drawable/ic_album" />
+
         <android.support.design.widget.FloatingActionButton
             android:id="@+id/buttonClandestino"
             android:layout_width="56dp"
@@ -93,7 +94,7 @@
             app:layout_constraintHorizontal_bias="1.0"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/buttonAlbum"
-            app:srcCompat="@drawable/pirata_white" />
+            app:srcCompat="@drawable/raio_branco" />
 
 
         <!-- Nome cliente-->

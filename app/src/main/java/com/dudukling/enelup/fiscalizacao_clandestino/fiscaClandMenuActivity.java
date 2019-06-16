@@ -12,6 +12,7 @@ import android.view.View;
 import android.widget.Toast;
 
 import com.dudukling.enelup.R;
+import com.dudukling.enelup.fiscalizacao_ilumunacao_publica.fiscaIPActivity;
 
 import java.util.Objects;
 
@@ -41,6 +42,15 @@ public class fiscaClandMenuActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 Toast.makeText(fiscaClandMenuActivity.this, "Indisponível", Toast.LENGTH_SHORT).show();
+            }
+        });
+
+        CardView cardViewFiscalizaMenuIP = this.findViewById(R.id.cardViewFiscalizaMenuIP);
+        cardViewFiscalizaMenuIP.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(fiscaClandMenuActivity.this, fiscaIPActivity.class);
+                startActivity(intent);
             }
         });
     }

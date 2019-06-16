@@ -25,21 +25,27 @@
         android:theme="@style/AppTheme"
         tools:ignore="AllowBackup,GoogleAppIndexingWarning">
 
-        <activity android:name=".fiscalizacao_clandestino.fiscaClandAlbumActivity" android:launchMode="singleTop" />
-        <activity android:name=".fiscalizacao_clandestino.fiscaClandFormActivity" android:launchMode="singleTop" />
-        <activity android:name=".fiscalizacao_clandestino.fiscaClandActivity" android:launchMode="singleTop" />
         <activity android:name=".fiscalizacao_clandestino.fiscaClandMenuActivity" android:launchMode="singleTop" />
-        <activity android:name=".faqActivity" android:launchMode="singleTop" />
-        <activity android:name=".ligacaoes_provisorias.ligProvLevCargaActivity" android:launchMode="singleTop" />
-        <activity android:name=".ligacoes_clandestinas.ligClandActivity" android:launchMode="singleTop" />
+        <activity android:name=".fiscalizacao_clandestino.fiscaClandActivity" android:launchMode="singleTop" />
+        <activity android:name=".fiscalizacao_clandestino.fiscaClandFormActivity" android:launchMode="singleTop" />
+        <activity android:name=".fiscalizacao_clandestino.fiscaClandAlbumActivity" android:launchMode="singleTop" />
+
+        <activity android:name=".fiscalizacao_ilumunacao_publica.fiscaIPActivity" />
+        <activity android:name=".fiscalizacao_ilumunacao_publica.fiscaIPFormActivity" />
+
         <activity android:name=".ligacaoes_provisorias.ligProvActivity" android:launchMode="singleTop" />
         <activity android:name=".ligacaoes_provisorias.ligProvFormActivity" android:launchMode="singleTop" />
+        <activity android:name=".ligacaoes_provisorias.ligProvLevCargaActivity" android:launchMode="singleTop" />
+        <activity android:name=".ligacaoes_provisorias.ligProvLevCargaFormActivity" android:launchMode="singleTop" />
         <activity android:name=".ligacaoes_provisorias.ligProvAlbumActivity" android:launchMode="singleTop" />
+
+        <activity android:name=".ligacoes_clandestinas.ligClandActivity" android:launchMode="singleTop" />
+        <activity android:name=".ligacoes_clandestinas.ligClandFormActivity" android:launchMode="singleTop" />
+
+        <activity android:name=".faqActivity" android:launchMode="singleTop" />
         <activity android:name=".imageActivity" android:launchMode="singleTop" />
         <activity android:name=".menuActivity" android:launchMode="singleTop" />
         <activity android:name=".importActivity" android:launchMode="singleTop" />
-        <activity android:name=".ligacoes_clandestinas.ligClandFormActivity" android:launchMode="singleTop" />
-        <activity android:name=".ligacaoes_provisorias.ligProvLevCargaFormActivity" android:launchMode="singleTop" />
         <activity
             android:name=".splashActivity"
             android:theme="@style/AppCompat.fullScreen">
@@ -51,6 +57,9 @@
         </activity>
 
 
+        <service
+            android:name=".util.reverseGeocoding"
+            android:exported="false"/>
         <!--
              The API key for Google Maps-based APIs is defined as a string resource.
              (See the file "res/values/google_maps_api.xml").

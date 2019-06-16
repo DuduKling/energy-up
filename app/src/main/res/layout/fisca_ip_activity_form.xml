@@ -1,0 +1,437 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:mask="http://schemas.android.com/apk/res-auto"
+    app:layout_constraintBottom_toBottomOf="parent"
+    app:layout_constraintEnd_toEndOf="parent"
+    app:layout_constraintStart_toStartOf="parent"
+    app:layout_constraintTop_toTopOf="parent"
+    tools:context=".fiscalizacao_ilumunacao_publica.fiscaIPActivity">
+
+    <android.support.constraint.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:paddingBottom="10dp">
+
+        <!--Funcionario-->
+        <TextView
+            android:id="@+id/textViewFiscaIPFormFuncionario"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
+            android:layout_marginLeft="8dp"
+            android:text="Funcionário *"
+            app:layout_constraintBottom_toBottomOf="@+id/spinnerFiscaIPFormFuncionario"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="@+id/spinnerFiscaIPFormFuncionario" />
+        <Spinner
+            android:id="@+id/spinnerFiscaIPFormFuncionario"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
+            android:layout_marginLeft="8dp"
+            android:layout_marginTop="8dp"
+            android:layout_marginEnd="8dp"
+            android:layout_marginRight="8dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@+id/textViewFiscaIPFormFuncionario"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <!--Municipio-->
+        <TextView
+            android:id="@+id/textViewFiscaIPFormMunicipio"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
+            android:layout_marginLeft="8dp"
+            android:text="Município *"
+            app:layout_constraintBottom_toBottomOf="@+id/spinnerFiscaIPFormMunicipio"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="@+id/spinnerFiscaIPFormMunicipio" />
+        <Spinner
+            android:id="@+id/spinnerFiscaIPFormMunicipio"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
+            android:layout_marginLeft="8dp"
+            android:layout_marginTop="8dp"
+            android:layout_marginEnd="8dp"
+            android:layout_marginRight="8dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="1.0"
+            app:layout_constraintStart_toEndOf="@+id/textViewFiscaIPFormMunicipio"
+            app:layout_constraintTop_toBottomOf="@+id/spinnerFiscaIPFormFuncionario" />
+
+        <!--Coordenadas-->
+        <android.support.design.widget.TextInputLayout
+            android:id="@+id/textInputLayoutFiscaIPFormLatitude"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
+            android:layout_marginLeft="8dp"
+            android:layout_marginTop="8dp"
+            android:layout_marginEnd="8dp"
+            android:layout_marginRight="8dp"
+            app:layout_constraintEnd_toStartOf="@+id/progressBarFiscaIPFormPS"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/spinnerFiscaIPFormMunicipio">
+
+            <android.support.design.widget.TextInputEditText
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:digits="-.0123456789"
+                android:hint="Latitude *"
+                android:inputType="numberSigned|numberDecimal"
+                android:maxLength="20" />
+        </android.support.design.widget.TextInputLayout>
+        <android.support.design.widget.TextInputLayout
+            android:id="@+id/textInputLayoutFiscaIPFormLongitude"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
+            android:layout_marginLeft="8dp"
+            android:layout_marginTop="8dp"
+            android:layout_marginEnd="8dp"
+            android:layout_marginRight="8dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/textInputLayoutFiscaIPFormLatitude">
+
+            <android.support.design.widget.TextInputEditText
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="Longitude *"
+                android:inputType="numberSigned|numberDecimal"
+                android:digits="-.0123456789"
+                android:maxLength="20"/>
+        </android.support.design.widget.TextInputLayout>
+
+        <!--Bairro-->
+        <android.support.design.widget.TextInputLayout
+            android:id="@+id/textInputLayoutFiscaIPFormBairro"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
+            android:layout_marginLeft="8dp"
+            android:layout_marginTop="8dp"
+            android:layout_marginEnd="8dp"
+            android:layout_marginRight="8dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/textInputLayoutFiscaIPFormLongitude">
+
+            <android.support.design.widget.TextInputEditText
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="Bairro *"
+                android:inputType="text"
+                android:maxLength="40" />
+        </android.support.design.widget.TextInputLayout>
+
+        <!--GPS Loading-->
+        <android.support.design.widget.FloatingActionButton
+            android:id="@+id/floatingActionButtonFiscaIPFormGPS"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="8dp"
+            android:layout_marginRight="8dp"
+            android:clickable="true"
+            app:fabSize="mini"
+            app:layout_constraintBottom_toBottomOf="@+id/textInputLayoutFiscaIPFormLatitude"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="@+id/textInputLayoutFiscaIPFormLatitude"
+            mask:srcCompat="@drawable/ic_gps_add" />
+        <ProgressBar
+            android:id="@+id/progressBarFiscaIPFormPS"
+            style="?android:attr/progressBarStyle"
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:layout_marginEnd="5dp"
+            android:layout_marginRight="5dp"
+            app:layout_constraintBottom_toBottomOf="@+id/floatingActionButtonFiscaIPFormGPS"
+            app:layout_constraintEnd_toStartOf="@+id/floatingActionButtonFiscaIPFormGPS"
+            app:layout_constraintTop_toTopOf="@+id/floatingActionButtonFiscaIPFormGPS" />
+
+        <!--Endereco-->
+        <android.support.design.widget.TextInputLayout
+            android:id="@+id/textInputLayoutFiscaIPFormEndereco"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
+            android:layout_marginLeft="8dp"
+            android:layout_marginTop="8dp"
+            android:layout_marginEnd="8dp"
+            android:layout_marginRight="8dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/textInputLayoutFiscaIPFormBairro">
+
+            <android.support.design.widget.TextInputEditText
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="Endereço *"
+                android:inputType="text"
+                android:maxLength="75" />
+        </android.support.design.widget.TextInputLayout>
+
+        <!--Sinalizacao de area de risco-->
+        <TextView
+            android:id="@+id/textViewFiscaIPFormSinalizacaoRisco"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
+            android:layout_marginLeft="8dp"
+            android:layout_marginTop="8dp"
+            android:text="Sinalização de área de risco? *"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/textInputLayoutFiscaIPFormEndereco" />
+        <RadioGroup
+            android:id="@+id/radioGroupFiscaIPFormSinalizacaoRisco"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
+            android:layout_marginLeft="8dp"
+            android:layout_marginEnd="8dp"
+            android:layout_marginRight="8dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@+id/textViewFiscaIPFormSinalizacaoRisco"
+            app:layout_constraintTop_toTopOf="@+id/textViewFiscaIPFormSinalizacaoRisco">
+
+            <RadioButton
+                android:id="@+id/radioButtonFiscaIPFormSinalizacaoRisco1"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="Sim" />
+            <RadioButton
+                android:id="@+id/radioButtonFiscaIPFormSinalizacaoRisco2"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="Não" />
+        </RadioGroup>
+
+        <!--Acesa 24h-->
+        <TextView
+            android:id="@+id/textViewFiscaIPFormAcesa24"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
+            android:layout_marginLeft="8dp"
+            android:layout_marginTop="8dp"
+            android:text="Acesa 24h? *"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/radioGroupFiscaIPFormSinalizacaoRisco" />
+        <RadioGroup
+            android:id="@+id/radioGroupFiscaIPFormAcesa24"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
+            android:layout_marginLeft="8dp"
+            android:layout_marginEnd="8dp"
+            android:layout_marginRight="8dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@+id/textViewFiscaIPFormAcesa24"
+            app:layout_constraintTop_toTopOf="@+id/textViewFiscaIPFormAcesa24">
+
+            <RadioButton
+                android:id="@+id/radioButtonFiscaIPFormAcesa241"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="Sim" />
+            <RadioButton
+                android:id="@+id/radioButtonFiscaIPFormAcesa242"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="Não" />
+        </RadioGroup>
+
+        <!--Quebrada-->
+        <TextView
+            android:id="@+id/textViewFiscaIPFormQuebrada"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
+            android:layout_marginLeft="8dp"
+            android:layout_marginTop="8dp"
+            android:text="Lâmpada/luminária quebrada? *"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/radioGroupFiscaIPFormAcesa24" />
+        <RadioGroup
+            android:id="@+id/radioGroupFiscaIPFormQuebrada"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
+            android:layout_marginLeft="8dp"
+            android:layout_marginEnd="8dp"
+            android:layout_marginRight="8dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@+id/textViewFiscaIPFormQuebrada"
+            app:layout_constraintTop_toTopOf="@+id/textViewFiscaIPFormQuebrada">
+
+            <RadioButton
+                android:id="@+id/radioButtonFiscaIPFormQuebrada1"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="Sim" />
+            <RadioButton
+                android:id="@+id/radioButtonFiscaIPFormQuebrada2"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="Não" />
+        </RadioGroup>
+
+        <!--Tipo Luminaria-->
+        <TextView
+            android:id="@+id/textViewFiscaIPFormTipoLuminaria"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
+            android:layout_marginLeft="8dp"
+            android:text="Tipo Luminária *"
+            app:layout_constraintBottom_toBottomOf="@+id/spinnerFiscaIPFormTipoLuminaria"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="@+id/spinnerFiscaIPFormTipoLuminaria" />
+        <Spinner
+            android:id="@+id/spinnerFiscaIPFormTipoLuminaria"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
+            android:layout_marginLeft="8dp"
+            android:layout_marginTop="8dp"
+            android:layout_marginEnd="8dp"
+            android:layout_marginRight="8dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="1.0"
+            app:layout_constraintStart_toEndOf="@+id/textViewFiscaIPFormTipoLuminaria"
+            app:layout_constraintTop_toBottomOf="@+id/radioGroupFiscaIPFormQuebrada" />
+
+        <!--Potencia-->
+        <android.support.design.widget.TextInputLayout
+            android:id="@+id/textInputLayoutFiscaIPFormPotencia"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
+            android:layout_marginLeft="8dp"
+            android:layout_marginTop="8dp"
+            android:layout_marginEnd="8dp"
+            android:layout_marginRight="8dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/spinnerFiscaIPFormTipoLuminaria">
+
+            <android.support.design.widget.TextInputEditText
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="Potência (W) *"
+                android:inputType="text"
+                android:maxLength="75" />
+        </android.support.design.widget.TextInputLayout>
+
+        <!--Obs-->
+        <android.support.design.widget.TextInputLayout
+            android:id="@+id/textInputLayoutFiscaIPFormObservacao"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
+            android:layout_marginLeft="8dp"
+            android:layout_marginTop="8dp"
+            android:layout_marginEnd="8dp"
+            android:layout_marginRight="8dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/textInputLayoutFiscaIPFormPotencia">
+
+            <android.support.design.widget.TextInputEditText
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="Observação"
+                android:inputType="textMultiLine"
+                android:maxLength="75" />
+        </android.support.design.widget.TextInputLayout>
+
+        <!--Horario-->
+        <TextView
+            android:id="@+id/textViewFiscaIPFormHorario"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
+            android:layout_marginLeft="8dp"
+            android:layout_marginTop="8dp"
+            android:layout_marginEnd="8dp"
+            android:layout_marginRight="8dp"
+            android:text="Horário: --:--:--"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.0"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/textInputLayoutFiscaIPFormObservacao" />
+
+        <!--Plaqueta Prefeitura-->
+        <android.support.design.widget.TextInputLayout
+            android:id="@+id/textInputLayoutFiscaIPFormPlaqueta"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
+            android:layout_marginLeft="8dp"
+            android:layout_marginTop="8dp"
+            android:layout_marginEnd="8dp"
+            android:layout_marginRight="8dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/textViewFiscaIPFormHorario">
+
+            <android.support.design.widget.TextInputEditText
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="Plaqueta Prefeitura"
+                android:inputType="text"
+                android:maxLength="75" />
+        </android.support.design.widget.TextInputLayout>
+
+        <!--Area Urbana/Rural-->
+        <TextView
+            android:id="@+id/textViewFiscaIPFormAreaUrbanaRural"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
+            android:layout_marginLeft="8dp"
+            android:layout_marginTop="8dp"
+            android:text="Área *"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/textInputLayoutFiscaIPFormPlaqueta" />
+        <RadioGroup
+            android:id="@+id/radioGroupFiscaIPFormAreaUrbanaRural"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
+            android:layout_marginLeft="8dp"
+            android:layout_marginEnd="8dp"
+            android:layout_marginRight="8dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@+id/textViewFiscaIPFormAreaUrbanaRural"
+            app:layout_constraintTop_toTopOf="@+id/textViewFiscaIPFormAreaUrbanaRural">
+
+            <RadioButton
+                android:id="@+id/radioButtonFiscaIPFormAreaUrbanaRural1"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="Urbana" />
+            <RadioButton
+                android:id="@+id/radioButtonFiscaIPFormAreaUrbanaRural2"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="Rural" />
+        </RadioGroup>
+
+
+    </android.support.constraint.ConstraintLayout>
+</ScrollView>
