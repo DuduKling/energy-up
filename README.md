@@ -2,6 +2,8 @@
 
 Protótipo de Aplicativo Android para operações de fiscalização em campo para empresas do ramo de distribuição de eletricidade.
 
+PS: Algumas informações sensíveis foram removidas posteriormente por questões de segurança.
+
 
 ## Objetivo
 
