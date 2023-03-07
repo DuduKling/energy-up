@@ -1,6 +1,6 @@
-# EnergyUp
+# energy-up
 
-Protótipo de Aplicativo Android para operações de fiscalização em campo da Energy.
+Protótipo de Aplicativo Android para operações de fiscalização em campo para empresas do ramo de distribuição de eletricidade.
 
 
 ## Objetivo
